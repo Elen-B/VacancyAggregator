@@ -3,5 +3,6 @@
     <string name="command">Команда</string>
     <string name="favorite">Избранное</string>
     <string name="main">Главная</string>
-    <string name="list_empty">"Список пуст</string>
+    <string name="list_empty">Список пуст</string>
+    <string name="no_list">Не удалось получить список вакансий</string>
 </resources>
