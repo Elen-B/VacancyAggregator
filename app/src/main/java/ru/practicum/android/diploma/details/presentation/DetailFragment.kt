@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentDetailBinding
@@ -81,14 +80,6 @@ class DetailFragment : Fragment() {
         } else {
             binding.employment.isVisible = true
             binding.employment.text = professionDetail.employmentName
-        }
-        binding.employerName.text = professionDetail.employerName
-        binding.employerCity.text = professionDetail.employerCity
-        if (professionDetail.employerLogo!=null) {
-            Glide
-                .with(requireContext())
-                .load(professionDetail.employerLogo)
-                .into(binding.employerLogo)
         }
     }
 }
