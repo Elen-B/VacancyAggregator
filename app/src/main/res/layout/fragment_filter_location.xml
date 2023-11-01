@@ -66,4 +66,16 @@
             android:textAppearance="@style/FilterMenuItemEditTextAppearance"
             android:focusableInTouchMode="false"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btFilterChoose"
+        style="@style/FilterBlueButtonStyle"
+        android:layout_marginBottom="@dimen/margin_24"
+        android:layout_marginStart="@dimen/margin_24"
+        android:layout_marginEnd="@dimen/margin_24"
+        android:text="@string/filter_button_choose"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
