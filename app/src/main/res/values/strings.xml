@@ -20,4 +20,8 @@
     <string name="filter_salary_required">Не показывать без зарплаты</string>
     <string name="filter_button_apply">Применить</string>
     <string name="filter_button_clear">Сбросить</string>
+    <string name="vacancy_name">vacancy name</string>
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="required_experience">Требуемый опыт</string>
 </resources>
