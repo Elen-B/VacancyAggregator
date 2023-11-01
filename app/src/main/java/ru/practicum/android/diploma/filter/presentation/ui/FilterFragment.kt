@@ -14,7 +14,6 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.search.presentation.ui.SearchFragmentDirections
 
 class FilterFragment: Fragment() {
     private lateinit var binding: FragmentFilterBinding
@@ -72,6 +71,10 @@ class FilterFragment: Fragment() {
 
         binding.miFilterSalary.editText?.doOnTextChanged { text, _, _, _ ->
             setSalaryEditTextStyle(binding.miFilterSalary, !text.isNullOrEmpty())
+        }
+
+        binding.btTopBarBack.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
