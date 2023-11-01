@@ -8,6 +8,6 @@ import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewMode
 val viewModelModule = module {
     viewModel {
         FilterViewModel()
-        DetailViewModel()
+        DetailViewModel(get())
     }
 }
