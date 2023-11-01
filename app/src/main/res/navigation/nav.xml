@@ -9,4 +9,9 @@
         android:name="ru.practicum.android.diploma.search.presentation.ui.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/favouritesFragment2"
+        android:name="ru.practicum.android.diploma.favourites.presentation.FavouritesFragment"
+        android:label="FavouritesFragment"
+        tools:layout="@layout/fragment_favourites"/>
 </navigation>
