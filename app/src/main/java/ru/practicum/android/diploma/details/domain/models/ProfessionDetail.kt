@@ -1,11 +1,11 @@
 package ru.practicum.android.diploma.details.domain.models
 
 data class ProfessionDetail(
-    val id: Int,
+    val id: String,
     val name:String,
-    val employmentId: Int?,
+    val employmentId: String,
     val employmentName: String?,
-    val employerId:Int,
+    val employerId: String,
     val employerName:String,
     val employerLogo: String,
     val experienceId: String?,

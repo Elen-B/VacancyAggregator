@@ -49,7 +49,7 @@ data class DetailDto(
     @SerializedName("employment")
     val employment: Employment,
     @SerializedName("experience")
-    val experience: Experience,
+    val experience: Experience?,
     @SerializedName("expires_at")
     val expiresAt: String,
     @SerializedName("has_test")
@@ -85,7 +85,7 @@ data class DetailDto(
     @SerializedName("response_url")
     val responseUrl: Any,
     @SerializedName("salary")
-    val salary: Salary,
+    val salary: Salary?,
     @SerializedName("schedule")
     val schedule: Schedule,
     @SerializedName("test")
