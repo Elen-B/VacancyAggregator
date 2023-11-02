@@ -24,4 +24,6 @@
     <string name="from">от</string>
     <string name="to">до</string>
     <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="not_salary">Зарплата не указана</string>
 </resources>

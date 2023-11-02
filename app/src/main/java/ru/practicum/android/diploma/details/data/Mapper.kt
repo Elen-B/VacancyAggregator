@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.details.data
 
-import ru.practicum.android.diploma.details.data.remote.dto.DetailDto
+import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 
 fun DetailDto.mapToProfessionDetail(): ProfessionDetail =

@@ -52,18 +52,16 @@ class DetailFragment : Fragment() {
         binding.vacancyName.text = professionDetail.name
         val from = getString(R.string.from)
         val to = getString(R.string.to)
+        val notSalary = getString(R.string.not_salary)
         if (professionDetail.salaryFrom == null && professionDetail.salaryTo == null) {
-            binding.salary.isVisible = false
+            binding.salary.text = notSalary
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
-            binding.salary.isVisible = true
             binding.salary.text =
                 "$from ${professionDetail.salaryFrom.formattedNumber()} ${professionDetail.salaryCurrency}"
         } else if (professionDetail.salaryFrom == null && professionDetail.salaryTo != null) {
-            binding.salary.isVisible = true
             binding.salary.text =
                 "$to ${professionDetail.salaryTo.formattedNumber()} ${professionDetail.salaryCurrency}"
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo != null) {
-            binding.salary.isVisible = true
             binding.salary.text =
                 "$from ${professionDetail.salaryFrom.formattedNumber()} $to ${professionDetail.salaryTo.formattedNumber()} ${professionDetail.salaryCurrency}"
         }
