@@ -56,9 +56,11 @@ class SearchFragment : Fragment() {
             }
         }
 
+        /*
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+         */
 
         binding.searchEditText.doAfterTextChanged {
             if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
