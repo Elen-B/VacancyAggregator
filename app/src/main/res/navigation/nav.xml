@@ -14,4 +14,9 @@
         android:name="ru.practicum.android.diploma.filter.presentation.ui.FilterFragment"
         android:label="FilterFragment"
         tools:layout="@layout/fragment_filter"/>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="ru.practicum.android.diploma.details.presentation.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

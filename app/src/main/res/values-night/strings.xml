@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vacancy_name">vacancy name</string>
+    <string name="from">от</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="not_salary">Зарплата не указана</string>
+</resources>
