@@ -26,4 +26,12 @@
     <string name="required_experience">Требуемый опыт</string>
     <string name="vacancy">Вакансия</string>
     <string name="not_salary">Зарплата не указана</string>
+
+    <!--team section -->
+    <string name="team_topbar_header">Команда</string>
+    <string name="team_main_title">Над приложением работали</string>
+    <string name="team_developer_1">Василий</string>
+    <string name="team_developer_2">Дмитрий</string>
+    <string name="team_developer_3">Елена</string>
+    <string name="team_developer_4">Савелий</string>
 </resources>

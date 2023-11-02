@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TeamTopBarHeaderStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_topbar_header"/>
+
+    <TextView
+        style="@style/TeamTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_main_title"/>
+
+    <TextView
+        style="@style/TeamDeveloperStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_developer_1"/>
+
+    <TextView
+        style="@style/TeamDeveloperStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_developer_2"/>
+
+    <TextView
+        style="@style/TeamDeveloperStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_developer_3"/>
+
+    <TextView
+        style="@style/TeamDeveloperStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/team_developer_4"/>
+</LinearLayout>
