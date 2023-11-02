@@ -8,10 +8,12 @@ import androidx.activity.addCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
@@ -47,7 +49,7 @@ class SearchFragment : Fragment() {
 
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
-
+/*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (binding.searchEditText.hasFocus()) {
                 binding.searchEditText.clearFocus()
@@ -55,7 +57,7 @@ class SearchFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
         }
-
+*/
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -77,6 +79,10 @@ class SearchFragment : Fragment() {
 
         binding.iconCross.setOnClickListener {
             binding.searchEditText.setText("")
+        }
+
+        binding.imageButton.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
         }
     }
 

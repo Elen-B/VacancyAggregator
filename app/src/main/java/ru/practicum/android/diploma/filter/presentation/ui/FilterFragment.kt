@@ -1,12 +1,14 @@
 package ru.practicum.android.diploma.filter.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
@@ -36,21 +38,30 @@ class FilterFragment: Fragment() {
         setSalaryEditTextStyle(binding.miFilterSalary, false)
 
         binding.miFilterLocation.editText?.setOnClickListener {
-            // переход на фрагмент локаций
-            }
+            showLocation()
+        }
 
         binding.miFilterIndustry.editText?.setOnClickListener {
-            // переход на фрагмент отраслей
+            showIndustry()
         }
 
         binding.miFilterLocation.setEndIconOnClickListener {
-            binding.miFilterLocation.editText?.text = null
-            setMenuEditTextStyle(binding.miFilterLocation, false)
+            if (binding.miFilterLocation.editText?.text.isNullOrEmpty())
+                showLocation()
+            else {
+                binding.miFilterLocation.editText?.text = null
+                setMenuEditTextStyle(binding.miFilterLocation, false)
+            }
         }
 
         binding.miFilterIndustry.setEndIconOnClickListener {
-            binding.miFilterIndustry.editText?.text = null
-            setMenuEditTextStyle(binding.miFilterIndustry, false)
+            if (binding.miFilterIndustry.editText?.text.isNullOrEmpty())
+                showIndustry()
+            else {
+                binding.miFilterIndustry.editText?.text = null
+                setMenuEditTextStyle(binding.miFilterIndustry, false)
+            }
+
         }
 
         binding.miFilterSalary.setEndIconOnClickListener {
@@ -60,6 +71,10 @@ class FilterFragment: Fragment() {
 
         binding.miFilterSalary.editText?.doOnTextChanged { text, _, _, _ ->
             setSalaryEditTextStyle(binding.miFilterSalary, !text.isNullOrEmpty())
+        }
+
+        binding.btTopBarBack.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
@@ -93,5 +108,17 @@ class FilterFragment: Fragment() {
         textInputLayout.defaultHintTextColor = colorStateList
         textInputLayout.hintTextColor = colorStateList
         textInputLayout.isEndIconVisible = filled
+    }
+
+    private fun showLocation() {
+        Log.e("filter", findNavController().currentDestination.toString())
+        val action = FilterFragmentDirections.actionFilterFragmentToFilterLocationFragment2(
+            // location
+        )
+       findNavController().navigate(action)
+    }
+
+    private fun showIndustry() {
+        //
     }
 }
