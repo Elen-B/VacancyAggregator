@@ -9,13 +9,13 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.ui.search.ItemClickListener
-import com.example.playlistmaker.ui.search.SearchVacancyAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.search.presentation.ItemClickListener
+import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
@@ -56,11 +56,9 @@ class SearchFragment : Fragment() {
             }
         }
 
-        /*
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-         */
 
         binding.searchEditText.doAfterTextChanged {
             if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
