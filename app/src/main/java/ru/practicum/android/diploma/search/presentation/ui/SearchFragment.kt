@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
 
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
-
+/*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (binding.searchEditText.hasFocus()) {
                 binding.searchEditText.clearFocus()
@@ -57,7 +57,7 @@ class SearchFragment : Fragment() {
                 requireActivity().onBackPressed()
             }
         }
-
+*/
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
