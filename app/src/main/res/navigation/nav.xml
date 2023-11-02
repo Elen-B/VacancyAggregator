@@ -44,4 +44,14 @@
         android:name="ru.practicum.android.diploma.filter.presentation.ui.LocationRegionFragment"
         android:label="LocationRegionFragment"
         tools:layout="@layout/fragment_location_region"/>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="ru.practicum.android.diploma.details.presentation.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="ru.practicum.android.diploma.team.presentation.TeamFragment"
+        android:label="TeamFragment"
+        tools:layout="@layout/fragment_team"/>
 </navigation>

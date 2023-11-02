@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.core.root.presentation.ui
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import ru.practicum.android.diploma.BuildConfig
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import ru.practicum.android.diploma.R

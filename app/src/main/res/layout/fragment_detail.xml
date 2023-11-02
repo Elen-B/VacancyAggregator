@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".details.presentation.DetailFragment">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:layout_marginStart="@dimen/margin_12"
+        app:layout_constraintTop_toTopOf="@id/vacancy"
+        app:layout_constraintBottom_toBottomOf="@id/vacancy"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_favorite_border_24"
+        android:layout_marginEnd="@dimen/margin_12"
+        app:layout_constraintTop_toTopOf="@id/vacancy"
+        app:layout_constraintBottom_toBottomOf="@id/vacancy"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_share_24"
+        android:layout_marginEnd="@dimen/margin_20"
+        app:layout_constraintTop_toTopOf="@id/vacancy"
+        app:layout_constraintBottom_toBottomOf="@id/vacancy"
+        app:layout_constraintEnd_toStartOf="@id/favorite"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/vacancy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:text="@string/vacancy"
+        android:textColor="@color/base_text"
+        android:textAlignment="center"
+        android:textSize="@dimen/header_text_size"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/vacancyName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_40"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:text="@string/vacancy_name"
+        android:textColor="@color/base_text"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintTop_toBottomOf="@id/vacancy" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/salary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_4"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:text="@string/from"
+        android:textColor="@color/base_text"
+        android:textSize="@dimen/header_text_size"
+        app:layout_constraintTop_toBottomOf="@id/vacancyName" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/requiredExperience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_24"
+        android:text="@string/required_experience"
+        android:textStyle="bold"
+        android:textColor="@color/base_text"
+        android:textSize="@dimen/regular_text_size"
+        app:layout_constraintTop_toBottomOf="@id/salary"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/experience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_4"
+        android:text="@string/from"
+        android:textColor="@color/base_text"
+        android:textSize="@dimen/regular_text_size"
+        app:layout_constraintTop_toBottomOf="@id/requiredExperience"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/employment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_8"
+        android:text="@string/from"
+        android:textColor="@color/base_text"
+        android:textSize="@dimen/regular_text_size"
+        app:layout_constraintTop_toBottomOf="@id/experience"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
