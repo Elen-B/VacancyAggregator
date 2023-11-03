@@ -11,7 +11,7 @@ data class Employer(
     @SerializedName("id")
     val id: String,
     @SerializedName("logo_urls")
-    val logoUrls: LogoUrls,
+    val logoUrls: LogoUrls?,
     @SerializedName("name")
     val name: String,
     @SerializedName("trusted")

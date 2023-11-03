@@ -99,5 +99,13 @@ class DetailFragment : Fragment() {
             binding.vacancyDescription.isVisible = false
             binding.description.isVisible = false
         }
+        if (professionDetail.keySkills!=null&&professionDetail.keySkills!="") {
+            binding.keySkills.isVisible = true
+            binding.keySkillsContent.isVisible = true
+            binding.keySkillsContent.text = professionDetail.keySkills
+        } else {
+            binding.keySkills.isVisible = false
+            binding.keySkillsContent.isVisible = false
+        }
     }
 }
