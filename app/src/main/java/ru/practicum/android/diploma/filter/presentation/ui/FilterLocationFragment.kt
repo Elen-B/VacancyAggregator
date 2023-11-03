@@ -41,8 +41,12 @@ class FilterLocationFragment: Fragment() {
             render(it)
         }
 
-        binding.miLocationCountry.editText?.setOnClickListener {
+        viewModel.getShowCountryTrigger().observe(viewLifecycleOwner) {
             showCountry()
+        }
+
+        binding.miLocationCountry.editText?.setOnClickListener {
+            viewModel.showCountry()
         }
 
         binding.miLocationRegion.editText?.setOnClickListener {
@@ -51,7 +55,7 @@ class FilterLocationFragment: Fragment() {
 
         binding.miLocationCountry.setEndIconOnClickListener {
             if (binding.miLocationCountry.editText?.text.isNullOrEmpty())
-                showCountry()
+                viewModel.showCountry()
             else {
                 viewModel.onCountryChanged(null)
                 //binding.miLocationCountry.editText?.text = null
