@@ -17,5 +17,6 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
         salaryCurrency = this.salary?.currency,
         salaryFrom = this.salary?.from,
         salaryTo = this.salary?.to,
-        employerCity = this.area.name
+        employerCity = this.area.name,
+        description = this.description
     )

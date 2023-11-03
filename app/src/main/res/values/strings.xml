@@ -38,6 +38,9 @@
     <string name="required_experience">Требуемый опыт</string>
     <string name="vacancy">Вакансия</string>
     <string name="not_salary">Зарплата не указана</string>
+    <string name="vacancy_description">Описание вакансии</string>
+
+
 
     <!--team section -->
     <string name="team_topbar_header">Команда</string>

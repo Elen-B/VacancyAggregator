@@ -18,4 +18,6 @@ data class DetailDto(
     val name: String,
     @SerializedName("salary")
     val salary: Salary?,
+    @SerializedName("description")
+    val description: String?,
 )

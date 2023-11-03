@@ -2,10 +2,12 @@ package ru.practicum.android.diploma.details.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -54,6 +56,7 @@ class DetailFragment : Fragment() {
         val from = getString(R.string.from)
         val to = getString(R.string.to)
         val notSalary = getString(R.string.not_salary)
+        val description = Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
         if (professionDetail.salaryFrom == null && professionDetail.salaryTo == null) {
             binding.salary.text = notSalary
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
@@ -87,6 +90,14 @@ class DetailFragment : Fragment() {
                 .with(requireContext())
                 .load(professionDetail.employerLogo)
                 .into(binding.employerLogo)
+        }
+        if (professionDetail.description!=null&&professionDetail.description!="...") {
+            binding.vacancyDescription.isVisible = true
+            binding.description.isVisible = true
+            binding.description.text = description
+        } else {
+            binding.vacancyDescription.isVisible = false
+            binding.description.isVisible = false
         }
     }
 }
