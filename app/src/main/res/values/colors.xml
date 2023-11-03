@@ -7,4 +7,6 @@
     <color name="light_grey">#E6E8EB</color>
     <color name="red">#F56B6C</color>
     <color name="background_grey">#801A1B22</color>
+    <color name="base_text">#1A1B22</color>
+    <color name="card_text">#1A1B22</color>
 </resources>
