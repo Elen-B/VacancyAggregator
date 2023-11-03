@@ -40,14 +40,6 @@ class DetailFragment : Fragment() {
             when (result) {
                 is DetailState.Success -> {
                     setData(result.data)
-                    binding.email.setOnClickListener {
-                        Toast.makeText(requireContext(), "result.message", Toast.LENGTH_LONG).show()
-                        /*val intent = Intent(Intent.ACTION_SENDTO)
-                        intent.data = Uri.parse("mailto:${result.data.email}")
-                        if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                            startActivity(intent)
-                        }*/
-                    }
                 }
 
                 is DetailState.Error -> {
@@ -156,6 +148,17 @@ class DetailFragment : Fragment() {
         } else {
             binding.emailName.isVisible = false
             binding.email.isVisible = false
+        }
+        binding.email.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:${professionDetail.email}")
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+        }
+        binding.phone.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${professionDetail.phone}"))
+            startActivity(intent)
         }
     }
 }

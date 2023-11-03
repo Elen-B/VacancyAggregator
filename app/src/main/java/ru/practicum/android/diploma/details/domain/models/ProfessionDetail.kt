@@ -16,7 +16,6 @@ data class ProfessionDetail(
     val salaryTo: Int?,
     val description: String?,
     val keySkills: String?,
-    val phoneNumber: Long?,
     val phone: String?,
     val contactName: String?,
     val email: String?,
