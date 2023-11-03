@@ -72,6 +72,57 @@
         android:textSize="@dimen/header_text_size"
         app:layout_constraintTop_toBottomOf="@id/vacancyName" />
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardEmployer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        app:cardCornerRadius="@dimen/margin_12"
+        app:layout_constraintTop_toBottomOf="@id/salary">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_grey">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/employerLogo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/margin_16"
+                android:src="@drawable/vacancy_item_search_placeholder"
+                android:layout_marginBottom="@dimen/margin_16"
+                android:layout_marginStart="@dimen/margin_16"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/employerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:text="@string/from"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/header_text_size"
+                app:layout_constraintTop_toTopOf="@id/employerLogo"
+                app:layout_constraintStart_toEndOf="@id/employerLogo"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/employerCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:text="@string/from"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                app:layout_constraintTop_toBottomOf="@id/employerName"
+                app:layout_constraintStart_toEndOf="@id/employerLogo"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/requiredExperience"
@@ -83,7 +134,7 @@
         android:textStyle="bold"
         android:textColor="@color/base_text"
         android:textSize="@dimen/regular_text_size"
-        app:layout_constraintTop_toBottomOf="@id/salary"
+        app:layout_constraintTop_toBottomOf="@id/cardEmployer"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
