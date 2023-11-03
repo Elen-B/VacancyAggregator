@@ -33,6 +33,9 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
         },
     )
 
+
+
+
 private fun List<KeySkill>?.mapToString(): String {
     return if (this.isNullOrEmpty()) {
         ""
