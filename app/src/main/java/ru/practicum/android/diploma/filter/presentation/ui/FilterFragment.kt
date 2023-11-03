@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
@@ -39,8 +40,12 @@ class FilterFragment: Fragment() {
             render(it)
         }
 
+        viewModel.getShowLocationTrigger().observe(viewLifecycleOwner) {filterParameters ->
+            showLocation(filterParameters.country, filterParameters.region)
+        }
+
         binding.miFilterLocation.editText?.setOnClickListener {
-            showLocation()
+            viewModel.showLocation()
         }
 
         binding.miFilterIndustry.editText?.setOnClickListener {
@@ -49,7 +54,7 @@ class FilterFragment: Fragment() {
 
         binding.miFilterLocation.setEndIconOnClickListener {
             if (binding.miFilterLocation.editText?.text.isNullOrEmpty())
-                showLocation()
+                viewModel.showLocation()
             else {
                 binding.miFilterLocation.editText?.text = null
                 setMenuEditTextStyle(binding.miFilterLocation, false)
@@ -163,10 +168,12 @@ class FilterFragment: Fragment() {
         binding.cbFilterSalaryRequired.isChecked = filterParameters.fSalaryRequired
     }
 
-    private fun showLocation() {
+    private fun showLocation(country: Area?, region: Area?) {
         Log.e("filter", findNavController().currentDestination.toString())
-        val action = FilterFragmentDirections.actionFilterFragmentToFilterLocationFragment2(
-            // location
+        val action = FilterFragmentDirections.actionFilterFragmentToFilterLocationFragment(
+            country,
+            //Area("555", "ЙЙЙ"),
+            region
         )
        findNavController().navigate(action)
     }

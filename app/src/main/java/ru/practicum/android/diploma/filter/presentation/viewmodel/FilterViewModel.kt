@@ -5,12 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class FilterViewModel : ViewModel() {
     private val filterParameters: FilterParameters by lazy { getSavedFilterParameters() }
 
     private val stateLiveData = MutableLiveData<FilterScreenState>()
     fun observeState(): LiveData<FilterScreenState> = stateLiveData
+
+    private val showLocationTrigger = SingleEventLiveData<FilterParameters>()
+    fun getShowLocationTrigger(): LiveData<FilterParameters> = showLocationTrigger
 
     init {
         setState(FilterScreenState.Started(filterParameters))
@@ -46,5 +50,10 @@ class FilterViewModel : ViewModel() {
         val newFilterParameters = filterParameters.copy(salary = salary)
         setState(getCurrentState(newFilterParameters))
         setFilterParameters(newFilterParameters)
+    }
+
+    fun showLocation() {
+        // добавить clickDebounce
+        showLocationTrigger.value = filterParameters
     }
 }
