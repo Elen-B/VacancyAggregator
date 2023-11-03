@@ -5,5 +5,7 @@ sealed interface Request {
 
     data class AreaRequest(val areaId: String): Request
 
+    data class VacancySearchRequest(val text: String): Request
+
     object CountryRequest: Request
 }

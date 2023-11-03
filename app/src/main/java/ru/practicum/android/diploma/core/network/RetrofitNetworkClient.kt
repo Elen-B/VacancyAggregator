@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.core.network.utils.networkAvailable
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 
 class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val context: Context) :
     NetworkClient {
@@ -17,7 +18,10 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
 
         return withContext(Dispatchers.IO) {
             try {
-                processRequest(dto).apply { resultCode = Response.RESULT_SUCCESS }
+                processRequest(dto).apply {
+                    if(resultCode == 0){
+                        resultCode = Response.RESULT_SUCCESS }
+                }
             }
             catch(e: Exception) {
 
@@ -30,6 +34,7 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
         return when (dto) {
             //is Request.AreaRequest -> hhunterApiService.getAreas()
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
+            is Request.VacancySearchRequest -> VacancySearchResponse(hhunterApiService.getVacancyList(dto.text))
             else -> Response().apply { resultCode = Response.RESULT_UNKNOWN_REQUEST }
         }
     }
