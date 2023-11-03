@@ -3,11 +3,19 @@ package ru.practicum.android.diploma.core.network
 import retrofit2.http.GET
 import retrofit2.http.Path
 import ru.practicum.android.diploma.details.data.remote.DetailDto
+import ru.practicum.android.diploma.filter.data.dto.AreaDto
+import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 
 interface HhunterApi {
     @GET("vacancies/{vacancy_id}")
     suspend fun getDeail(
-        @Path ("vacancy_id") vacancy: String
+        @Path("vacancy_id") vacancy: String
     ): DetailDto
+
+    @GET("/areas/countries")
+    suspend fun getCountries(): List<AreaDto>
+
+    @GET("/areas/{areaId}")
+    suspend fun getAreas(): AreaResponse
 }
 

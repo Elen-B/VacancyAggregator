@@ -27,7 +27,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        LocationCountryViewModel()
+        LocationCountryViewModel(get())
     }
 
     viewModel {

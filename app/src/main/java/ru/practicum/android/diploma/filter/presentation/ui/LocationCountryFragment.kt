@@ -30,5 +30,8 @@ class LocationCountryFragment: Fragment() {
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        //TEST
+        viewModel.loadData()
     }
 }
