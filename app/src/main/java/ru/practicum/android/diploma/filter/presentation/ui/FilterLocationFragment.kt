@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
@@ -15,6 +17,7 @@ import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterLocation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.models.FilterLocationScreenState
 
 class FilterLocationFragment: Fragment() {
@@ -36,6 +39,15 @@ class FilterLocationFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setFragmentResultListener(COUNTRY_RESULT_KEY) { _, bundle ->
+            val country: Area? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(COUNTRY_RESULT_VAL, Area::class.java)
+            } else {
+                bundle.getParcelable(COUNTRY_RESULT_VAL)
+            }
+            viewModel.onCountryChanged(country)
+        }
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -126,5 +138,10 @@ class FilterLocationFragment: Fragment() {
             FilterLocationFragmentDirections.actionFilterLocationFragmentToLocationRegionFragment(
             )
         findNavController().navigate(action)
+    }
+
+    companion object {
+        const val COUNTRY_RESULT_KEY = "country_key"
+        const val COUNTRY_RESULT_VAL = "country_value"
     }
 }
