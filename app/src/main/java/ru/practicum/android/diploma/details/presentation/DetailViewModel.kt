@@ -21,7 +21,7 @@ class DetailViewModel (
     private fun getData() {
         viewModelScope.launch {
             //val id = savedStateHandle.get<String>("id") ?: return@launch
-            when (val resultData = detailsInterActor.getDetails(id = "88000000")) {
+            when (val resultData = detailsInterActor.getDetails(id = "88000102")) {
                 is Resource.Error -> {
                     _state.value =
                         DetailState.Error(resultData.message ?: "An unknown error")

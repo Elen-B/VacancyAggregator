@@ -23,13 +23,19 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
         keySkills = this.keySkills?.mapToString(),
         comment = this.contacts?.phones?.first()?.comment,
         contactName = this.contacts?.name,
-        email = this.contacts?.email,
-        phone = "+${this.contacts?.phones?.first()?.country} (${this.contacts?.phones?.first()?.city}) ${this.contacts?.phones?.first()?.number}",
-        phoneNumber = convertStringToLong(
+        email = "edurda77@gmail.com"/*this.contacts?.email*/,
+        phone = "+7 (902) 6355319"/*if (this.contacts == null || this.contacts.phones.isEmpty()) null else {
+            convertStringToSting(
+                prefix = this.contacts.phones.first().country,
+                middle = this.contacts.phones.first().city,
+                postfix = this.contacts.phones.first().number
+            )
+        }*/,
+        phoneNumber =79026355319/* convertStringToLong(
             prefix = this.contacts?.phones?.first()?.country,
             middle = this.contacts?.phones?.first()?.city,
             postfix = this.contacts?.phones?.first()?.number
-        )
+        )*/
     )
 
 private fun List<KeySkill>?.mapToString(): String {
@@ -44,13 +50,25 @@ private fun List<KeySkill>?.mapToString(): String {
 
 private fun convertStringToLong(
     prefix:String?,
-    middle:String?,
+    middle: String?,
     postfix: String?
 ): Long? {
     val postfixRemoved = postfix?.replace("-", "")
     return try {
-        (prefix+middle+postfixRemoved).toLong()
-    } catch (error:Exception) {
+        (prefix + middle + postfixRemoved).toLong()
+    } catch (error: Exception) {
+        null
+    }
+}
+
+private fun convertStringToSting(
+    prefix: String?,
+    middle: String?,
+    postfix: String?
+): String? {
+    return if (prefix != null && middle != null && postfix != null) {
+        "+$prefix ($middle) $postfix"
+    } else {
         null
     }
 }
