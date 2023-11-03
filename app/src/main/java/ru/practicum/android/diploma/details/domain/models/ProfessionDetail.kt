@@ -14,5 +14,6 @@ data class ProfessionDetail(
     val salaryCurrency: String?,
     val salaryFrom: Int?,
     val salaryTo: Int?,
-    val description: String?
+    val description: String?,
+    val keySkills: String?,
 )
