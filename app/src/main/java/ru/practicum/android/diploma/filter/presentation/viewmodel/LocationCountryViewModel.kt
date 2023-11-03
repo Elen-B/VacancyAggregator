@@ -1,33 +1,39 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
+import ru.practicum.android.diploma.filter.presentation.models.LocationCountryScreenState
 
 class LocationCountryViewModel(private val filterInteractor: FilterInteractor): ViewModel()  {
+
+    private val stateLiveData = MutableLiveData<LocationCountryScreenState>()
+    fun observeState(): LiveData<LocationCountryScreenState> = stateLiveData
+
     init {
         loadData()
     }
 
-    fun loadData() {
+    private fun loadData() {
         viewModelScope.launch {
             val result = filterInteractor.getCountries()
             if (!result.second.isNullOrEmpty()) {
-                logShowMessage("ошибка: " + result.second)
+                setState(LocationCountryScreenState.Error)
             } else {
                 if (result.first != null) {
-                    logShowMessage("список стран: " + result.first.toString())
+                    setState(LocationCountryScreenState.Content(result.first!!))
                 } else {
-                    logShowMessage("список стран пуст почему-то")
+                    setState(LocationCountryScreenState.Error)
                 }
             }
 
         }
     }
 
-    private fun logShowMessage(message: String) {
-        Log.e("filter", message)
+    private fun setState(state: LocationCountryScreenState) {
+        stateLiveData.value = state
     }
 }
