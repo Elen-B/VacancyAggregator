@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
 class FilterFragment: Fragment() {
     private lateinit var binding: FragmentFilterBinding
@@ -32,10 +35,9 @@ class FilterFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.miFilterLocation.editText?.setText("Россия, Москва")
-        setMenuEditTextStyle(binding.miFilterLocation, true)
-        setMenuEditTextStyle(binding.miFilterIndustry, false)
-        setSalaryEditTextStyle(binding.miFilterSalary, false)
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
 
         binding.miFilterLocation.editText?.setOnClickListener {
             showLocation()
@@ -70,12 +72,56 @@ class FilterFragment: Fragment() {
         }
 
         binding.miFilterSalary.editText?.doOnTextChanged { text, _, _, _ ->
-            setSalaryEditTextStyle(binding.miFilterSalary, !text.isNullOrEmpty())
+            viewModel.onSalaryChanged(text.toString())
         }
 
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun render(state: FilterScreenState) {
+        when (state) {
+            is FilterScreenState.Started -> {
+                setViewData(state.data)
+                setViewAppearance(state)
+            }
+            is FilterScreenState.Modified -> {
+                if (state.update)
+                    setViewData(state.data)
+                setViewAppearance(state)
+            }
+            else -> Unit
+        }
+
+    }
+
+    private fun setViewAppearance(state: FilterScreenState) {
+        val filterParameters = when (state) {
+            is FilterScreenState.Started -> state.data
+            is FilterScreenState.Modified -> state.data
+            else -> null
+        }
+
+        if (filterParameters != null) {
+            setMenuEditTextStyle(
+                binding.miFilterLocation,
+                !filterParameters.country?.name.isNullOrEmpty()
+            )
+
+            setMenuEditTextStyle(
+                binding.miFilterIndustry,
+                !filterParameters.industry?.name.isNullOrEmpty()
+            )
+
+            setSalaryEditTextStyle(
+                binding.miFilterSalary,
+                filterParameters.salary != null
+            )
+            binding.btFilterClear.isVisible = !filterParameters.isEmpty()
+        }
+
+        binding.btFilterApply.isVisible = state is FilterScreenState.Modified
     }
 
     private fun setMenuEditTextStyle(textInputLayout: TextInputLayout, filled: Boolean) {
@@ -108,6 +154,13 @@ class FilterFragment: Fragment() {
         textInputLayout.defaultHintTextColor = colorStateList
         textInputLayout.hintTextColor = colorStateList
         textInputLayout.isEndIconVisible = filled
+    }
+
+    private fun setViewData(filterParameters: FilterParameters) {
+        binding.miFilterLocation.editText?.setText(filterParameters.country?.name)
+        binding.miFilterIndustry.editText?.setText(filterParameters.industry?.name)
+        binding.miFilterSalary.editText?.setText(filterParameters.salary.toString())
+        binding.cbFilterSalaryRequired.isChecked = filterParameters.fSalaryRequired
     }
 
     private fun showLocation() {
