@@ -145,9 +145,9 @@
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/required_experience"
-                android:textStyle="bold"
                 android:textColor="@color/base_text"
                 android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_medium"
                 app:layout_constraintTop_toBottomOf="@id/cardEmployer"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -227,6 +227,123 @@
                 android:textSize="@dimen/regular_text_size"
                 android:fontFamily="@font/ys_display_regular"
                 app:layout_constraintTop_toBottomOf="@id/keySkills"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/contacts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_24"
+                android:text="@string/contacts"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/header_text_size"
+                android:fontFamily="@font/ys_display_medium"
+                app:layout_constraintTop_toBottomOf="@id/keySkillsContent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/contactFace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/contact_name"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_medium"
+                app:layout_constraintTop_toBottomOf="@id/contacts"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/contactName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_4"
+                android:text="@string/contact_name"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_regular"
+                app:layout_constraintTop_toBottomOf="@id/contactFace"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/emailName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/e_mail"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_medium"
+                app:layout_constraintTop_toBottomOf="@id/contactName"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_4"
+                android:text="@string/e_mail"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_regular"
+                app:layout_constraintTop_toBottomOf="@id/emailName"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/phoneName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/phone"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_medium"
+                app:layout_constraintTop_toBottomOf="@id/email"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_4"
+                android:text="@string/phone"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_regular"
+                app:layout_constraintTop_toBottomOf="@id/phoneName"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/commentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/comment"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_medium"
+                app:layout_constraintTop_toBottomOf="@id/phone"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_4"
+                android:text="@string/comment"
+                android:textColor="@color/base_text"
+                android:textSize="@dimen/regular_text_size"
+                android:fontFamily="@font/ys_display_regular"
+                app:layout_constraintTop_toBottomOf="@id/commentName"
                 app:layout_constraintStart_toStartOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
