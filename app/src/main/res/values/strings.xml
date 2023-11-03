@@ -51,4 +51,6 @@
     <string name="team_developer_2">Дмитрий</string>
     <string name="team_developer_3">Елена</string>
     <string name="team_developer_4">Савелий</string>
+    <string name="list_empty">Список пуст</string>
+    <string name="no_list">Не удалось получить\nсписок вакансий</string>
 </resources>
