@@ -21,7 +21,7 @@ class FilterLocationFragment: Fragment() {
     private lateinit var binding: FragmentFilterLocationBinding
     private val args: FilterLocationFragmentArgs by navArgs()
 
-    private val viewModel: FilterLocationViewModel by viewModel() {
+    private val viewModel: FilterLocationViewModel by viewModel {
         parametersOf(args.country, args.region)
     }
 

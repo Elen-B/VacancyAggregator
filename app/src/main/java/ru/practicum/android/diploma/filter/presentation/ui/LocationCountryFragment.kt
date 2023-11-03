@@ -4,16 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentLocationCountryBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationCountryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.filter.presentation.models.LocationCountryScreenState
 
 class LocationCountryFragment: Fragment() {
     private lateinit var binding: FragmentLocationCountryBinding
 
     private val viewModel: LocationCountryViewModel by viewModel()
+
+    private val adapter = LocationCountryAdapter(listOf()).apply {
+        clickListener = LocationCountryAdapter.CountryClickListener {
+            //setfragmentresult
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +36,23 @@ class LocationCountryFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        //TEST
-        viewModel.loadData()
+        binding.rvCountryList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvCountryList.adapter = adapter
+    }
+
+    private fun render(state: LocationCountryScreenState) {
+        binding.rvCountryList.isVisible = state is LocationCountryScreenState.Content
+        binding.phFilterError.isVisible = state is LocationCountryScreenState.Error
+
+        if (state is LocationCountryScreenState.Content)
+            adapter.addItems(state.countryList)
     }
 }
