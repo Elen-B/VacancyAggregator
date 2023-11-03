@@ -56,7 +56,7 @@ class DetailFragment : Fragment() {
         val from = getString(R.string.from)
         val to = getString(R.string.to)
         val notSalary = getString(R.string.not_salary)
-        val description = Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        val description = Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
         if (professionDetail.salaryFrom == null && professionDetail.salaryTo == null) {
             binding.salary.text = notSalary
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
