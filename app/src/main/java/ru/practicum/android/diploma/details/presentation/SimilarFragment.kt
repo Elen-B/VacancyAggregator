@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSimilarBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 
@@ -42,7 +45,7 @@ class SimilarFragment : Fragment() {
             }
         }
         binding.back.setOnClickListener {
-
+            view.findNavController().popBackStack()
         }
 
     }
@@ -54,7 +57,8 @@ class SimilarFragment : Fragment() {
         val stateClickListener: SimilarAdapter.OnStateClickListener =
             object : SimilarAdapter.OnStateClickListener {
                 override fun onStateClick(item: ProfessionSimillar, position: Int) {
-
+                    val bundle = bundleOf("id" to item.id)
+                    view?.findNavController()?.navigate(R.id.action_similarFragment_to_detailFragment, bundle)
                 }
             }
         val adapter = SimilarAdapter(data, stateClickListener, requireContext())

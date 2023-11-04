@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.details.presentation
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -9,7 +10,7 @@ import ru.practicum.android.diploma.util.Resource
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
-    //private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state = MutableLiveData<DetailState>(DetailState.Loading)
     val state = _state
