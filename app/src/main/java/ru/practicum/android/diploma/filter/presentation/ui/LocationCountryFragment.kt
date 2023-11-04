@@ -22,7 +22,10 @@ class LocationCountryFragment: Fragment() {
 
     private val adapter = LocationViewAdapter(listOf()).apply {
         clickListener = LocationViewAdapter.CountryClickListener { area ->
-            setFragmentResult(FilterLocationFragment.COUNTRY_RESULT_KEY, bundleOf(FilterLocationFragment.COUNTRY_RESULT_VAL to area))
+            setFragmentResult(
+                FilterLocationFragment.COUNTRY_RESULT_KEY,
+                bundleOf(FilterLocationFragment.COUNTRY_RESULT_VAL to area)
+            )
             findNavController().navigateUp()
         }
     }

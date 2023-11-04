@@ -49,6 +49,15 @@ class FilterLocationFragment: Fragment() {
             viewModel.onCountryChanged(country)
         }
 
+        setFragmentResultListener(REGION_RESULT_KEY) { _, bundle ->
+            val region: Area? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(REGION_RESULT_VAL, Area::class.java)
+            } else {
+                bundle.getParcelable(REGION_RESULT_VAL)
+            }
+            viewModel.onRegionChanged(region)
+        }
+
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -143,6 +152,8 @@ class FilterLocationFragment: Fragment() {
 
     companion object {
         const val COUNTRY_RESULT_KEY = "country_key"
+        const val REGION_RESULT_KEY = "region_key"
         const val COUNTRY_RESULT_VAL = "country_value"
+        const val REGION_RESULT_VAL = "region_value"
     }
 }
