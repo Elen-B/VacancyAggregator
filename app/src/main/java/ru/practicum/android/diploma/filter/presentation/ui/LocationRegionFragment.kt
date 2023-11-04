@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.databinding.FragmentLocationRegionBinding
@@ -19,6 +21,13 @@ class LocationRegionFragment: Fragment() {
 
     private val viewModel: LocationRegionViewModel by viewModel {
         parametersOf(args.country)
+    }
+
+    private val adapter = LocationViewAdapter(listOf()).apply {
+        clickListener = LocationViewAdapter.CountryClickListener { area ->
+     //       setFragmentResult(FilterLocationFragment.COUNTRY_RESULT_KEY, bundleOf(FilterLocationFragment.COUNTRY_RESULT_VAL to area))
+     //       findNavController().navigateUp()
+        }
     }
 
     override fun onCreateView(
@@ -40,9 +49,16 @@ class LocationRegionFragment: Fragment() {
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        binding.rvRegionList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvRegionList.adapter = adapter
     }
 
     private fun render(state: LocationRegionScreenState) {
-        //
+        binding.phFilterEmpty.isVisible = state is LocationRegionScreenState.Empty
+        binding.phFilterError.isVisible = state is LocationRegionScreenState.Error
+
+        if (state is LocationRegionScreenState.Content)
+            adapter.addItems(state.regionList)
     }
 }

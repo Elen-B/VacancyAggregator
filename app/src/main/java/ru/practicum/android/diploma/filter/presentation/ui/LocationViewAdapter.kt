@@ -4,17 +4,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.filter.domain.models.Area
 
-class LocationCountryAdapter(private var items: List<Area>) : RecyclerView.Adapter<LocationCountryViewHolder>() {
+class LocationViewAdapter(private var items: List<Area>) : RecyclerView.Adapter<LocationViewViewHolder>() {
     var clickListener: CountryClickListener? = null
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationCountryViewHolder {
-        return LocationCountryViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewViewHolder {
+        return LocationViewViewHolder(parent)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: LocationCountryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LocationViewViewHolder, position: Int) {
         val track = items[position]
         holder.bind(track)
         holder.itemView.setOnClickListener{clickListener?.onCountryClick(track)}

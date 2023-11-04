@@ -24,8 +24,8 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
         viewModelScope.launch {
             val id = country?.id.orEmpty()
             //Log.e("filter", "id = " + id)
-            val result = filterInteractor.getAreas(id.orEmpty())
-            //Log.e("filter", result.toString())
+            val result = filterInteractor.getAreas(id)
+            //Log.e("filter", result.toString() + result.toString())
             if (!result.second.isNullOrEmpty()) {
                 setState(LocationRegionScreenState.Error)
             } else {
