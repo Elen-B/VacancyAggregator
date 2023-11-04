@@ -115,6 +115,10 @@ class FilterFragment: Fragment() {
             viewModel.saveFilterParameters()
             findNavController().navigateUp()
         }
+
+        binding.btFilterClear.setOnClickListener {
+            viewModel.onClearFilterClick()
+        }
     }
 
     private fun render(state: FilterScreenState) {

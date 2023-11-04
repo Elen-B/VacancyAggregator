@@ -68,6 +68,12 @@ class FilterViewModel(
         setState(getCurrentState(newFilterParameters, false))
     }
 
+    fun onClearFilterClick() {
+        val newFilterParameters = FilterParameters()
+        setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, true))
+    }
+
     fun showLocation() {
         // добавить clickDebounce
         showLocationTrigger.value = filterParameters
