@@ -41,15 +41,16 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/vacancy"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_12"
         android:layout_marginTop="@dimen/margin_16"
         android:layout_marginEnd="@dimen/margin_16"
         android:paddingBottom="@dimen/margin_8"
         android:text="@string/vacancy"
         android:textColor="@color/base_text"
-        android:textAlignment="center"
         android:textSize="@dimen/header_text_size"
+        app:layout_constraintStart_toEndOf="@id/back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -115,13 +116,16 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/employerName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_8"
-                        android:text="@string/from"
+                        android:text="@string/employer_name"
                         android:textColor="@color/card_text"
+                        android:layout_marginEnd="@dimen/margin_16"
                         android:textSize="@dimen/header_text_size"
-                        app:layout_constraintTop_toTopOf="@id/employerLogo"
+                        android:layout_marginTop="@dimen/margin_16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/employerLogo"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -132,6 +136,7 @@
                         android:text="@string/from"
                         android:textColor="@color/card_text"
                         android:textSize="@dimen/regular_text_size"
+                        android:paddingBottom="@dimen/margin_16"
                         app:layout_constraintTop_toBottomOf="@id/employerName"
                         app:layout_constraintStart_toEndOf="@id/employerLogo"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
