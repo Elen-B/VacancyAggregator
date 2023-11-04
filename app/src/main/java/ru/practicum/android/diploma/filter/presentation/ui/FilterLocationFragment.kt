@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -70,6 +72,10 @@ class FilterLocationFragment: Fragment() {
             showRegion(country)
         }
 
+        viewModel.getApplyFilterTrigger().observe(viewLifecycleOwner) { list ->
+            applyFilter(list)
+        }
+
         binding.miLocationCountry.editText?.setOnClickListener {
             viewModel.showCountry()
         }
@@ -96,6 +102,10 @@ class FilterLocationFragment: Fragment() {
 
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.btFilterChoose.setOnClickListener {
+            viewModel.applyFilter()
         }
     }
 
@@ -150,7 +160,19 @@ class FilterLocationFragment: Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun applyFilter(list: List<Area?>) {
+        setFragmentResult(
+            LOCATION_RESULT_KEY,
+            bundleOf(
+                COUNTRY_RESULT_VAL to list[0],
+                REGION_RESULT_VAL to list[1]
+            )
+        )
+        findNavController().navigateUp()
+    }
+
     companion object {
+        const val LOCATION_RESULT_KEY = "location_key"
         const val COUNTRY_RESULT_KEY = "country_key"
         const val REGION_RESULT_KEY = "region_key"
         const val COUNTRY_RESULT_VAL = "country_value"

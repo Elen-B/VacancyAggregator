@@ -21,6 +21,9 @@ class FilterLocationViewModel(
     private val showRegionTrigger = SingleEventLiveData<Area?>()
     fun getShowRegionTrigger(): LiveData<Area?> = showRegionTrigger
 
+    private val applyFilterTrigger = SingleEventLiveData<List<Area?>>()
+    fun getApplyFilterTrigger(): LiveData<List<Area?>> = applyFilterTrigger
+
     init {
         setState(FilterLocationScreenState.Content(country, region))
     }
@@ -49,6 +52,15 @@ class FilterLocationViewModel(
         if (/*clickDebounce() &&*/ stateLiveData.value is FilterLocationScreenState.Content) {
             showRegionTrigger.value =
                 (stateLiveData.value as FilterLocationScreenState.Content).country
+        }
+    }
+
+    fun applyFilter() {
+        if (/*clickDebounce() &&*/ stateLiveData.value is FilterLocationScreenState.Content) {
+            applyFilterTrigger.value = listOf(
+                (stateLiveData.value as FilterLocationScreenState.Content).country,
+                (stateLiveData.value as FilterLocationScreenState.Content).region,
+            )
         }
     }
 }

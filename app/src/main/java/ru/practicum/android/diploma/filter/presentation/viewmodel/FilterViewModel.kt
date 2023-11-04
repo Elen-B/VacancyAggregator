@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
@@ -29,11 +30,11 @@ class FilterViewModel : ViewModel() {
         stateLiveData.value = state
     }
 
-    private fun getCurrentState(newFilterParameters: FilterParameters): FilterScreenState {
+    private fun getCurrentState(newFilterParameters: FilterParameters, update: Boolean): FilterScreenState {
         return if (filterParameters.equals(newFilterParameters) && stateLiveData.value is FilterScreenState.Initial) {
             FilterScreenState.Initial
         } else {
-            FilterScreenState.Modified(newFilterParameters, false)
+            FilterScreenState.Modified(newFilterParameters, update)
         }
     }
 
@@ -48,8 +49,16 @@ class FilterViewModel : ViewModel() {
     fun onSalaryChanged(value: String) {
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
-        setState(getCurrentState(newFilterParameters))
         setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, false))
+
+    }
+
+    fun onLocationChanged(country: Area?, region: Area?) {
+        val newFilterParameters = filterParameters.copy(country = country, region = region)
+        setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, true))
+
     }
 
     fun showLocation() {
