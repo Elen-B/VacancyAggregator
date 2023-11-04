@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.details.data.remote.DetailDto
-import ru.practicum.android.diploma.details.data.remote.SimillarVacancyDto
+import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.search.data.dto.VacancyDTO
@@ -15,10 +15,10 @@ interface HhunterApi {
         @Path("vacancy_id") vacancy: String
     ): DetailDto
 
-    @GET("/vacancies/{vacancy_id}/similar_vacancies")
+    @GET("vacancies/{vacancy_id}/similar_vacancies")
     suspend fun getSimilarVacancies(
         @Path("vacancy_id") vacancy: String
-    ): List<SimillarVacancyDto>
+    ): SimilarVacancyDto
 
 
     @GET("/areas/countries")

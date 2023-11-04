@@ -9,9 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -50,9 +52,7 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-
-
-    }
+            }
 
     @SuppressLint("SetTextI18n")
     private fun setData(professionDetail: ProfessionDetail) {
@@ -159,6 +159,10 @@ class DetailFragment : Fragment() {
         binding.phone.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${professionDetail.phone}"))
             startActivity(intent)
+        }
+        binding.btSimilar.setOnClickListener {
+            val bundle = bundleOf("id_vacancy" to professionDetail.id)
+            view?.findNavController()?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
         }
     }
 }

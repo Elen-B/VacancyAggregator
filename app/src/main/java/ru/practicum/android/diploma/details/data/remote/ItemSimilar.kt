@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.details.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class SimillarVacancyDto(
+data class ItemSimilar(
     @SerializedName("employer")
     val employer:Employer,
     @SerializedName("id")

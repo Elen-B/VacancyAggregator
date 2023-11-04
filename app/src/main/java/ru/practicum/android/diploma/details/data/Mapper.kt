@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.details.data
 
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.data.remote.KeySkill
-import ru.practicum.android.diploma.details.data.remote.SimillarVacancyDto
+import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 
@@ -36,8 +36,8 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
     )
 
 
-fun List<SimillarVacancyDto>.mapToProfessionSimilar(): List<ProfessionSimillar> {
-    return this.map {
+fun SimilarVacancyDto.mapToProfessionSimilar(): List<ProfessionSimillar> {
+    return this.items.map {
         ProfessionSimillar(
             employerId = it.employer.id,
             employerName = it.employer.name,
