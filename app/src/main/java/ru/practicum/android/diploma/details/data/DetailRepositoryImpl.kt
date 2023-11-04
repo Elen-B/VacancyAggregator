@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.details.data
 import ru.practicum.android.diploma.core.network.HhunterApi
 import ru.practicum.android.diploma.details.domain.impl.DetailRepository
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
+import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 import ru.practicum.android.diploma.util.Resource
 
 class DetailRepositoryImpl(
@@ -16,4 +17,15 @@ class DetailRepositoryImpl(
             Resource.Error(error.message?: "An unknown error")
         }
     }
+
+    override suspend fun getVacanciesSimilar(id: String): Resource<List<ProfessionSimillar>> {
+        return try {
+            val result = hhunterApi.getSimilarVacancies(id)
+            Resource.Success(result.mapToProfessionSimilar())
+        } catch (error: Exception) {
+            Resource.Error(error.message?: "An unknown error")
+        }
+    }
+
+
 }
