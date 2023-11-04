@@ -12,4 +12,5 @@
     <string name="e_mail">E-mail</string>
     <string name="phone">Телефон</string>
     <string name="comment">Комментарий</string>
+    <string name="similar_vacancies">Похожие вакансии</string>
 </resources>
