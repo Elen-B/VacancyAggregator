@@ -4,6 +4,7 @@ plugins {
     id("ru.practicum.android.diploma.plugins.developproperties")
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")
 }
 
 android {
