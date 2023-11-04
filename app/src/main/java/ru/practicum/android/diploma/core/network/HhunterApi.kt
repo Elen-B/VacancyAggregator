@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancyDTO
 
 interface HhunterApi {
     @GET("vacancies/{vacancy_id}")
-    suspend fun getDeail(
+    suspend fun getDetail(
         @Path("vacancy_id") vacancy: String
     ): DetailDto
 

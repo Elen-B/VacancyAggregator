@@ -22,4 +22,6 @@ data class DetailDto(
     val description: String?,
     @SerializedName("key_skills")
     val keySkills: List<KeySkill>?,
+    @SerializedName("contacts")
+    val contacts: Contacts?
 )

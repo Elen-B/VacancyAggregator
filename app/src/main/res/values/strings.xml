@@ -34,6 +34,7 @@
 
     <!-- details section -->
     <string name="vacancy_name">vacancy name</string>
+    <string name="employer_name">Кировское районное отделение судебных приставов</string>
     <string name="from">от</string>
     <string name="to">до</string>
     <string name="required_experience">Требуемый опыт</string>
@@ -53,4 +54,9 @@
     <string name="team_developer_4">Савелий</string>
     <string name="list_empty">Список пуст</string>
     <string name="no_list">Не удалось получить\nсписок вакансий</string>
+    <string name="contacts">Контакты</string>
+    <string name="contact_name">Контактное лицо</string>
+    <string name="e_mail">E-mail</string>
+    <string name="phone">Телефон</string>
+    <string name="comment">Комментарий</string>
 </resources>

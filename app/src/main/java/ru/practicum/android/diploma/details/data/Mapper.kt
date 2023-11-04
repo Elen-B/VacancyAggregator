@@ -14,14 +14,27 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
         employerName = this.employer.name,
         employerLogo = this.employer.logoUrls?.original,
         experienceId = this.experience?.id,
-        experienceName =this.experience?.name,
+        experienceName = this.experience?.name,
         salaryCurrency = this.salary?.currency,
         salaryFrom = this.salary?.from,
         salaryTo = this.salary?.to,
         employerCity = this.area.name,
         description = this.description,
-        keySkills = this.keySkills?.mapToString()
+        keySkills = this.keySkills?.mapToString(),
+        comment = this.contacts?.phones?.first()?.comment,
+        contactName = this.contacts?.name,
+        email = this.contacts?.email,
+        phone = if (this.contacts == null || this.contacts.phones.isEmpty()) null else {
+            convertStringToSting(
+                prefix = this.contacts.phones.first().country,
+                middle = this.contacts.phones.first().city,
+                postfix = this.contacts.phones.first().number
+            )
+        },
     )
+
+
+
 
 private fun List<KeySkill>?.mapToString(): String {
     return if (this.isNullOrEmpty()) {
@@ -30,5 +43,17 @@ private fun List<KeySkill>?.mapToString(): String {
         val marker = "• "
         val newline = "\n"
         this.joinToString("") { marker + it.name + newline }
+    }
+}
+
+private fun convertStringToSting(
+    prefix: String?,
+    middle: String?,
+    postfix: String?
+): String? {
+    return if (prefix != null && middle != null && postfix != null) {
+        "+$prefix ($middle) $postfix"
+    } else {
+        null
     }
 }

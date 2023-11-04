@@ -1,8 +1,11 @@
 package ru.practicum.android.diploma.details.presentation
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,14 +36,14 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.state.observe(viewLifecycleOwner) {result->
+            when (result) {
                 is DetailState.Success -> {
-                    setData(it.data)
+                    setData(result.data)
                 }
 
                 is DetailState.Error -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
                 }
 
                 is DetailState.Loading -> {
@@ -48,6 +51,7 @@ class DetailFragment : Fragment() {
                 }
             }
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -106,6 +110,55 @@ class DetailFragment : Fragment() {
         } else {
             binding.keySkills.isVisible = false
             binding.keySkillsContent.isVisible = false
+        }
+        binding.contacts.isVisible = !(professionDetail.comment==null
+                &&professionDetail.phone==null
+                &&professionDetail.email==null
+                &&professionDetail.contactName==null)
+        if (professionDetail.comment!=null) {
+            binding.commentName.isVisible = true
+            binding.comment.isVisible = true
+            binding.comment.text = professionDetail.comment
+        } else {
+            binding.commentName.isVisible = false
+            binding.comment.isVisible = false
+        }
+
+        if (professionDetail.contactName!=null) {
+            binding.contactFace.isVisible = true
+            binding.contactName.isVisible = true
+            binding.contactName.text = professionDetail.contactName
+        } else {
+            binding.contactFace.isVisible = false
+            binding.contactName.isVisible = false
+        }
+        if (professionDetail.phone!=null) {
+            binding.phoneName.isVisible = true
+            binding.phone.isVisible = true
+            binding.phone.text = professionDetail.phone
+        } else {
+            binding.phoneName.isVisible = false
+            binding.phone.isVisible = false
+        }
+
+        if (professionDetail.email!=null) {
+            binding.emailName.isVisible = true
+            binding.email.isVisible = true
+            binding.email.text = professionDetail.email
+        } else {
+            binding.emailName.isVisible = false
+            binding.email.isVisible = false
+        }
+        binding.email.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:${professionDetail.email}")
+            if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(intent)
+            }
+        }
+        binding.phone.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${professionDetail.phone}"))
+            startActivity(intent)
         }
     }
 }
