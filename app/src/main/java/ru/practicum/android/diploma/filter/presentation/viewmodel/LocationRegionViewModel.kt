@@ -7,22 +7,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
+import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.models.LocationRegionScreenState
 
-class LocationRegionViewModel(private val filterInteractor: FilterInteractor): ViewModel() {
+class LocationRegionViewModel(country: Area?, private val filterInteractor: FilterInteractor) :
+    ViewModel() {
 
     private val stateLiveData = MutableLiveData<LocationRegionScreenState>()
     fun observeState(): LiveData<LocationRegionScreenState> = stateLiveData
 
     init {
-        loadData()
+        loadData(country = country)
     }
 
-    private fun loadData() {
+    private fun loadData(country: Area?) {
         viewModelScope.launch {
-            val id: String? = "113"
+            val id = country?.id.orEmpty()
+            //Log.e("filter", "id = " + id)
             val result = filterInteractor.getAreas(id.orEmpty())
-            Log.e("filter", result.toString())
+            //Log.e("filter", result.toString())
             if (!result.second.isNullOrEmpty()) {
                 setState(LocationRegionScreenState.Error)
             } else {

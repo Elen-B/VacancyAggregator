@@ -44,4 +44,11 @@ class FilterLocationViewModel(
     fun showCountry() {
         showCountryTrigger.value = Unit
     }
+
+    fun showRegion() {
+        if (/*clickDebounce() &&*/ stateLiveData.value is FilterLocationScreenState.Content) {
+            showRegionTrigger.value =
+                (stateLiveData.value as FilterLocationScreenState.Content).country
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -169,10 +168,8 @@ class FilterFragment: Fragment() {
     }
 
     private fun showLocation(country: Area?, region: Area?) {
-        Log.e("filter", findNavController().currentDestination.toString())
         val action = FilterFragmentDirections.actionFilterFragmentToFilterLocationFragment(
             country,
-            //Area("555", "ЙЙЙ"),
             region
         )
        findNavController().navigate(action)

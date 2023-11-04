@@ -57,12 +57,16 @@ class FilterLocationFragment: Fragment() {
             showCountry()
         }
 
+        viewModel.getShowRegionTrigger().observe(viewLifecycleOwner) { country ->
+            showRegion(country)
+        }
+
         binding.miLocationCountry.editText?.setOnClickListener {
             viewModel.showCountry()
         }
 
         binding.miLocationRegion.editText?.setOnClickListener {
-            showRegion()
+            viewModel.showRegion()
         }
 
         binding.miLocationCountry.setEndIconOnClickListener {
@@ -70,18 +74,14 @@ class FilterLocationFragment: Fragment() {
                 viewModel.showCountry()
             else {
                 viewModel.onCountryChanged(null)
-                //binding.miLocationCountry.editText?.text = null
-                //setMenuEditTextStyle(binding.miLocationCountry, false)
             }
         }
 
         binding.miLocationRegion.setEndIconOnClickListener {
             if (binding.miLocationRegion.editText?.text.isNullOrEmpty())
-                showRegion()
+                viewModel.showRegion()
             else {
                 viewModel.onRegionChanged(null)
-                //binding.miLocationRegion.editText?.text = null
-                //setMenuEditTextStyle(binding.miLocationRegion, false)
             }
         }
 
@@ -133,9 +133,10 @@ class FilterLocationFragment: Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun showRegion() {
+    private fun showRegion(country: Area?) {
         val action =
             FilterLocationFragmentDirections.actionFilterLocationFragmentToLocationRegionFragment(
+                country
             )
         findNavController().navigate(action)
     }
