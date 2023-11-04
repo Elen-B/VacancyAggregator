@@ -4,7 +4,9 @@ import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
 import ru.practicum.android.diploma.filter.data.mapper.AreaMapper
+import ru.practicum.android.diploma.filter.data.mapper.AreaTreeMapper
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.util.Resource
@@ -18,9 +20,19 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                     areaDto
                 )
             })
-            Response.RESULT_NETWORK_ERROR -> Resource.Error("Подключение отсутствует")
-            Response.RESULT_BAD_REQUEST -> Resource.Error("Ошибка сервера")
-            else -> Resource.Error("Неизвестная ошибка")
+            else -> Resource.Error("")
+        }
+    }
+
+    override suspend fun getAreas(id: String): Resource<List<Area>> {
+        val response = networkClient.doRequest(Request.AreaRequest(id))
+        return when (response.resultCode) {
+            Response.RESULT_SUCCESS -> {
+                val flattenArea = AreaTreeMapper.map((response as AreaTreeResponse).results).sortedBy { it.name }
+                Resource.Success(flattenArea)
+            }
+
+            else -> Resource.Error("")
         }
     }
 }

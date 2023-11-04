@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.core.network.utils.networkAvailable
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 
 class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val context: Context) :
@@ -32,7 +33,7 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
 
     private suspend fun processRequest(dto: Request): Response {
         return when (dto) {
-            //is Request.AreaRequest -> hhunterApiService.getAreas()
+            is Request.AreaRequest -> AreaTreeResponse(hhunterApiService.getAreas(dto.id))
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
             is Request.VacancySearchRequest -> VacancySearchResponse(hhunterApiService.getVacancyList(dto.text))
             else -> Response().apply { resultCode = Response.RESULT_UNKNOWN_REQUEST }

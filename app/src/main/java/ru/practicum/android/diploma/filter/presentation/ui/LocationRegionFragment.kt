@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentLocationRegionBinding
+import ru.practicum.android.diploma.filter.presentation.models.LocationRegionScreenState
+import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationRegionViewModel
 
 class LocationRegionFragment: Fragment() {
     private lateinit var binding: FragmentLocationRegionBinding
+
+    private val viewModel: LocationRegionViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,8 +28,16 @@ class LocationRegionFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun render(state: LocationRegionScreenState) {
+        //
     }
 }
