@@ -1,28 +1,63 @@
-package ru.practicum.android.diploma.details.presentation;
+package ru.practicum.android.diploma.details.presentation
 
-import android.os.Bundle;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.databinding.FragmentSimilarBinding
+import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 
-import androidx.fragment.app.Fragment;
+class SimilarFragment : Fragment() {
+    private var _binding: FragmentSimilarBinding? = null
+    private val viewModel: SimilarViewModel by viewModel()
+    private val binding get() = _binding!!
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSimilarBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-import ru.practicum.android.diploma.R;
+        viewModel.state.observe(viewLifecycleOwner) {result->
+            when (result) {
+                is SimilarState.Success -> {
+                    setData(result.data)
+                }
 
-public class SimilarFragment extends Fragment {
+                is SimilarState.Error -> {
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+                }
 
+                is SimilarState.Loading -> {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+                }
+            }
+        }
+        binding.back.setOnClickListener {
+
+        }
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    private fun setData(data: List<ProfessionSimillar>) {
+        binding.rvSimilar.layoutManager = LinearLayoutManager(
+            requireContext(), LinearLayoutManager.VERTICAL, false
+        )
+        val stateClickListener: SimilarAdapter.OnStateClickListener =
+            object : SimilarAdapter.OnStateClickListener {
+                override fun onStateClick(item: ProfessionSimillar, position: Int) {
 
-        return inflater.inflate(R.layout.fragment_similar, container, false);
+                }
+            }
+        val adapter = SimilarAdapter(data, stateClickListener, requireContext())
+        binding.rvSimilar.adapter = adapter
     }
 }
