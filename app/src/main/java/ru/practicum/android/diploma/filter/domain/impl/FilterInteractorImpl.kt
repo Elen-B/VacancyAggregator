@@ -14,7 +14,7 @@ class FilterInteractorImpl(private val repository: FilterRepository): FilterInte
     }
 
     override suspend fun getAreas(id: String): Pair<List<Area>?, String?> {
-        val res = repository.getAreas(id)
+        val res = if (id.isEmpty()) repository.getAreas() else repository.getAreas(id)
         return when(res) {
             is Resource.Success -> Pair(res.data, null)
             is Resource.Error -> Pair(null, res.message)

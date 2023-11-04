@@ -8,4 +8,6 @@ sealed interface Request {
     data class VacancySearchRequest(val text: String): Request
 
     object CountryRequest: Request
+
+    object AreasRequest: Request
 }

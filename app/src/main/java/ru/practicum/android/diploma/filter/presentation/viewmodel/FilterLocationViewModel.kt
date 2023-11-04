@@ -34,6 +34,12 @@ class FilterLocationViewModel(
 
     fun onCountryChanged(country: Area?) {
         val newState =
+            if (country == null || !country.equals((stateLiveData.value as FilterLocationScreenState.Content).country))
+                (stateLiveData.value as FilterLocationScreenState.Content).copy(
+                    country = country,
+                    region = null
+                )
+        else
             (stateLiveData.value as FilterLocationScreenState.Content).copy(country = country)
         setState(newState)
     }

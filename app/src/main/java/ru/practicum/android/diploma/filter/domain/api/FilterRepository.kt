@@ -8,4 +8,6 @@ interface FilterRepository {
     suspend fun getCountries(): Resource<List<Area>>
 
     suspend fun getAreas(id: String): Resource<List<Area>>
+
+    suspend fun getAreas(): Resource<List<Area>>
 }

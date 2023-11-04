@@ -17,6 +17,9 @@ interface HhunterApi {
     @GET("/areas/countries")
     suspend fun getCountries(): List<AreaDto>
 
+    @GET("/areas/")
+    suspend fun getAreas(): List<AreaTreeDto>
+
     @GET("/areas/{area_id}")
     suspend fun getAreas(
         @Path("area_id") id: String
