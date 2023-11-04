@@ -31,7 +31,7 @@ val viewModelModule = module {
         LocationCountryViewModel(get())
     }
 
-    viewModel {
-        LocationRegionViewModel()
+    viewModel {(country: Area?) ->
+        LocationRegionViewModel(country, get())
     }
 }

@@ -5,7 +5,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
-import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
 import ru.practicum.android.diploma.search.data.dto.VacancyDTO
 
 interface HhunterApi {
@@ -17,8 +17,13 @@ interface HhunterApi {
     @GET("/areas/countries")
     suspend fun getCountries(): List<AreaDto>
 
-    @GET("/areas/{areaId}")
-    suspend fun getAreas(): AreaResponse
+    @GET("/areas/")
+    suspend fun getAreas(): List<AreaTreeDto>
+
+    @GET("/areas/{area_id}")
+    suspend fun getAreas(
+        @Path("area_id") id: String
+    ): AreaTreeDto?
 
     @GET("vacancies")
     suspend fun getVacancyList(
