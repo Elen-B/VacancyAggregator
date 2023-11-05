@@ -11,6 +11,7 @@
     <string name="vacancy_error">Не удалось получить список вакансий</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="text">Text</string>
+    <string name="foundVacancies">Найдено %1$s вакансий</string>
 
 
     <!-- filter section -->

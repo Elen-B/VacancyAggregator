@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,8 +51,9 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
 
+
         viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
-            binding.textVacancyCount.setText(it)
+            binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
         }
 /*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {

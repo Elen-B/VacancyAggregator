@@ -3,11 +3,9 @@ package ru.practicum.android.diploma.search.presentation.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
@@ -22,9 +20,9 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
     private var searchJob: Job? = null
     private var isClickAllowed = true
     private val stateLiveData = MutableLiveData<VacancyState>()
-    private val foundVacanciesCount = MutableLiveData<String>("0")
+    private val foundVacanciesCount = MutableLiveData<String?>(null)
     fun observeState(): LiveData<VacancyState> = stateLiveData
-    fun observeFoundVacanciesCount(): LiveData<String> = foundVacanciesCount
+    fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
 
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
         if (latestSearchText == changedText && !forceButtonClick) {
@@ -42,17 +40,24 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(VacancyState.Loading)
+            foundVacanciesCount.postValue("1-0")
             viewModelScope.launch {
                 interactor
                     .searchVacancy(newSearchText)
                     .collect { pair ->
-                        processResult(pair.data, pair.message)
+                        processResult(
+                            pair.second.data,
+                            pair.second.message
+                        ).apply { foundVacanciesCount.postValue(pair.first) }
                     }
             }
         }
     }
 
-    private fun processResult(foundVacancies: List<SearchVacancy>?, message: String?) {
+    private fun processResult(
+        foundVacancies: List<SearchVacancy>?,
+        message: String?
+    ) {
         val vacancies = mutableListOf<SearchVacancy>()
         if (foundVacancies != null) {
             vacancies.addAll(foundVacancies)

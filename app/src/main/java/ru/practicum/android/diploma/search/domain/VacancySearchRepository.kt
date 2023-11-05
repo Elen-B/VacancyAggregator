@@ -5,6 +5,6 @@ import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
 
 interface VacancySearchRepository {
-   fun searchVacancy(text: String): Flow<Resource<List<SearchVacancy>>>
+   fun searchVacancy(text: String): Flow<Pair<String?,Resource<List<SearchVacancy>>>>
 
 }

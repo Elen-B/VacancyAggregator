@@ -21,10 +21,11 @@ class VacancySearchRepositoryImpl(
     private val networkClient: NetworkClient,
 ) :
     VacancySearchRepository {
-    override fun searchVacancy(text: String): Flow<Resource<List<SearchVacancy>>> = flow {
+    override fun searchVacancy(text: String): Flow<Pair<String?, Resource<List<SearchVacancy>>>> = flow {
         val response = networkClient.doRequest(Request.VacancySearchRequest(text))
         when (response.resultCode) {
-            Response.RESULT_SUCCESS -> emit(Resource.Success((response as VacancySearchResponse).items.map { it ->
+            Response.RESULT_SUCCESS -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
+                Resource.Success((response as VacancySearchResponse).items.map { it ->
                 SearchVacancy(
                     it.id?.toInt(),
                     it.name,
@@ -32,10 +33,15 @@ class VacancySearchRepositoryImpl(
                     Employer(it.employer?.id, it.employer?.name),
                     it.employer?.logo_urls?.get(LOG_IMAGE)
                 )
-            }))
-            Response.RESULT_NETWORK_ERROR -> emit(Resource.Error(R.string.network_error.toString()))
-            Response.RESULT_BAD_REQUEST -> emit(Resource.Error(R.string.vacancy_error.toString()))
-            else -> emit(Resource.Error(R.string.unknown_error.toString()))
+            })))
+            Response.RESULT_NETWORK_ERROR -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
+                Resource.Error(R.string.network_error.toString())))
+            Response.RESULT_BAD_REQUEST -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
+                Resource.Error(R.string.vacancy_error.toString())))
+            else -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
+                Resource.Error(R.string.unknown_error.toString())))
         }
     }.flowOn(Dispatchers.IO)
+
+
 }
