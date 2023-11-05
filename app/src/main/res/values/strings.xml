@@ -31,6 +31,9 @@
     <string name="error_region_message">Такого региона нет</string>
     <string name="error_connection_message">Не удалось получить\nсписок</string>
     <string name="search_content_description">Найти/Очистить</string>
+    <string name="industry_topbar_header">Выбор отрасли</string>
+    <string name="industry_edittext_hint">Введите отрасль</string>
+    <string name="error_industry_message">Такой отрасли нет</string>
 
     <!-- details section -->
     <string name="vacancy_name">vacancy name</string>

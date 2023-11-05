@@ -50,6 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/topLayout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/miFilterLocationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -71,6 +72,7 @@
         app:layout_constraintTop_toBottomOf="@id/miFilterLocation">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/miFilterIndustryText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
