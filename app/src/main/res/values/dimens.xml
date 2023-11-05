@@ -23,9 +23,11 @@
     <dimen name="margin_32">32dp</dimen>
     <dimen name="margin_36">36dp</dimen>
     <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_36">36dp</dimen>
 
     <!--Размеры из Search эпика-->
     <dimen name="margin_19">19dp</dimen>
+    <dimen name="margin_46">46dp</dimen>
     <dimen name="margin_12">12dp</dimen>
     <dimen name="margin_27">27dp</dimen>
     <dimen name="margin_164">164dp</dimen>

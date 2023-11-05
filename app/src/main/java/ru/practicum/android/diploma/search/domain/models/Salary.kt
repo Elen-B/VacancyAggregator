@@ -10,16 +10,16 @@ data class Salary(
     fun getSalaryToTextView(): String{
        val text = StringBuilder()
        if(from.isNullOrBlank() && to.isNullOrBlank()){
-           text.append("от $from до $to ${currency?.name}")
+           text.append("Зарплата не указана")
        }
         else if(from.isNullOrBlank()){
-           text.append("от $from ${currency?.name}")
+           text.append("до $to ${currency?.name}")
         }
        else if(to.isNullOrBlank()){
-           text.append("до $to ${currency?.name}")
+           text.append("от $from ${currency?.name}")
        }
         else{
-           text.append("Зарплата не указана")
+           text.append("от $from до $to ${currency?.name}")
        }
         return text.toString()
     }

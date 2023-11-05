@@ -10,7 +10,12 @@ import ru.practicum.android.diploma.favourites.domain.impl.FavouritesInteractorI
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.impl.FilterInteractorImpl
+
+import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
+import ru.practicum.android.diploma.search.domain.impl.VacancySearchInteractorImpl
+
 import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
+
 
 val interactorModule = module {
     single <DetailsInterActor> {
@@ -20,6 +25,9 @@ val interactorModule = module {
     single <FilterInteractor> {
         FilterInteractorImpl(get())
     }
+
+    single <VacancySearchInteractor> {
+        VacancySearchInteractorImpl(get())
 
     single<FavouritesInteractor>{
         FavouritesInteractorImpl(get())

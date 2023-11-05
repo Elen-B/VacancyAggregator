@@ -6,6 +6,8 @@ import retrofit2.http.Query
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
+import ru.practicum.android.diploma.filter.data.dto.AreaResponse
+import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
 import ru.practicum.android.diploma.search.data.dto.VacancyDTO
 
@@ -40,7 +42,7 @@ interface HhunterApi {
     @GET("vacancies")
     suspend fun getVacancyList(
         @Query("text") vacancy: String
-    ): List<VacancyDTO>
+    ): VacancySearchResponse
 
 }
 
