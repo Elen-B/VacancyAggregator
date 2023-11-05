@@ -8,9 +8,9 @@ import java.util.Locale
 const val CLICK_DEBOUNCE_DELAY = 1000L
 const val SEARCH_DEBOUNCE_DELAY = 2000L
 
-
 const val BASE_URL = "https://api.hh.ru/"
 
+const val SHARED_PREFS = "app_preferences"
 
 fun Int.formattedNumber(): String {
     val numberFormat = NumberFormat.getNumberInstance(Locale.US)

@@ -11,19 +11,24 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputLayout
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
 class FilterFragment: Fragment() {
     private lateinit var binding: FragmentFilterBinding
+    private val args: FilterFragmentArgs by navArgs()
 
-    private val viewModel: FilterViewModel by viewModel()
+    private val viewModel: FilterViewModel by viewModel {
+        parametersOf(args.filter)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +62,10 @@ class FilterFragment: Fragment() {
 
         viewModel.getShowLocationTrigger().observe(viewLifecycleOwner) {filterParameters ->
             showLocation(filterParameters.country, filterParameters.region)
+        }
+
+        viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
         }
 
         binding.miFilterLocation.editText?.setOnClickListener {
@@ -94,8 +103,21 @@ class FilterFragment: Fragment() {
             viewModel.onSalaryChanged(text.toString())
         }
 
+        binding.cbFilterSalaryRequired.setOnCheckedChangeListener { _, checked ->
+            viewModel.onFSalaryRequiredChanged(checked)
+        }
+
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.btFilterApply.setOnClickListener {
+            viewModel.saveFilterParameters()
+            findNavController().navigateUp()
+        }
+
+        binding.btFilterClear.setOnClickListener {
+            viewModel.onClearFilterClick()
         }
     }
 
