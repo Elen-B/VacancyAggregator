@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActor
 import ru.practicum.android.diploma.util.Resource
 
@@ -25,7 +26,10 @@ class SimilarViewModel (
             when (val resultData = similarInterActor.getSimilar(id = id)) {
                 is Resource.Error -> {
                     _state.value =
-                        SimilarState.Error(resultData.message ?: "An unknown error")
+                        SimilarState.Error(
+                            message = resultData.message ?: R.string.unknown_error,
+                            pathImage = resultData.errorImagePath ?: R.drawable.error_vacancy_dm
+                        )
                 }
                 is Resource.Success -> {
                     _state.value =

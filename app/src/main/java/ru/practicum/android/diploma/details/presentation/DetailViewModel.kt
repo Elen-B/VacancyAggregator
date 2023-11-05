@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActor
 import ru.practicum.android.diploma.util.Resource
 
@@ -25,7 +26,7 @@ class DetailViewModel (
             when (val resultData = detailsInterActor.getDetails(id = "88000100")) {
                 is Resource.Error -> {
                     _state.value =
-                        DetailState.Error(resultData.message ?: "An unknown error")
+                        DetailState.Error(resultData.message ?: R.string.unknown_error)
                 }
                 is Resource.Success -> {
                     _state.value =

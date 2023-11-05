@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.util.Resource
 
 class FilterInteractorImpl(private val repository: FilterRepository): FilterInteractor {
-    override suspend fun getCountries(): Pair<List<Area>?, String?> {
+    override suspend fun getCountries(): Pair<List<Area>?, Int?> {
         return when(val res = repository.getCountries()) {
             is Resource.Success -> Pair(res.data, null)
             is Resource.Error -> Pair(null, res.message)

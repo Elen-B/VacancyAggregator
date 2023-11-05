@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,10 @@ class SimilarFragment : Fragment() {
 
                 is SimilarState.Error -> {
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
+                    setError(
+                        message = result.message,
+                        imagePath = result.pathImage
+                    )
                 }
 
                 is SimilarState.Loading -> {
@@ -47,10 +52,25 @@ class SimilarFragment : Fragment() {
         binding.back.setOnClickListener {
             view.findNavController().popBackStack()
         }
+    }
 
+    private fun setError(
+        message: Int,
+        imagePath: Int
+    ) {
+        with(binding.include) {
+            imError.isVisible = true
+            tvError.isVisible = true
+            imError.setImageResource(imagePath)
+            tvError.text = getString(message)
+        }
+        binding.rvSimilar.isVisible = false
     }
 
     private fun setData(data: List<ProfessionSimillar>) {
+        binding.rvSimilar.isVisible = true
+        binding.include.imError.isVisible = false
+        binding.include.tvError.isVisible = false
         binding.rvSimilar.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
@@ -58,7 +78,8 @@ class SimilarFragment : Fragment() {
             object : SimilarAdapter.OnStateClickListener {
                 override fun onStateClick(item: ProfessionSimillar, position: Int) {
                     val bundle = bundleOf("id" to item.id)
-                    view?.findNavController()?.navigate(R.id.action_similarFragment_to_detailFragment, bundle)
+                    view?.findNavController()
+                        ?.navigate(R.id.action_similarFragment_to_detailFragment, bundle)
                 }
             }
         val adapter = SimilarAdapter(data, stateClickListener, requireContext())
