@@ -8,7 +8,6 @@ import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.core.network.utils.networkAvailable
 import ru.practicum.android.diploma.details.data.DetailVacancyResponse
 import ru.practicum.android.diploma.details.data.SimilarVacancyResponse
-import ru.practicum.android.diploma.filter.data.dto.AreaDataResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
@@ -37,8 +36,9 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
 
     private suspend fun processRequest(dto: Request): Response {
         return when (dto) {
-            is Request.AreaRequest -> AreaTreeResponse(hhunterApiService.getAreas(dto.id))
-            is Request.AreasRequest -> AreaListTreeResponse(hhunterApiService.getAreas())
+            is Request.AreaTreeRequest -> AreaTreeResponse(hhunterApiService.getAreas(dto.id))
+            is Request.AreasFullTreeRequest -> AreaListTreeResponse(hhunterApiService.getAreas())
+            //is Request.AreaDataRequest -> AreaDataResponse(hhunterApiService.getArea(dto.id))
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
             is Request.VacancySearchRequest -> VacancySearchResponse(hhunterApiService.getVacancyList(dto.text))
             is Request.SimilarVacancyRequest -> SimilarVacancyResponse(hhunterApiService.getSimilarVacancies(dto.id))
@@ -47,4 +47,6 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
             else -> Response().apply { resultCode = Response.RESULT_UNKNOWN_REQUEST }
         }
     }
+
+
 }
