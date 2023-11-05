@@ -28,7 +28,7 @@ val viewModelModule = module {
     }
 
     viewModel {(country: Area?, region: Area?) ->
-        FilterLocationViewModel(country, region)
+        FilterLocationViewModel(country, region, get())
     }
 
     viewModel {

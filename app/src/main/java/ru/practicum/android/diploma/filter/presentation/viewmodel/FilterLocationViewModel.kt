@@ -3,13 +3,17 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.models.FilterLocationScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class FilterLocationViewModel(
     country: Area?,
-    region: Area?
+    region: Area?,
+    private val filterInteractor: FilterInteractor
 ): ViewModel()  {
 
     private val stateLiveData = MutableLiveData<FilterLocationScreenState>()
@@ -45,9 +49,19 @@ class FilterLocationViewModel(
     }
 
     fun onRegionChanged(region: Area?) {
-        val newState =
-            (stateLiveData.value as FilterLocationScreenState.Content).copy(region = region)
-        setState(newState)
+        viewModelScope.launch {
+            val newState =
+                if (region != null) {
+                    val country = filterInteractor.getCuntryByRegion(region.id)
+                    (stateLiveData.value as FilterLocationScreenState.Content).copy(
+                        country = country,
+                        region = region
+                    )
+                } else {
+                    (stateLiveData.value as FilterLocationScreenState.Content).copy(region = region)
+                }
+            setState(newState)
+        }
     }
 
     fun showCountry() {
