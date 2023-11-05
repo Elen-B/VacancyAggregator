@@ -187,4 +187,21 @@
         <item name="android:textSize">@dimen/header_text_size</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="FilterIndustryItemRadioButtonStyle">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">@dimen/industry_item_min_height</item>
+        <item name="android:paddingStart">@dimen/margin_16</item>
+        <item name="android:paddingEnd">@dimen/margin_16</item>
+        <item name="android:paddingTop">@dimen/margin_8</item>
+        <item name="android:paddingBottom">@dimen/margin_8</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawablePadding">@dimen/margin_8</item>
+        <item name="android:drawableEnd">?android:attr/listChoiceIndicatorSingle</item>
+        <item name="drawableTint">@color/blue</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">@dimen/regular_text_size</item>
+    </style>
 </resources>
