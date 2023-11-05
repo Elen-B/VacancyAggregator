@@ -31,10 +31,9 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
                 renderState(FavouritesState.Empty)
             }
             else -> {
-                val currentVacancyList = mutableListOf<SearchVacancy>().also {
-                    it.addAll(vacancyList!!)
+                if (vacancyList != null) {
+                    renderState(FavouritesState.Content(vacancyList))
                 }
-                renderState(FavouritesState.Content(currentVacancyList))
             }
         }
     }
