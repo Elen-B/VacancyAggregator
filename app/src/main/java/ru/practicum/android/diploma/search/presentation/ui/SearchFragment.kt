@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -26,12 +27,10 @@ import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var foundVacanciesCount: String
     private val viewModel by viewModel<VacancySearchViewModel>()
-    private var isClickAllowed = true
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
-            if (clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 //TODO
             }
         }
@@ -50,11 +49,9 @@ class SearchFragment : Fragment() {
 
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
-        viewModel.observeIsClickAllowed().observe(viewLifecycleOwner){
-            isClickAllowed = it
-        }
+
         viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
-            foundVacanciesCount = it
+            binding.textVacancyCount.setText(it)
         }
 /*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -85,6 +82,13 @@ class SearchFragment : Fragment() {
             }
         }
 
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                viewModel.searchDebounce(binding.searchEditText.text.toString(), true)
+            }
+            false
+        }
+
         binding.iconCross.setOnClickListener {
             binding.searchEditText.setText("")
         }
@@ -94,13 +98,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun clickDebounce(): Boolean {
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewModel.delay()
-        }
-        return isClickAllowed
-    }
     private fun render(state: VacancyState) {
         when (state) {
             is VacancyState.Content -> showContent(state.vacancy)
@@ -138,7 +135,6 @@ class SearchFragment : Fragment() {
         binding.imageVacancyError.visibility = View.VISIBLE
         binding.textVacancyError.visibility = View.VISIBLE
         binding.recyclerViewSearch.visibility = View.GONE
-        binding.textVacancyCount.text = foundVacanciesCount
     }
 
     private fun showContent(contentTracks: List<SearchVacancy>) {
@@ -146,7 +142,6 @@ class SearchFragment : Fragment() {
         if (binding.searchEditText.text.isBlank()) {
             return
         }
-        binding.textVacancyCount.text = foundVacanciesCount
         binding.textVacancyCount.visibility = View.VISIBLE
         adapter.searchVacancyList.clear()
         adapter.searchVacancyList.addAll(contentTracks)

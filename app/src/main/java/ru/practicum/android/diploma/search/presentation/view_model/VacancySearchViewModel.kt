@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.presentation.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,15 +20,14 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
 
     private var latestSearchText: String? = null
     private var searchJob: Job? = null
+    private var isClickAllowed = true
     private val stateLiveData = MutableLiveData<VacancyState>()
-    private val isClickAllowed = MutableLiveData<Boolean>(true)
     private val foundVacanciesCount = MutableLiveData<String>("0")
     fun observeState(): LiveData<VacancyState> = stateLiveData
-    fun observeIsClickAllowed(): LiveData<Boolean> = isClickAllowed
     fun observeFoundVacanciesCount(): LiveData<String> = foundVacanciesCount
 
-    fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
+    fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
+        if (latestSearchText == changedText && !forceButtonClick) {
             return
         }
         latestSearchText = changedText
@@ -72,11 +72,17 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
             }
         }
     }
-    fun delay(){
-        viewModelScope.launch {
-            delay(CLICK_DEBOUNCE_DELAY)
-            isClickAllowed.postValue(true)
+
+    fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
+        return current
     }
 
     private fun renderState(state: VacancyState) {

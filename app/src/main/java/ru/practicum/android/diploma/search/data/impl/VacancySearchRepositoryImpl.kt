@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import org.koin.core.component.getScopeId
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
@@ -13,6 +14,7 @@ import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.domain.models.Employer
 import ru.practicum.android.diploma.search.domain.models.Salary
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.util.LOG_IMAGE
 import ru.practicum.android.diploma.util.Resource
 
 class VacancySearchRepositoryImpl(
@@ -28,7 +30,7 @@ class VacancySearchRepositoryImpl(
                     it.name,
                     Salary(it.salary?.from, it.salary?.to, it.salary?.currency),
                     Employer(it.employer?.id, it.employer?.name),
-                    it.employer?.logo_urls?.get("90")
+                    it.employer?.logo_urls?.get(LOG_IMAGE)
                 )
             }))
             Response.RESULT_NETWORK_ERROR -> emit(Resource.Error(R.string.network_error.toString()))
@@ -36,6 +38,4 @@ class VacancySearchRepositoryImpl(
             else -> emit(Resource.Error(R.string.unknown_error.toString()))
         }
     }.flowOn(Dispatchers.IO)
-
-
 }
