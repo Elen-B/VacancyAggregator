@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,14 +30,29 @@ class FilterViewModel(
     }
 
     private fun setState(state: FilterScreenState) {
+        Log.e("filter", state.toString())
         stateLiveData.value = state
     }
 
-    private fun getCurrentState(newFilterParameters: FilterParameters, update: Boolean): FilterScreenState {
-        return if (filterParameters.equals(newFilterParameters) && stateLiveData.value is FilterScreenState.Initial) {
-            FilterScreenState.Initial
-        } else {
-            FilterScreenState.Modified(newFilterParameters, update)
+    private fun getCurrentState(
+        newFilterParameters: FilterParameters,
+        update: Boolean
+    ): FilterScreenState {
+        return when {
+            stateLiveData.value is FilterScreenState.Modified -> FilterScreenState.Modified(
+                newFilterParameters,
+                update
+            )
+
+            stateLiveData.value is FilterScreenState.Initial && filterParameters.equals(
+                newFilterParameters
+            ) -> FilterScreenState.Initial
+
+            stateLiveData.value is FilterScreenState.Started && filterParameters.equals(
+                newFilterParameters
+            ) -> FilterScreenState.Initial
+
+            else -> FilterScreenState.Modified(newFilterParameters, update)
         }
     }
 
@@ -48,30 +64,32 @@ class FilterViewModel(
         filterParameters.fSalaryRequired = newFilterParameters.fSalaryRequired
     }
 
+    private fun setStateEx(filterParameters: FilterParameters, update: Boolean) {
+        val newState = getCurrentState(filterParameters, update)
+        setFilterParameters(filterParameters)
+        setState(newState)
+    }
+
     fun onSalaryChanged(value: String) {
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, false))
-
+        setStateEx(newFilterParameters, false)
     }
 
     fun onLocationChanged(country: Area?, region: Area?) {
+        Log.e("filter", country.toString())
         val newFilterParameters = filterParameters.copy(country = country, region = region)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, true))
+        setStateEx(newFilterParameters, true)
     }
 
     fun onFSalaryRequiredChanged(checked: Boolean) {
         val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, false))
+        setStateEx(newFilterParameters, false)
     }
 
     fun onClearFilterClick() {
         val newFilterParameters = FilterParameters()
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, true))
+        setStateEx(newFilterParameters, true)
     }
 
     fun showLocation() {

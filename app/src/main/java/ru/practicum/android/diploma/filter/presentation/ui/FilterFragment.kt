@@ -91,7 +91,6 @@ class FilterFragment: Fragment() {
                 binding.miFilterIndustry.editText?.text = null
                 setMenuEditTextStyle(binding.miFilterIndustry, false)
             }
-
         }
 
         binding.miFilterSalary.setEndIconOnClickListener {
@@ -134,7 +133,6 @@ class FilterFragment: Fragment() {
             }
             else -> Unit
         }
-
     }
 
     private fun setViewAppearance(state: FilterScreenState) {
@@ -143,7 +141,6 @@ class FilterFragment: Fragment() {
             is FilterScreenState.Modified -> state.data
             else -> null
         }
-
 
         if (filterParameters != null) {
             setMenuEditTextStyle(
