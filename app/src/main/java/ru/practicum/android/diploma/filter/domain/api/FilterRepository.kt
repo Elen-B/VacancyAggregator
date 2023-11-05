@@ -10,4 +10,6 @@ interface FilterRepository {
     suspend fun getAreas(id: String): Resource<List<Area>>
 
     suspend fun getAreas(): Resource<List<Area>>
+
+    suspend fun getArea(id: String): Resource<Area>
 }
