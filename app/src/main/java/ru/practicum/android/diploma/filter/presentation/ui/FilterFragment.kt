@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -91,7 +92,6 @@ class FilterFragment: Fragment() {
                 binding.miFilterIndustry.editText?.text = null
                 setMenuEditTextStyle(binding.miFilterIndustry, false)
             }
-
         }
 
         binding.miFilterSalary.setEndIconOnClickListener {
@@ -101,6 +101,19 @@ class FilterFragment: Fragment() {
 
         binding.miFilterSalary.editText?.doOnTextChanged { text, _, _, _ ->
             viewModel.onSalaryChanged(text.toString())
+        }
+
+        binding.miFilterSalary.editText?.setOnEditorActionListener { _, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                binding.miFilterSalary.editText?.clearFocus()
+                binding.miFilterSalary.isEndIconVisible = false
+            }
+            false
+        }
+
+        binding.miFilterSalary.editText?.setOnFocusChangeListener { _, hasFocus ->
+            binding.miFilterSalary.isEndIconVisible =
+                hasFocus && (binding.miFilterSalary.editText?.text?.isNotEmpty() ?: false)
         }
 
         binding.cbFilterSalaryRequired.setOnCheckedChangeListener { _, checked ->
@@ -134,7 +147,6 @@ class FilterFragment: Fragment() {
             }
             else -> Unit
         }
-
     }
 
     private fun setViewAppearance(state: FilterScreenState) {
@@ -143,7 +155,6 @@ class FilterFragment: Fragment() {
             is FilterScreenState.Modified -> state.data
             else -> null
         }
-
 
         if (filterParameters != null) {
             setMenuEditTextStyle(
@@ -195,7 +206,7 @@ class FilterFragment: Fragment() {
         textInputLayout.setBoxStrokeColorStateList(colorStateList!!)
         textInputLayout.defaultHintTextColor = colorStateList
         textInputLayout.hintTextColor = colorStateList
-        textInputLayout.isEndIconVisible = filled
+        textInputLayout.isEndIconVisible = filled && (textInputLayout.editText?.hasFocus() ?: false)
     }
 
     private fun setViewData(filterParameters: FilterParameters) {
