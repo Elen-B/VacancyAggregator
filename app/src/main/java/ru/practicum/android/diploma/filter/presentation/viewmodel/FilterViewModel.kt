@@ -3,13 +3,17 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
-class FilterViewModel : ViewModel() {
-    private val filterParameters: FilterParameters by lazy { getSavedFilterParameters() }
+class FilterViewModel(
+    filter: FilterParameters?,
+    private val filterLocalInteractor: FilterLocalInteractor
+) : ViewModel() {
+    private val filterParameters: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
 
     private val stateLiveData = MutableLiveData<FilterScreenState>()
     fun observeState(): LiveData<FilterScreenState> = stateLiveData
@@ -17,13 +21,11 @@ class FilterViewModel : ViewModel() {
     private val showLocationTrigger = SingleEventLiveData<FilterParameters>()
     fun getShowLocationTrigger(): LiveData<FilterParameters> = showLocationTrigger
 
+    private val saveFilterTrigger = SingleEventLiveData<Unit>()
+    fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
+
     init {
         setState(FilterScreenState.Started(filterParameters))
-    }
-
-    private fun getSavedFilterParameters(): FilterParameters {
-        //здесь получение данных из SharedPreferences
-        return FilterParameters(salary = 40000, fSalaryRequired = true)
     }
 
     private fun setState(state: FilterScreenState) {
@@ -58,11 +60,26 @@ class FilterViewModel : ViewModel() {
         val newFilterParameters = filterParameters.copy(country = country, region = region)
         setFilterParameters(newFilterParameters)
         setState(getCurrentState(newFilterParameters, true))
+    }
 
+    fun onFSalaryRequiredChanged(checked: Boolean) {
+        val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
+        setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, false))
+    }
+
+    fun onClearFilterClick() {
+        val newFilterParameters = FilterParameters()
+        setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, true))
     }
 
     fun showLocation() {
         // добавить clickDebounce
         showLocationTrigger.value = filterParameters
+    }
+
+    fun saveFilterParameters() {
+        filterLocalInteractor.saveFilterParameters(filterParameters)
     }
 }
