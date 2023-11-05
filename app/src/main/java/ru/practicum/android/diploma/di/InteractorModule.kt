@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.di
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActorImpl
+import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActor
+import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActorImpl
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.domain.impl.FavouritesInteractorImpl
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
@@ -25,5 +27,9 @@ val interactorModule = module {
 
     single<FilterLocalInteractor> {
         FilterLocalInteractorImpl(get())
+    }
+
+    single <SimilarInterActor> {
+        SimilarInterActorImpl(get())
     }
 }

@@ -6,6 +6,8 @@ import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.core.network.utils.networkAvailable
+import ru.practicum.android.diploma.details.data.DetailVacancyResponse
+import ru.practicum.android.diploma.details.data.SimilarVacancyResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaDataResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
@@ -40,6 +42,8 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
             is Request.AreaDataRequest -> AreaDataResponse(hhunterApiService.getArea(dto.id))
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
             is Request.VacancySearchRequest -> VacancySearchResponse(hhunterApiService.getVacancyList(dto.text))
+            is Request.VacancyDetailsRequest -> DetailVacancyResponse(hhunterApiService.getDetail(dto.id))
+            is Request.SimilarVacancyRequest -> SimilarVacancyResponse(hhunterApiService.getSimilarVacancies(dto.id))
             else -> Response().apply { resultCode = Response.RESULT_UNKNOWN_REQUEST }
         }
     }

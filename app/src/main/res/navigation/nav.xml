@@ -68,7 +68,11 @@
         android:id="@+id/detailFragment"
         android:name="ru.practicum.android.diploma.details.presentation.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_similarFragment"
+            app:destination="@id/similarFragment" />
+    </fragment>
     <fragment
         android:id="@+id/teamFragment"
         android:name="ru.practicum.android.diploma.team.presentation.TeamFragment"
@@ -84,4 +88,13 @@
         android:name="ru.practicum.android.diploma.filter.presentation.ui.FilterIndustryFragment"
         android:label="FilterIndustryFragment"
         tools:layout="@layout/fragment_filter_industry"/>
+    <fragment
+        android:id="@+id/similarFragment"
+        android:name="ru.practicum.android.diploma.details.presentation.SimilarFragment"
+        android:label="fragment_similar"
+        tools:layout="@layout/fragment_similar" >
+        <action
+            android:id="@+id/action_similarFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 </navigation>
