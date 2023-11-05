@@ -1,5 +1,9 @@
 package ru.practicum.android.diploma.search.data.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
@@ -15,23 +19,23 @@ class VacancySearchRepositoryImpl(
     private val networkClient: NetworkClient,
 ) :
     VacancySearchRepository {
-    override suspend fun searchVacancy(text: String): Resource<List<SearchVacancy>> {
-        val response = networkClient.doRequest(Request.CountryRequest)
-        return when (response.resultCode) {
-            Response.RESULT_SUCCESS -> Resource.Success((response as VacancySearchResponse).items.map { it ->
+    override fun searchVacancy(text: String): Flow<Resource<List<SearchVacancy>>> = flow {
+        val response = networkClient.doRequest(Request.VacancySearchRequest(text))
+        when (response.resultCode) {
+            Response.RESULT_SUCCESS -> emit(Resource.Success((response as VacancySearchResponse).items.map { it ->
                 SearchVacancy(
                     it.id?.toInt(),
                     it.name,
-                    Salary(it.salary.from, it.salary.to, it.salary.currency),
-                    Employer(it.employer.id, it.employer.name),
-                    it.logo_urls
+                    Salary(it.salary?.from, it.salary?.to, it.salary?.currency),
+                    Employer(it.employer?.id, it.employer?.name),
+                    it.employer?.logo_urls?.get("90")
                 )
-            })
-            Response.RESULT_NETWORK_ERROR -> Resource.Error(R.string.network_error.toString())
-            Response.RESULT_BAD_REQUEST -> Resource.Error(R.string.vacancy_error.toString())
-            else -> Resource.Error(R.string.unknown_error.toString())
+            }))
+            Response.RESULT_NETWORK_ERROR -> emit(Resource.Error(R.string.network_error.toString()))
+            Response.RESULT_BAD_REQUEST -> emit(Resource.Error(R.string.vacancy_error.toString()))
+            else -> emit(Resource.Error(R.string.unknown_error.toString()))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
 }

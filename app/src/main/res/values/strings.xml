@@ -10,6 +10,7 @@
     <string name="network_error">Нет интернета</string>
     <string name="vacancy_error">Не удалось получить список вакансий</string>
     <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="text">Text</string>
 
 
     <!-- filter section -->
