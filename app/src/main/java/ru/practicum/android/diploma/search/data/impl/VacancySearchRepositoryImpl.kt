@@ -27,9 +27,20 @@ class VacancySearchRepositoryImpl(
                     it.logo_urls
                 )
             })
-            Response.RESULT_NETWORK_ERROR -> Resource.Error(R.string.network_error.toString())
-            Response.RESULT_BAD_REQUEST -> Resource.Error(R.string.vacancy_error.toString())
-            else -> Resource.Error(R.string.unknown_error.toString())
+            Response.RESULT_NETWORK_ERROR -> Resource.Error(
+                message = R.string.network_error.toString(),
+                errorImagePath = R.drawable.error_connection_dm
+            )
+
+            Response.RESULT_BAD_REQUEST -> Resource.Error(
+                message = R.string.vacancy_error.toString(),
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
+
+            else -> Resource.Error(
+                message = R.string.unknown_error.toString(),
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
         }
     }
 

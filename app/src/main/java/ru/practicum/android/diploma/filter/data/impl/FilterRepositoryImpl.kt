@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filter.data.impl
 
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
@@ -18,9 +19,20 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                     areaDto
                 )
             })
-            Response.RESULT_NETWORK_ERROR -> Resource.Error("Подключение отсутствует")
-            Response.RESULT_BAD_REQUEST -> Resource.Error("Ошибка сервера")
-            else -> Resource.Error("Неизвестная ошибка")
+            Response.RESULT_NETWORK_ERROR -> Resource.Error(
+                message = R.string.network_error.toString(),
+                errorImagePath = R.drawable.error_connection_dm
+            )
+
+            Response.RESULT_BAD_REQUEST -> Resource.Error(
+                message = R.string.vacancy_error.toString(),
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
+
+            else -> Resource.Error(
+                message = R.string.unknown_error.toString(),
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
         }
     }
 }
