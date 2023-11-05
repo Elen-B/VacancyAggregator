@@ -104,7 +104,20 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 Resource.Success(area)
             }
 
-            else -> Resource.Error("")
+            Response.RESULT_NETWORK_ERROR -> Resource.Error(
+                message = R.string.network_error,
+                errorImagePath = R.drawable.error_connection_dm
+            )
+
+            Response.RESULT_BAD_REQUEST -> Resource.Error(
+                message = R.string.vacancy_error,
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
+
+            else -> Resource.Error(
+                message = R.string.unknown_error,
+                errorImagePath = R.drawable.error_vacancy_dm
+            )
         }
     }
 }

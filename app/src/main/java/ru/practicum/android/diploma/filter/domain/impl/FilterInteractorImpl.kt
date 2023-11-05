@@ -13,11 +13,11 @@ class FilterInteractorImpl(private val repository: FilterRepository): FilterInte
         }
     }
 
-    override suspend fun getAreas(id: String): Pair<List<Area>?, Int?> {
+    override suspend fun getAreas(id: String): Pair<List<Area>?, String?> {
         val res = if (id.isEmpty()) repository.getAreas() else repository.getAreas(id)
         return when(res) {
             is Resource.Success -> Pair(res.data, null)
-            is Resource.Error -> Pair(null, res.message)
+            is Resource.Error -> Pair(null, res.message.toString())
         }
     }
 
