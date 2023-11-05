@@ -73,6 +73,7 @@ class SearchFragment : Fragment() {
                     .isBlank()
             ) {
                 getDefaultView()
+                binding.searchEditText.clearFocus()
                 binding.iconSearch.visibility = View.VISIBLE
                 binding.iconCross.visibility = View.GONE
             } else if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()

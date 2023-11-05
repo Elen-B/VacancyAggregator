@@ -41,7 +41,7 @@
         android:layout_marginEnd="@dimen/margin_16"
         android:background="@drawable/edit_text_background"
         android:hint="@string/enter_request"
-        android:imeOptions="flagNavigateNext"
+        android:imeOptions="actionDone"
         android:paddingStart="@dimen/margin_16"
         android:singleLine="true"
         android:textColor="@color/black"
