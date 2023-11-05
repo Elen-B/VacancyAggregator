@@ -1,29 +1,38 @@
 package ru.practicum.android.diploma.details.data
 
-import ru.practicum.android.diploma.core.network.HhunterApi
+import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.core.network.NetworkClient
+import ru.practicum.android.diploma.core.network.dto.Request
+import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.details.domain.impl.DetailRepository
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 import ru.practicum.android.diploma.util.Resource
 
 class DetailRepositoryImpl(
-    private val hhunterApi: HhunterApi
+    private val networkClient: NetworkClient
 ): DetailRepository {
     override suspend fun getVacancyDetail (id:String): Resource<ProfessionDetail> {
-        return try {
-            val result = hhunterApi.getDetail(id)
-            Resource.Success(result.mapToProfessionDetail())
-        } catch (error: Exception) {
-            Resource.Error(error.message?: "An unknown error")
+        val response = networkClient.doRequest(Request.VacancyDetailsRequest(id))
+        return when (response.resultCode) {
+            Response.RESULT_SUCCESS -> {
+                Resource.Success((response as DetailVacancyResponse).item.mapToProfessionDetail())
+            }
+            Response.RESULT_NETWORK_ERROR -> Resource.Error(R.string.network_error.toString())
+            Response.RESULT_BAD_REQUEST -> Resource.Error(R.string.vacancy_error.toString())
+            else -> Resource.Error(R.string.unknown_error.toString())
         }
     }
 
     override suspend fun getVacanciesSimilar(id: String): Resource<List<ProfessionSimillar>> {
-        return try {
-            val result = hhunterApi.getSimilarVacancies(id)
-            Resource.Success(result.mapToProfessionSimilar())
-        } catch (error: Exception) {
-            Resource.Error(error.message?: "An unknown error")
+        val response = networkClient.doRequest(Request.SimilarVacancyRequest(id))
+        return when (response.resultCode) {
+            Response.RESULT_SUCCESS -> {
+                Resource.Success((response as SimilarVacancyResponse).item.mapToProfessionSimilar())
+            }
+            Response.RESULT_NETWORK_ERROR -> Resource.Error(R.string.network_error.toString())
+            Response.RESULT_BAD_REQUEST -> Resource.Error(R.string.vacancy_error.toString())
+            else -> Resource.Error(R.string.unknown_error.toString())
         }
     }
 
