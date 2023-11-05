@@ -220,6 +220,7 @@ class FilterFragment: Fragment() {
     }
 
     private fun showIndustry() {
-        //
+        val action = FilterFragmentDirections.actionFilterFragmentToFilterIndustryFragment()
+        findNavController().navigate(action)
     }
 }
