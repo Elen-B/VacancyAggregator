@@ -25,7 +25,8 @@ class DetailViewModel (
             when (val resultData = detailsInterActor.getDetails(id = "88000100")) {
                 is Resource.Error -> {
                     _state.value =
-                        DetailState.Error(resultData.message ?: "An unknown error")
+                        DetailState.Error(
+                            message = resultData.message ?: "An unknown error",)
                 }
                 is Resource.Success -> {
                     _state.value =

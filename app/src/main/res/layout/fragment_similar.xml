@@ -38,6 +38,14 @@
         android:layout_marginTop="@dimen/margin_16"
         app:layout_constraintTop_toBottomOf="@id/similarVacancy"/>
 
-
+    <include
+        android:id="@+id/include"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        layout="@layout/error_place_holder"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
