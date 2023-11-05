@@ -15,6 +15,9 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
     private val stateLiveData = MutableLiveData<LocationRegionScreenState>()
     fun observeState(): LiveData<LocationRegionScreenState> = stateLiveData
 
+    private val originalList: MutableList<Area> = ArrayList()
+    private val filteredList: MutableList<Area> = ArrayList()
+
     init {
         loadData(country = country)
     }
@@ -22,14 +25,13 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
     private fun loadData(country: Area?) {
         viewModelScope.launch {
             val id = country?.id.orEmpty()
-            //Log.e("filter", "id = " + id)
             val result = filterInteractor.getAreas(id)
-            //Log.e("filter", result.toString() + result.toString())
             if (!result.second.isNullOrEmpty()) {
                 setState(LocationRegionScreenState.Error)
             } else {
                 if (result.first != null) {
-                    setState(LocationRegionScreenState.Content(result.first!!))
+                    originalList.addAll(result.first!!)
+                    setState(LocationRegionScreenState.Content(originalList))
                 } else {
                     setState(LocationRegionScreenState.Error)
                 }
@@ -39,5 +41,23 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
 
     private fun setState(state: LocationRegionScreenState) {
         stateLiveData.value = state
+    }
+
+    fun onEditTextChanged(searchQuery: String?) {
+        filteredList.clear()
+        if (searchQuery.isNullOrEmpty()) {
+            setState(LocationRegionScreenState.Content(originalList))
+        } else {
+            for (item in originalList) {
+                if (item.name.contains(searchQuery, true)) {
+                    filteredList.add(item)
+                }
+            }
+            if (filteredList.size > 0) {
+                setState(LocationRegionScreenState.Content(filteredList))
+            } else {
+                setState(LocationRegionScreenState.Empty)
+            }
+        }
     }
 }
