@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filter.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +14,7 @@ class FilterViewModel(
     private val filterLocalInteractor: FilterLocalInteractor
 ) : ViewModel() {
     private val filterParameters: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
+    private val originalFilter: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
 
     private val stateLiveData = MutableLiveData<FilterScreenState>()
     fun observeState(): LiveData<FilterScreenState> = stateLiveData
@@ -26,11 +26,10 @@ class FilterViewModel(
     fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
 
     init {
-        setState(FilterScreenState.Started(filterParameters))
+        setState(FilterScreenState.Started(filterParameters, true))
     }
 
     private fun setState(state: FilterScreenState) {
-        Log.e("filter", state.toString())
         stateLiveData.value = state
     }
 
@@ -38,22 +37,10 @@ class FilterViewModel(
         newFilterParameters: FilterParameters,
         update: Boolean
     ): FilterScreenState {
-        return when {
-            stateLiveData.value is FilterScreenState.Modified -> FilterScreenState.Modified(
-                newFilterParameters,
-                update
-            )
-
-            stateLiveData.value is FilterScreenState.Initial && filterParameters.equals(
-                newFilterParameters
-            ) -> FilterScreenState.Initial
-
-            stateLiveData.value is FilterScreenState.Started && filterParameters.equals(
-                newFilterParameters
-            ) -> FilterScreenState.Initial
-
-            else -> FilterScreenState.Modified(newFilterParameters, update)
-        }
+        return if (originalFilter == newFilterParameters)
+            FilterScreenState.Started(newFilterParameters, update)
+        else
+            FilterScreenState.Modified(newFilterParameters, update)
     }
 
     private fun setFilterParameters(newFilterParameters: FilterParameters) {
@@ -67,7 +54,8 @@ class FilterViewModel(
     private fun setStateEx(filterParameters: FilterParameters, update: Boolean) {
         val newState = getCurrentState(filterParameters, update)
         setFilterParameters(filterParameters)
-        setState(newState)
+        if (newState != stateLiveData.value)
+            setState(newState)
     }
 
     fun onSalaryChanged(value: String) {
@@ -77,7 +65,6 @@ class FilterViewModel(
     }
 
     fun onLocationChanged(country: Area?, region: Area?) {
-        Log.e("filter", country.toString())
         val newFilterParameters = filterParameters.copy(country = country, region = region)
         setStateEx(newFilterParameters, true)
     }
