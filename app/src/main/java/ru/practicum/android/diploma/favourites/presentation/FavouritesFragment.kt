@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
 import ru.practicum.android.diploma.favourites.presentation.model.FavouritesState
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
 class FavouritesFragment: Fragment() {
+
 
 
     private val viewModel by viewModel<FavouritesViewModel>()
@@ -32,6 +36,11 @@ class FavouritesFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
      //viewModel.loadFavouriteVacancyList()
+
+        //Переход на экран детализации
+            /*val bundle = bundleOf("id" to vacancy.id)
+         view?.findNavController()
+             ?.navigate(R.id.action_favouritesFragment_to_detailFragment, bundle)*/
      viewModel.observeState().observe(viewLifecycleOwner) {
          render(it)
      }

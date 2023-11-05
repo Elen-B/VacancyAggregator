@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.delay
@@ -24,6 +26,8 @@ import ru.practicum.android.diploma.search.presentation.view_model.VacancySearch
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 
 
+
+
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
@@ -32,7 +36,10 @@ class SearchFragment : Fragment() {
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
             if (clickDebounce()) {
-                //TODO
+                //Переход на экран детализации
+               /* val bundle = bundleOf("id" to vacancy.id)
+                view?.findNavController()
+                    ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)*/
             }
         }
     })
