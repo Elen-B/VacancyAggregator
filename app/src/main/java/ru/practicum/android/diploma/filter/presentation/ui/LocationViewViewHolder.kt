@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.filter.domain.models.Area
 
-class LocationCountryViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
+class LocationViewViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parentView.context)
         .inflate(R.layout.filter_location_view, parentView, false)
 ) {
 
-    private val trackNameView: TextView by lazy { itemView.findViewById(R.id.tvLocation) }
+    private val countryNameView: TextView by lazy { itemView.findViewById(R.id.tvLocation) }
 
     fun bind(model: Area) {
-        trackNameView.text = model.name
+        countryNameView.text = model.name
     }
 }

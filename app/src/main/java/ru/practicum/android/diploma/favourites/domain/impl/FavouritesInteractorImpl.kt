@@ -1,8 +1,10 @@
 package ru.practicum.android.diploma.favourites.domain.impl
 
+import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesRepository
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.util.Resource
 
 class FavouritesInteractorImpl(private val favouritesRepository: FavouritesRepository): FavouritesInteractor {
 
@@ -14,8 +16,13 @@ class FavouritesInteractorImpl(private val favouritesRepository: FavouritesRepos
         favouritesRepository.deleteVacancy(searchVacancy)
     }
 
-    override suspend fun getListVacancy(): List<SearchVacancy> {
-        return favouritesRepository.getListVacancy()
+    override suspend fun getListVacancy(): kotlinx.coroutines.flow.Flow<Pair<List<SearchVacancy>?, String?>> {
+        return favouritesRepository.getListVacancy().map { result ->
+            when (result) {
+                is Resource.Success -> Pair(result.data, "")
+                is Resource.Error -> Pair(null, result.message)
+            }
+        }
     }
 
     override suspend fun getVacancyById(id: Int): SearchVacancy{

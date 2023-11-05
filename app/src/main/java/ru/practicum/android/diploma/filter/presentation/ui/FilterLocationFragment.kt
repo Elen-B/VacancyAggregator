@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -49,6 +51,15 @@ class FilterLocationFragment: Fragment() {
             viewModel.onCountryChanged(country)
         }
 
+        setFragmentResultListener(REGION_RESULT_KEY) { _, bundle ->
+            val region: Area? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(REGION_RESULT_VAL, Area::class.java)
+            } else {
+                bundle.getParcelable(REGION_RESULT_VAL)
+            }
+            viewModel.onRegionChanged(region)
+        }
+
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
@@ -57,12 +68,20 @@ class FilterLocationFragment: Fragment() {
             showCountry()
         }
 
+        viewModel.getShowRegionTrigger().observe(viewLifecycleOwner) { country ->
+            showRegion(country)
+        }
+
+        viewModel.getApplyFilterTrigger().observe(viewLifecycleOwner) { list ->
+            applyFilter(list)
+        }
+
         binding.miLocationCountry.editText?.setOnClickListener {
             viewModel.showCountry()
         }
 
         binding.miLocationRegion.editText?.setOnClickListener {
-            showRegion()
+            viewModel.showRegion()
         }
 
         binding.miLocationCountry.setEndIconOnClickListener {
@@ -70,23 +89,23 @@ class FilterLocationFragment: Fragment() {
                 viewModel.showCountry()
             else {
                 viewModel.onCountryChanged(null)
-                //binding.miLocationCountry.editText?.text = null
-                //setMenuEditTextStyle(binding.miLocationCountry, false)
             }
         }
 
         binding.miLocationRegion.setEndIconOnClickListener {
             if (binding.miLocationRegion.editText?.text.isNullOrEmpty())
-                showRegion()
+                viewModel.showRegion()
             else {
                 viewModel.onRegionChanged(null)
-                //binding.miLocationRegion.editText?.text = null
-                //setMenuEditTextStyle(binding.miLocationRegion, false)
             }
         }
 
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.btFilterChoose.setOnClickListener {
+            viewModel.applyFilter()
         }
     }
 
@@ -133,15 +152,30 @@ class FilterLocationFragment: Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun showRegion() {
+    private fun showRegion(country: Area?) {
         val action =
             FilterLocationFragmentDirections.actionFilterLocationFragmentToLocationRegionFragment(
+                country
             )
         findNavController().navigate(action)
     }
 
+    private fun applyFilter(list: List<Area?>) {
+        setFragmentResult(
+            LOCATION_RESULT_KEY,
+            bundleOf(
+                COUNTRY_RESULT_VAL to list[0],
+                REGION_RESULT_VAL to list[1]
+            )
+        )
+        findNavController().navigateUp()
+    }
+
     companion object {
+        const val LOCATION_RESULT_KEY = "location_key"
         const val COUNTRY_RESULT_KEY = "country_key"
+        const val REGION_RESULT_KEY = "region_key"
         const val COUNTRY_RESULT_VAL = "country_value"
+        const val REGION_RESULT_VAL = "region_value"
     }
 }
