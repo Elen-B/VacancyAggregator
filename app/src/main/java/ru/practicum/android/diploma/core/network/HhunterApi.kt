@@ -25,6 +25,11 @@ interface HhunterApi {
         @Path("area_id") id: String
     ): AreaTreeDto?
 
+    @GET("/areas/{area_id}")
+    suspend fun getArea(
+        @Path("area_id") id: String
+    ): AreaDto
+
     @GET("vacancies")
     suspend fun getVacancyList(
         @Query("text") vacancy: String

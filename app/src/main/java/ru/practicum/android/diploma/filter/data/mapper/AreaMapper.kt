@@ -8,14 +8,16 @@ object AreaMapper {
     fun map(areaDto: AreaDto): Area {
         return Area(
             id = areaDto.id,
-            name = areaDto.name
+            name = areaDto.name,
+            parentId = areaDto.parentId
         )
     }
 
     fun map(areaTreeDto: AreaTreeDto): Area {
         return Area(
             id = areaTreeDto.id,
-            name = areaTreeDto.name
+            name = areaTreeDto.name,
+            parentId = areaTreeDto.parentId
         )
     }
 }
