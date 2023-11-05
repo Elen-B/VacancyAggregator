@@ -44,6 +44,9 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
     }
 
     fun onEditTextChanged(searchQuery: String?) {
+        if (stateLiveData.value is LocationRegionScreenState.Error)
+            return
+
         filteredList.clear()
         if (searchQuery.isNullOrEmpty()) {
             setState(LocationRegionScreenState.Content(originalList))
