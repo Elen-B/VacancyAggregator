@@ -12,9 +12,9 @@ const val NETWORK_ERROR = "Нет интернета"
 const val VACANCY_ERROR = "Не удалось получить список вакансий"
 const val UNKNOWN_ERROR = "Неизвестная ошибка"
 
-
 const val BASE_URL = "https://api.hh.ru/"
 
+const val SHARED_PREFS = "app_preferences"
 
 fun Int.formattedNumber(): String {
     val numberFormat = NumberFormat.getNumberInstance(Locale.US)

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
@@ -97,7 +98,11 @@ class SearchFragment : Fragment() {
         }
 
         binding.imageButton.setOnClickListener {
-            findNavController().navigate(R.id.action_searchFragment_to_filterFragment)
+            // исправить на использование viewModel в задаче применения фильтра к поиску
+            val action = SearchFragmentDirections.actionSearchFragmentToFilterFragment(
+                filter = null
+            )
+            findNavController().navigate(action)
         }
     }
 

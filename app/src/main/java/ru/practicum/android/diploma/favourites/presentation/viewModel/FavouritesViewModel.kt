@@ -5,20 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.presentation.model.FavouritesState
+import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
-class FavouritesViewModel(): ViewModel() {
+class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor): ViewModel() {
 
     private val favouritesLiveDataMutable = MutableLiveData<FavouritesState>()
     fun observeState(): LiveData<FavouritesState> = favouritesLiveDataMutable
 
     fun loadFavouriteVacancyList(){
         viewModelScope.launch {
-            //TODO
+            favouritesInteractor.getListVacancy().collect { pair ->
+                processResult(pair.first, pair.second)
+            }
         }
     }
 
-    private fun processResult(vacancyList: Any, message: String) {
+    private fun processResult(vacancyList: List<SearchVacancy>?, message: String?) {
         when (message) {
             ERROR -> {
                 renderState(FavouritesState.Error)
@@ -27,10 +31,9 @@ class FavouritesViewModel(): ViewModel() {
                 renderState(FavouritesState.Empty)
             }
             else -> {
-                val currentVacancyList = mutableListOf<Any>().also {
-                    it.addAll(listOf(vacancyList))
+                if (vacancyList != null) {
+                    renderState(FavouritesState.Content(vacancyList))
                 }
-                renderState(FavouritesState.Content(currentVacancyList))
             }
         }
     }
