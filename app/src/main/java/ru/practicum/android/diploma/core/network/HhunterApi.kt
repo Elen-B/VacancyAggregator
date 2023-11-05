@@ -6,10 +6,8 @@ import retrofit2.http.Query
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
-import ru.practicum.android.diploma.filter.data.dto.AreaResponse
-import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
-import ru.practicum.android.diploma.search.data.dto.VacancyDTO
+import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 
 interface HhunterApi {
     @GET("vacancies/{vacancy_id}")
