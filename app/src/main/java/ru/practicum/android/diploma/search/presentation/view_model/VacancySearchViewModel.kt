@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,9 @@ import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.VACANCY_ERROR
 
 class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : ViewModel() {
 
@@ -32,7 +35,8 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(SEARCH_DEBOUNCE_DELAY)
+            if(!forceButtonClick){
+            delay(SEARCH_DEBOUNCE_DELAY)}
             searchRequest(changedText)
         }
     }
@@ -40,7 +44,6 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(VacancyState.Loading)
-            foundVacanciesCount.postValue("1-0")
             viewModelScope.launch {
                 interactor
                     .searchVacancy(newSearchText)
@@ -63,17 +66,16 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
             vacancies.addAll(foundVacancies)
         }
         when {
-            message == R.string.network_error.toString() -> {
-                renderState(VacancyState.Error(errorMessage = R.string.network_error.toString()))
+            message == NETWORK_ERROR -> {
+                renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
             }
 
-            message == R.string.vacancy_error.toString() -> {
-                renderState(VacancyState.Empty(message = R.string.vacancy_error.toString()))
+            message == VACANCY_ERROR || foundVacancies.isNullOrEmpty() -> {
+                renderState(VacancyState.Empty(message = VACANCY_ERROR))
             }
 
             else -> {
                 renderState(VacancyState.Content(vacancy = vacancies))
-                foundVacanciesCount.postValue(message.toString())
             }
         }
     }

@@ -15,7 +15,10 @@ import ru.practicum.android.diploma.search.domain.models.Employer
 import ru.practicum.android.diploma.search.domain.models.Salary
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.LOG_IMAGE
+import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.UNKNOWN_ERROR
+import ru.practicum.android.diploma.util.VACANCY_ERROR
 
 class VacancySearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -34,12 +37,12 @@ class VacancySearchRepositoryImpl(
                     it.employer?.logo_urls?.get(LOG_IMAGE)
                 )
             })))
-            Response.RESULT_NETWORK_ERROR -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
-                Resource.Error(R.string.network_error.toString())))
-            Response.RESULT_BAD_REQUEST -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
-                Resource.Error(R.string.vacancy_error.toString())))
-            else -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
-                Resource.Error(R.string.unknown_error.toString())))
+            Response.RESULT_NETWORK_ERROR -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
+                Resource.Error(NETWORK_ERROR)))
+            Response.RESULT_BAD_REQUEST -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
+                Resource.Error(VACANCY_ERROR)))
+            else -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
+                Resource.Error(UNKNOWN_ERROR)))
         }
     }.flowOn(Dispatchers.IO)
 
