@@ -144,6 +144,7 @@ class SearchFragment : Fragment() {
         if (binding.searchEditText.text.isBlank()) {
             return
         }
+        binding.imageCover.visibility = View.GONE
         binding.textVacancyCount.visibility = View.VISIBLE
         adapter.searchVacancyList.clear()
         adapter.searchVacancyList.addAll(contentTracks)
