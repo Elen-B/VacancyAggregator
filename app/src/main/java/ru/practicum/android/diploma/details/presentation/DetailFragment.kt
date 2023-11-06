@@ -20,6 +20,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.util.formattedNumber
+import ru.practicum.android.diploma.util.setSymbolByCurrency
 
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
@@ -69,13 +70,25 @@ class DetailFragment : Fragment() {
             binding.salary.text = notSalary
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
             binding.salary.text =
-                "$from ${professionDetail.salaryFrom.formattedNumber()} ${professionDetail.salaryCurrency}"
+                "$from ${professionDetail.salaryFrom.formattedNumber()} ${
+                    setSymbolByCurrency(
+                        professionDetail.salaryCurrency
+                    )
+                }"
         } else if (professionDetail.salaryFrom == null && professionDetail.salaryTo != null) {
             binding.salary.text =
-                "$to ${professionDetail.salaryTo.formattedNumber()} ${professionDetail.salaryCurrency}"
+                "$to ${professionDetail.salaryTo.formattedNumber()} ${
+                    setSymbolByCurrency(
+                        professionDetail.salaryCurrency
+                    )
+                }"
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo != null) {
             binding.salary.text =
-                "$from ${professionDetail.salaryFrom.formattedNumber()} $to ${professionDetail.salaryTo.formattedNumber()} ${professionDetail.salaryCurrency}"
+                "$from ${professionDetail.salaryFrom.formattedNumber()} $to ${professionDetail.salaryTo.formattedNumber()} ${
+                    setSymbolByCurrency(
+                        professionDetail.salaryCurrency
+                    )
+                }"
         }
         if (professionDetail.experienceName == null) {
             binding.experience.isVisible = false

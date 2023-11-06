@@ -8,6 +8,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemSimilarBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 import ru.practicum.android.diploma.util.formattedNumber
+import ru.practicum.android.diploma.util.setSymbolByCurrency
 
 class SimilarHolder (private val binding: ItemSimilarBinding, private val context: Context):
     RecyclerView.ViewHolder(binding.root) {
@@ -31,13 +32,17 @@ class SimilarHolder (private val binding: ItemSimilarBinding, private val contex
             binding.salarySimilar.text = notSalary
         } else if (item.salaryFrom != null && item.salaryTo == null) {
             binding.salarySimilar.text =
-                "$from ${item.salaryFrom.formattedNumber()} ${item.salaryCurrency}"
+                "$from ${item.salaryFrom.formattedNumber()} ${setSymbolByCurrency(item.salaryCurrency)}"
         } else if (item.salaryFrom == null && item.salaryTo != null) {
             binding.salarySimilar.text =
-                "$to ${item.salaryTo.formattedNumber()} ${item.salaryCurrency}"
+                "$to ${item.salaryTo.formattedNumber()} ${setSymbolByCurrency(item.salaryCurrency)}"
         } else if (item.salaryFrom != null && item.salaryTo != null) {
             binding.salarySimilar.text =
-                "$from ${item.salaryFrom.formattedNumber()} $to ${item.salaryTo.formattedNumber()} ${item.salaryCurrency}"
+                "$from ${item.salaryFrom.formattedNumber()} $to ${item.salaryTo.formattedNumber()} ${
+                    setSymbolByCurrency(
+                        item.salaryCurrency
+                    )
+                }"
         }
     }
 }
