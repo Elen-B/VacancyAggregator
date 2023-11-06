@@ -59,7 +59,7 @@ class LocationRegionFragment: Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.edRegionSearch.doOnTextChanged { text, _, before, count ->
+        binding.edRegionSearch.doOnTextChanged { text, _, before, _ ->
             if (before == 0 && !text.isNullOrEmpty()) {
                 binding.ibtRegionSearch.setImageResource(R.drawable.ic_filter_clear)
             }

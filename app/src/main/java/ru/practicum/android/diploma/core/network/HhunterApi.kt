@@ -38,7 +38,7 @@ interface HhunterApi {
         @Path("area_id") id: String
     ): AreaDto
 
-    @GET("/industries")
+    @GET("industries")
     suspend fun getIndustries(): List<IndustryTreeDto>
 
     @GET("vacancies")

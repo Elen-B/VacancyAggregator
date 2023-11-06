@@ -1,11 +1,14 @@
 package ru.practicum.android.diploma.filter.presentation.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
@@ -13,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterIndustryScreenState
@@ -29,8 +33,6 @@ class FilterIndustryFragment: Fragment() {
     private val adapter = IndustryAdapter(listOf()).apply {
         clickListener = IndustryAdapter.IndustryClickListener { industry ->
             viewModel.onIndustryChecked(industry)
-        //    this.checkedIndustry = industry
-        //    this.notifyDataSetChanged()
         }
     }
 
@@ -60,6 +62,24 @@ class FilterIndustryFragment: Fragment() {
 
         binding.btFilterChoose.setOnClickListener {
             viewModel.applyFilter()
+        }
+
+        binding.edIndustrySearch.doOnTextChanged { text, _, before, _ ->
+            if (before == 0 && !text.isNullOrEmpty()) {
+                binding.ibtIndustrySearch.setImageResource(R.drawable.ic_filter_clear)
+            }
+            if (before > 0 && text.isNullOrEmpty()) {
+                binding.ibtIndustrySearch.setImageResource(R.drawable.icon_search)
+            }
+
+            viewModel.onEditTextChanged(text.toString())
+        }
+
+        binding.ibtIndustrySearch.setOnClickListener {
+            binding.edIndustrySearch.setText("")
+            val imm =
+                binding.edIndustrySearch.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.edIndustrySearch.windowToken, 0)
         }
 
         binding.rvIndustryList.layoutManager = LinearLayoutManager(requireContext())
