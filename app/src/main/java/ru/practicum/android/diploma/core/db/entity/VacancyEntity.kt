@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class VacancyEntity(
     @PrimaryKey @ColumnInfo(name = "id")
     val id: String,
-    val name: String,
+    val name: String?,
     val salary: String,
     val employer: String,
-    val logo: String
+    val logo: String?
 )
