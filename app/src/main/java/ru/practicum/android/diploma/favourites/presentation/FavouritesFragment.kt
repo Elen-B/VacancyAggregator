@@ -38,6 +38,7 @@ class FavouritesFragment: Fragment() {
 
      //viewModel.loadFavouriteVacancyList()
      viewModel.observeState().observe(viewLifecycleOwner) {
+         favouritesVacancyAdapter.setVacancyList(null)
          render(it)
      }
 
@@ -66,7 +67,6 @@ class FavouritesFragment: Fragment() {
     }
 
     private fun showContent(vacancyList: List<SearchVacancy>){
-        favouritesVacancyAdapter.setVacancyList(null)
         binding.imageListEmpty.isVisible = false
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = false
