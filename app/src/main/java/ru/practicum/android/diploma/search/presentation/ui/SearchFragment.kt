@@ -122,6 +122,8 @@ class SearchFragment : Fragment() {
         binding.imageCover.visibility = View.GONE
         binding.imageConnectionError.visibility = View.GONE
         binding.textConnectionError.visibility = View.GONE
+        binding.imageServerError.visibility = View.GONE
+        binding.textServerError.visibility = View.GONE
         binding.imageVacancyError.visibility = View.GONE
         binding.textVacancyError.visibility = View.GONE
         binding.viewElement.visibility = View.GONE
@@ -168,6 +170,8 @@ class SearchFragment : Fragment() {
 
     private fun getDefaultView() {
         binding.imageCover.visibility = View.VISIBLE
+        binding.imageServerError.visibility = View.GONE
+        binding.textServerError.visibility = View.GONE
         binding.imageConnectionError.visibility = View.GONE
         binding.textConnectionError.visibility = View.GONE
         binding.imageVacancyError.visibility = View.GONE
