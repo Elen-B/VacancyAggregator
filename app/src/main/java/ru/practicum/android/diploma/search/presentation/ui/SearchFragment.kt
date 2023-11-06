@@ -1,11 +1,12 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
-import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -26,20 +27,17 @@ import ru.practicum.android.diploma.search.presentation.view_model.VacancySearch
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 
 
-
-
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<VacancySearchViewModel>()
-    private var isClickAllowed = true
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
-            if (clickDebounce()) {
+            if (viewModel.clickDebounce()) {
                 //Переход на экран детализации
-               /* val bundle = bundleOf("id" to vacancy.id)
-                view?.findNavController()
-                    ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)*/
+                /* val bundle = bundleOf("id" to vacancy.id)
+                 view?.findNavController()
+                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)*/
             }
         }
     })
@@ -57,6 +55,11 @@ class SearchFragment : Fragment() {
 
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
+
+
+        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
+            binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
+        }
 /*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (binding.searchEditText.hasFocus()) {
@@ -75,14 +78,23 @@ class SearchFragment : Fragment() {
                     .isBlank()
             ) {
                 getDefaultView()
+                binding.searchEditText.clearFocus()
                 binding.iconSearch.visibility = View.VISIBLE
                 binding.iconCross.visibility = View.GONE
             } else if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
                     .isNotEmpty()
             ) {
+                viewModel.searchDebounce(binding.searchEditText.text.toString())
                 binding.iconSearch.visibility = View.GONE
                 binding.iconCross.visibility = View.VISIBLE
             }
+        }
+
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                viewModel.searchDebounce(binding.searchEditText.text.toString(), true)
+            }
+            false
         }
 
         binding.iconCross.setOnClickListener {
@@ -98,17 +110,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
     private fun render(state: VacancyState) {
         when (state) {
             is VacancyState.Content -> showContent(state.vacancy)
@@ -127,23 +128,26 @@ class SearchFragment : Fragment() {
         binding.imageVacancyError.visibility = View.GONE
         binding.textVacancyError.visibility = View.GONE
         binding.viewElement.visibility = View.GONE
-        binding.textVacancyCount.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
+        binding.textVacancyCount.visibility = View.GONE
     }
 
     private fun showError(errorMessage: String) {
         binding.progressBar.visibility = View.GONE
         binding.imageConnectionError.visibility = View.VISIBLE
         binding.textConnectionError.visibility = View.VISIBLE
+        binding.textConnectionError.setText(errorMessage)
         binding.recyclerViewSearch.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.GONE
     }
 
-    private fun showEmpty(emptyMessage: String) {
+    private fun showEmpty(message: String) {
         binding.progressBar.visibility = View.GONE
         binding.imageVacancyError.visibility = View.VISIBLE
         binding.textVacancyError.visibility = View.VISIBLE
         binding.recyclerViewSearch.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.GONE
     }
 
     private fun showContent(contentTracks: List<SearchVacancy>) {
@@ -151,6 +155,8 @@ class SearchFragment : Fragment() {
         if (binding.searchEditText.text.isBlank()) {
             return
         }
+        binding.imageCover.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.VISIBLE
         adapter.searchVacancyList.clear()
         adapter.searchVacancyList.addAll(contentTracks)
         adapter.notifyDataSetChanged()
@@ -167,5 +173,6 @@ class SearchFragment : Fragment() {
         binding.textVacancyCount.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.GONE
     }
 }

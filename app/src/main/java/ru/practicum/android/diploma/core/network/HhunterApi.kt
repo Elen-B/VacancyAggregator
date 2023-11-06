@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
-import ru.practicum.android.diploma.search.data.dto.VacancyDTO
+import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 
 interface HhunterApi {
     @GET("vacancies/{vacancy_id}")
@@ -40,7 +40,7 @@ interface HhunterApi {
     @GET("vacancies")
     suspend fun getVacancyList(
         @Query("text") vacancy: String
-    ): List<VacancyDTO>
+    ): VacancySearchResponse
 
 }
 

@@ -14,6 +14,7 @@ class FilterViewModel(
     private val filterLocalInteractor: FilterLocalInteractor
 ) : ViewModel() {
     private val filterParameters: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
+    private val originalFilter: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
 
     private val stateLiveData = MutableLiveData<FilterScreenState>()
     fun observeState(): LiveData<FilterScreenState> = stateLiveData
@@ -25,19 +26,21 @@ class FilterViewModel(
     fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
 
     init {
-        setState(FilterScreenState.Started(filterParameters))
+        setState(FilterScreenState.Started(filterParameters, true))
     }
 
     private fun setState(state: FilterScreenState) {
         stateLiveData.value = state
     }
 
-    private fun getCurrentState(newFilterParameters: FilterParameters, update: Boolean): FilterScreenState {
-        return if (filterParameters.equals(newFilterParameters) && stateLiveData.value is FilterScreenState.Initial) {
-            FilterScreenState.Initial
-        } else {
+    private fun getCurrentState(
+        newFilterParameters: FilterParameters,
+        update: Boolean
+    ): FilterScreenState {
+        return if (originalFilter == newFilterParameters)
+            FilterScreenState.Started(newFilterParameters, update)
+        else
             FilterScreenState.Modified(newFilterParameters, update)
-        }
     }
 
     private fun setFilterParameters(newFilterParameters: FilterParameters) {
@@ -48,30 +51,32 @@ class FilterViewModel(
         filterParameters.fSalaryRequired = newFilterParameters.fSalaryRequired
     }
 
+    private fun setStateEx(filterParameters: FilterParameters, update: Boolean) {
+        val newState = getCurrentState(filterParameters, update)
+        setFilterParameters(filterParameters)
+        if (newState != stateLiveData.value)
+            setState(newState)
+    }
+
     fun onSalaryChanged(value: String) {
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, false))
-
+        setStateEx(newFilterParameters, false)
     }
 
     fun onLocationChanged(country: Area?, region: Area?) {
         val newFilterParameters = filterParameters.copy(country = country, region = region)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, true))
+        setStateEx(newFilterParameters, true)
     }
 
     fun onFSalaryRequiredChanged(checked: Boolean) {
         val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, false))
+        setStateEx(newFilterParameters, false)
     }
 
     fun onClearFilterClick() {
         val newFilterParameters = FilterParameters()
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, true))
+        setStateEx(newFilterParameters, true)
     }
 
     fun showLocation() {

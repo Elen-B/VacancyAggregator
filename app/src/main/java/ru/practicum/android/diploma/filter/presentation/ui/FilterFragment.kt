@@ -91,7 +91,6 @@ class FilterFragment: Fragment() {
                 binding.miFilterIndustry.editText?.text = null
                 setMenuEditTextStyle(binding.miFilterIndustry, false)
             }
-
         }
 
         binding.miFilterSalary.setEndIconOnClickListener {
@@ -132,36 +131,30 @@ class FilterFragment: Fragment() {
                     setViewData(state.data)
                 setViewAppearance(state)
             }
-            else -> Unit
         }
-
     }
 
     private fun setViewAppearance(state: FilterScreenState) {
         val filterParameters = when (state) {
             is FilterScreenState.Started -> state.data
             is FilterScreenState.Modified -> state.data
-            else -> null
         }
 
+        setMenuEditTextStyle(
+            binding.miFilterLocation,
+            !filterParameters.country?.name.isNullOrEmpty() || !filterParameters.region?.name.isNullOrEmpty()
+        )
 
-        if (filterParameters != null) {
-            setMenuEditTextStyle(
-                binding.miFilterLocation,
-                !filterParameters.country?.name.isNullOrEmpty() || !filterParameters.region?.name.isNullOrEmpty()
-            )
+        setMenuEditTextStyle(
+            binding.miFilterIndustry,
+            !filterParameters.industry?.name.isNullOrEmpty()
+        )
 
-            setMenuEditTextStyle(
-                binding.miFilterIndustry,
-                !filterParameters.industry?.name.isNullOrEmpty()
-            )
-
-            setSalaryEditTextStyle(
-                binding.miFilterSalary,
-                filterParameters.salary != null
-            )
-            binding.btFilterClear.isVisible = !filterParameters.isEmpty()
-        }
+        setSalaryEditTextStyle(
+            binding.miFilterSalary,
+            filterParameters.salary != null
+        )
+        binding.btFilterClear.isVisible = !filterParameters.isEmpty()
 
         binding.btFilterApply.isVisible = state is FilterScreenState.Modified
     }
