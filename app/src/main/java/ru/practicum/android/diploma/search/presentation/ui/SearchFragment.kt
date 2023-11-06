@@ -34,6 +34,7 @@ class SearchFragment : Fragment() {
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
             if (viewModel.clickDebounce()) {
+                //TODO
                 //Переход на экран детализации
                 /* val bundle = bundleOf("id" to vacancy.id)
                  view?.findNavController()
