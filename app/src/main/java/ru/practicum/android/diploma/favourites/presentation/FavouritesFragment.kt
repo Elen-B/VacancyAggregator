@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
+import ru.practicum.android.diploma.favourites.presentation.adapter.FavouritesVacancyAdapter
 import ru.practicum.android.diploma.favourites.presentation.model.FavouritesState
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
@@ -19,6 +20,10 @@ class FavouritesFragment: Fragment() {
 
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
+
+    private val favouritesVacancyAdapter = FavouritesVacancyAdapter{
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,9 +66,12 @@ class FavouritesFragment: Fragment() {
     }
 
     private fun showContent(vacancyList: List<SearchVacancy>){
+        favouritesVacancyAdapter.setVacancyList(null)
         binding.imageListEmpty.isVisible = false
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = false
         binding.textNoList.isVisible = false
+        favouritesVacancyAdapter.setVacancyList(vacancyList)
+        binding.rvFavouriteList.adapter = favouritesVacancyAdapter
     }
 }
