@@ -62,6 +62,7 @@ class LocationRegionFragment: Fragment() {
     private fun render(state: LocationRegionScreenState) {
         binding.phFilterEmpty.isVisible = state is LocationRegionScreenState.Empty
         binding.phFilterError.isVisible = state is LocationRegionScreenState.Error
+        binding.rvRegionList.isVisible = state is LocationRegionScreenState.Content
 
         if (state is LocationRegionScreenState.Content)
             adapter.addItems(state.regionList)

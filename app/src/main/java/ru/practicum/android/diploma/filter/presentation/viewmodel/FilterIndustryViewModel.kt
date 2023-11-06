@@ -3,28 +3,34 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.presentation.models.FilterIndustryScreenState
 
-class FilterIndustryViewModel: ViewModel() {
+class FilterIndustryViewModel(private val filterInteractor: FilterInteractor): ViewModel() {
 
     private val stateLiveData = MutableLiveData<FilterIndustryScreenState>()
     fun observeState(): LiveData<FilterIndustryScreenState> = stateLiveData
-
 
     init {
         loadData()
     }
 
     private fun loadData() {
-        setState(
-            FilterIndustryScreenState.Content(
-                listOf(
-                    Industry("111", "IT"),
-                    Industry("112", "Право")
-                ), Industry("111", "IT")
-            )
-        )
+        viewModelScope.launch {
+            val result = filterInteractor.getIndustries()
+            //Log.e("filter", result.toString() + result.toString())
+            if (!result.second.isNullOrEmpty()) {
+                setState(FilterIndustryScreenState.Error)
+            } else {
+                if (result.first != null) {
+                    setState(FilterIndustryScreenState.Content(result.first!!, null))
+                } else {
+                    setState(FilterIndustryScreenState.Error)
+                }
+            }
+        }
     }
 
     private fun setState(state: FilterIndustryScreenState) {
