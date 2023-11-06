@@ -4,29 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterIndustryScreenState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 
 class FilterIndustryFragment: Fragment() {
     private lateinit var binding: FragmentFilterIndustryBinding
+    private val args: FilterIndustryFragmentArgs by navArgs()
 
-    private val viewModel: FilterIndustryViewModel by viewModel()
+    private val viewModel: FilterIndustryViewModel by viewModel {
+        parametersOf(args.industry)
+    }
 
     private val adapter = IndustryAdapter(listOf()).apply {
         clickListener = IndustryAdapter.IndustryClickListener { industry ->
-            this.checkedIndustry = industry
-            this.notifyDataSetChanged()
-        /*    setFragmentResult(
-                FilterLocationFragment.REGION_RESULT_KEY,
-                bundleOf(FilterLocationFragment.REGION_RESULT_VAL to industry)
-            )
-            findNavController().navigateUp()*/
+            viewModel.onIndustryChecked(industry)
+        //    this.checkedIndustry = industry
+        //    this.notifyDataSetChanged()
         }
     }
 
@@ -46,8 +50,16 @@ class FilterIndustryFragment: Fragment() {
             render(it)
         }
 
+        viewModel.getApplyFilterTrigger().observe(viewLifecycleOwner) { industry ->
+            applyFilter(industry)
+        }
+
         binding.btTopBarBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.btFilterChoose.setOnClickListener {
+            viewModel.applyFilter()
         }
 
         binding.rvIndustryList.layoutManager = LinearLayoutManager(requireContext())
@@ -59,7 +71,24 @@ class FilterIndustryFragment: Fragment() {
         binding.phFilterError.isVisible = state is FilterIndustryScreenState.Error
         binding.rvIndustryList.isVisible = state is FilterIndustryScreenState.Content
 
-        if (state is FilterIndustryScreenState.Content)
-            adapter.addItems(state.industryList)
+
+        if (state is FilterIndustryScreenState.Content) {
+            adapter.addItems(state.industryList, state.checkedIndustry)
+            binding.btFilterChoose.isVisible = state.checkedIndustry != null
+        } else
+            binding.btFilterChoose.isVisible = false
+    }
+
+    private fun applyFilter(industry: Industry?) {
+        setFragmentResult(
+            INDUSTRY_RESULT_KEY,
+            bundleOf(INDUSTRY_RESULT_VAL to industry)
+        )
+        findNavController().navigateUp()
+    }
+
+    companion object {
+        const val INDUSTRY_RESULT_KEY = "industry_key"
+        const val INDUSTRY_RESULT_VAL = "industry_val"
     }
 }

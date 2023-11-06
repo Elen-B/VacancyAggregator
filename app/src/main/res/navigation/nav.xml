@@ -87,7 +87,12 @@
         android:id="@+id/filterIndustryFragment"
         android:name="ru.practicum.android.diploma.filter.presentation.ui.FilterIndustryFragment"
         android:label="FilterIndustryFragment"
-        tools:layout="@layout/fragment_filter_industry"/>
+        tools:layout="@layout/fragment_filter_industry">
+        <argument
+            android:name="industry"
+            app:argType="ru.practicum.android.diploma.filter.domain.models.Industry"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/similarFragment"
         android:name="ru.practicum.android.diploma.details.presentation.SimilarFragment"

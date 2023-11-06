@@ -21,8 +21,9 @@ class IndustryAdapter(private var items: List<Industry>) : RecyclerView.Adapter<
         holder.itemView.setOnClickListener{clickListener?.onIndustryClick(item)}
     }
 
-    fun addItems(values: List<Industry>) {
+    fun addItems(values: List<Industry>, checkedIndustry: Industry?) {
         items = values
+        this.checkedIndustry = checkedIndustry
         this.notifyDataSetChanged()
     }
 

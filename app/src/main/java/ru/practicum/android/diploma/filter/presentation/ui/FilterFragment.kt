@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
 class FilterFragment: Fragment() {
@@ -56,12 +57,25 @@ class FilterFragment: Fragment() {
             viewModel.onLocationChanged(country, region)
         }
 
+        setFragmentResultListener(FilterIndustryFragment.INDUSTRY_RESULT_KEY) { _, bundle ->
+            val industry: Industry? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(FilterIndustryFragment.INDUSTRY_RESULT_VAL, Industry::class.java)
+            } else {
+                bundle.getParcelable(FilterIndustryFragment.INDUSTRY_RESULT_VAL)
+            }
+            viewModel.onIndustryChanged(industry)
+        }
+
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
         viewModel.getShowLocationTrigger().observe(viewLifecycleOwner) {filterParameters ->
             showLocation(filterParameters.country, filterParameters.region)
+        }
+
+        viewModel.getShowIndustryTrigger().observe(viewLifecycleOwner) {industry ->
+            showIndustry(industry)
         }
 
         viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) {
@@ -73,7 +87,7 @@ class FilterFragment: Fragment() {
         }
 
         binding.miFilterIndustry.editText?.setOnClickListener {
-            showIndustry()
+            viewModel.showIndustry()
         }
 
         binding.miFilterLocation.setEndIconOnClickListener {
@@ -86,10 +100,9 @@ class FilterFragment: Fragment() {
 
         binding.miFilterIndustry.setEndIconOnClickListener {
             if (binding.miFilterIndustry.editText?.text.isNullOrEmpty())
-                showIndustry()
+                viewModel.showIndustry()
             else {
-                binding.miFilterIndustry.editText?.text = null
-                setMenuEditTextStyle(binding.miFilterIndustry, false)
+                viewModel.onIndustryChanged(null)
             }
 
         }
@@ -219,8 +232,10 @@ class FilterFragment: Fragment() {
        findNavController().navigate(action)
     }
 
-    private fun showIndustry() {
-        val action = FilterFragmentDirections.actionFilterFragmentToFilterIndustryFragment()
+    private fun showIndustry(industry: Industry?) {
+        val action = FilterFragmentDirections.actionFilterFragmentToFilterIndustryFragment(
+            industry
+        )
         findNavController().navigate(action)
     }
 }
