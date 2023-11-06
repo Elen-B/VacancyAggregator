@@ -22,7 +22,7 @@ class DetailRepositoryImpl(
                 message = R.string.network_error.toString(),
                 errorImagePath = R.drawable.error_connection_lm)
             Response.RESULT_BAD_REQUEST -> Resource.Error(
-                message = R.string.vacancy_error.toString(),
+                message = R.string.empty_vacancy_error.toString(),
                 errorImagePath = R.drawable.error_vacancy_dm)
             else -> Resource.Error(
                 message = R.string.unknown_error.toString(),
@@ -40,7 +40,7 @@ class DetailRepositoryImpl(
                 message = R.string.network_error.toString(),
                 errorImagePath = R.drawable.error_connection_lm)
             Response.RESULT_BAD_REQUEST -> Resource.Error(
-                message = R.string.vacancy_error.toString(),
+                message = R.string.empty_vacancy_error.toString(),
                 errorImagePath = R.drawable.error_vacancy_dm)
             else -> Resource.Error(
                 message = R.string.unknown_error.toString(),

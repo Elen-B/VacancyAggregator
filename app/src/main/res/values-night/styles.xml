@@ -11,4 +11,8 @@
     <style name="ErrorVacancyImage">
         <item name="android:src">@drawable/error_vacancy_dm</item>
     </style>
+
+    <style name="ServerErrorVacancyImage">
+        <item name="android:src">@drawable/error_vacancy_dm</item>
+    </style>
 </resources>

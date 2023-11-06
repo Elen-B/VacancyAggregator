@@ -24,6 +24,7 @@ import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.SERVER_ERROR
 
 
 class SearchFragment : Fragment() {
@@ -130,9 +131,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
+        if(errorMessage == SERVER_ERROR){
+            binding.imageConnectionError.visibility = View.VISIBLE
+            binding.textConnectionError.visibility = View.VISIBLE
+        }
+        else{
+            binding.imageServerError.visibility = View.VISIBLE
+            binding.textServerError.visibility = View.VISIBLE
+        }
         binding.progressBar.visibility = View.GONE
-        binding.imageConnectionError.visibility = View.VISIBLE
-        binding.textConnectionError.visibility = View.VISIBLE
         binding.textConnectionError.setText(errorMessage)
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE

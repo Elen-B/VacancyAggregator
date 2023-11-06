@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.LOG_IMAGE
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 
@@ -40,9 +41,9 @@ class VacancySearchRepositoryImpl(
             Response.RESULT_NETWORK_ERROR -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
                 Resource.Error(NETWORK_ERROR)))
             Response.RESULT_BAD_REQUEST -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
-                Resource.Error(VACANCY_ERROR)))
+                Resource.Error(SERVER_ERROR)))
             else -> emit(Pair<String?, Resource<List<SearchVacancy>>>(null,
-                Resource.Error(UNKNOWN_ERROR)))
+                Resource.Error(SERVER_ERROR)))
         }
     }.flowOn(Dispatchers.IO)
 

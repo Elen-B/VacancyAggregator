@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 
 class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : ViewModel() {
@@ -70,7 +71,11 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
                 renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
             }
 
-            message == VACANCY_ERROR || foundVacancies.isNullOrEmpty() -> {
+            message == SERVER_ERROR -> {
+                renderState(VacancyState.Error(errorMessage = SERVER_ERROR))
+            }
+
+            vacancies.isNullOrEmpty() -> {
                 renderState(VacancyState.Empty(message = VACANCY_ERROR))
             }
 

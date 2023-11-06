@@ -8,7 +8,8 @@
     <string name="vacancy_search">Поиск вакансий</string>
     <string name="enter_request">Введите запрос</string>
     <string name="network_error">Нет интернета</string>
-    <string name="vacancy_error">Не удалось получить список вакансий</string>
+    <string name="empty_vacancy_error">Не удалось получить список вакансий</string>
+    <string name="server_error">Ошибка сервера</string>
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="text">Text</string>
     <string name="foundVacancies">Найдено %1$s вакансий</string>

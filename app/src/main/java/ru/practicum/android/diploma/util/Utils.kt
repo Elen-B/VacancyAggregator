@@ -11,6 +11,7 @@ const val LOG_IMAGE = "90"
 const val NETWORK_ERROR = "Нет интернета"
 const val VACANCY_ERROR = "Не удалось получить список вакансий"
 const val UNKNOWN_ERROR = "Неизвестная ошибка"
+const val SERVER_ERROR = "Ошибка сервера"
 
 const val BASE_URL = "https://api.hh.ru/"
 
