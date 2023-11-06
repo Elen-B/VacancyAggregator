@@ -52,7 +52,11 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-            }
+
+        binding.back.setOnClickListener {
+            view.findNavController().popBackStack()
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setData(professionDetail: ProfessionDetail) {
