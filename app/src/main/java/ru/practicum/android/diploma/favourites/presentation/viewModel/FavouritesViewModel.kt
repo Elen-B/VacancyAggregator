@@ -9,12 +9,12 @@ import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.presentation.model.FavouritesState
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
-class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor): ViewModel() {
+class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor) : ViewModel() {
 
     private val favouritesLiveDataMutable = MutableLiveData<FavouritesState>()
     fun observeState(): LiveData<FavouritesState> = favouritesLiveDataMutable
 
-    fun loadFavouriteVacancyList(){
+    fun loadFavouriteVacancyList() {
         viewModelScope.launch {
             favouritesInteractor.getListVacancy().collect { pair ->
                 processResult(pair.first, pair.second)
@@ -23,13 +23,16 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
     }
 
     private fun processResult(vacancyList: List<SearchVacancy>?, message: String?) {
+
         when (message) {
             ERROR -> {
                 renderState(FavouritesState.Error)
             }
+
             EMPTY -> {
                 renderState(FavouritesState.Empty)
             }
+
             else -> {
                 if (vacancyList != null) {
                     renderState(FavouritesState.Content(vacancyList))
@@ -43,7 +46,7 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
     }
 
     companion object {
-        private const val ERROR = "error"
-        private const val EMPTY = "empty"
+        const val ERROR = "error"
+        const val EMPTY = "empty"
     }
 }

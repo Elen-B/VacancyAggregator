@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.favourites.presentation.model.FavouritesStat
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
-class FavouritesFragment: Fragment() {
+class FavouritesFragment : Fragment() {
 
 
     private val viewModel by viewModel<FavouritesViewModel>()
@@ -21,7 +21,7 @@ class FavouritesFragment: Fragment() {
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
 
-    private val favouritesVacancyAdapter = FavouritesVacancyAdapter{
+    private val favouritesVacancyAdapter = FavouritesVacancyAdapter {
 
     }
 
@@ -33,44 +33,48 @@ class FavouritesFragment: Fragment() {
         _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-     //viewModel.loadFavouriteVacancyList()
-     viewModel.observeState().observe(viewLifecycleOwner) {
-         favouritesVacancyAdapter.setVacancyList(null)
-         render(it)
-     }
+        viewModel.loadFavouriteVacancyList()
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            favouritesVacancyAdapter.setVacancyList(null)
+            render(it)
+        }
 
     }
 
-    private fun render(state: FavouritesState){
-        when(state){
+    private fun render(state: FavouritesState) {
+        when (state) {
             is FavouritesState.Empty -> showEmpty()
             is FavouritesState.Error -> showError()
             is FavouritesState.Content -> showContent(state.vacancyList)
         }
     }
 
-    private fun showEmpty(){
+    private fun showEmpty() {
         binding.imageListEmpty.isVisible = true
         binding.textListEmpty.isVisible = true
         binding.imageNoList.isVisible = false
         binding.textNoList.isVisible = false
+        binding.rvFavouriteList.isVisible = false
     }
 
-    private fun showError(){
+    private fun showError() {
         binding.imageListEmpty.isVisible = false
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = true
         binding.textNoList.isVisible = true
+        binding.rvFavouriteList.isVisible = false
     }
 
-    private fun showContent(vacancyList: List<SearchVacancy>){
+    private fun showContent(vacancyList: List<SearchVacancy>) {
         binding.imageListEmpty.isVisible = false
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = false
         binding.textNoList.isVisible = false
+        binding.rvFavouriteList.isVisible = true
         favouritesVacancyAdapter.setVacancyList(vacancyList)
         binding.rvFavouriteList.adapter = favouritesVacancyAdapter
     }
