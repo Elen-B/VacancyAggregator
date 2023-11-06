@@ -7,10 +7,13 @@ import ru.practicum.android.diploma.filter.data.dto.AreaDataResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryListTreeResponse
 import ru.practicum.android.diploma.filter.data.mapper.AreaMapper
 import ru.practicum.android.diploma.filter.data.mapper.AreaTreeMapper
+import ru.practicum.android.diploma.filter.data.mapper.IndustryTreeMapper
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.util.Resource
 
 class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRepository {
@@ -62,6 +65,21 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                     else null
 
                 Resource.Success(area)
+            }
+
+            else -> Resource.Error("")
+        }
+    }
+
+    override suspend fun getIndustries(): Resource<List<Industry>> {
+        val response = networkClient.doRequest(Request.IndustryTreeRequest)
+        return when (response.resultCode) {
+            Response.RESULT_SUCCESS -> {
+                val flattenIndustry =
+                    ((response as IndustryListTreeResponse).results.flatMap { industryTreeDto ->
+                        IndustryTreeMapper.map(industryTreeDto)
+                    }).sortedBy { it.name }
+                Resource.Success(flattenIndustry)
             }
 
             else -> Resource.Error("")

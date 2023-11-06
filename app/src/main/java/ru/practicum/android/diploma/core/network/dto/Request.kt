@@ -13,4 +13,6 @@ sealed interface Request {
     object AreasFullTreeRequest: Request
 
     data class AreaDataRequest(val id: String): Request
+
+    object IndustryTreeRequest: Request
 }

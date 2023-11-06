@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.favourites.presentation.viewModel.Favourites
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationCountryViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationRegionViewModel
@@ -39,8 +40,8 @@ val viewModelModule = module {
         LocationRegionViewModel(country, get())
     }
 
-    viewModel {
-        FilterIndustryViewModel()
+    viewModel {(industry: Industry?) ->
+        FilterIndustryViewModel(industry, get())
     }
 
     viewModel {

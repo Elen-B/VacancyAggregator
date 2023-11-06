@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filter.domain.impl
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.util.Resource
 
 class FilterInteractorImpl(private val repository: FilterRepository): FilterInteractor {
@@ -39,4 +40,10 @@ class FilterInteractorImpl(private val repository: FilterRepository): FilterInte
         return parent
     }
 
+    override suspend fun getIndustries(): Pair<List<Industry>?, String?> {
+        return when(val res = repository.getIndustries()) {
+            is Resource.Success -> Pair(res.data, null)
+            is Resource.Error -> Pair(null, res.message)
+        }
+    }
 }

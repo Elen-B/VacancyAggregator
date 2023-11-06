@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
@@ -21,6 +22,9 @@ class FilterViewModel(
 
     private val showLocationTrigger = SingleEventLiveData<FilterParameters>()
     fun getShowLocationTrigger(): LiveData<FilterParameters> = showLocationTrigger
+
+    private val showIndustryTrigger = SingleEventLiveData<Industry?>()
+    fun getShowIndustryTrigger(): LiveData<Industry?> = showIndustryTrigger
 
     private val saveFilterTrigger = SingleEventLiveData<Unit>()
     fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
@@ -69,6 +73,12 @@ class FilterViewModel(
         setStateEx(newFilterParameters, true)
     }
 
+    fun onIndustryChanged(industry: Industry?) {
+        val newFilterParameters = filterParameters.copy(industry = industry)
+        setFilterParameters(newFilterParameters)
+        setState(getCurrentState(newFilterParameters, true))
+    }
+
     fun onFSalaryRequiredChanged(checked: Boolean) {
         val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
         setStateEx(newFilterParameters, false)
@@ -82,6 +92,10 @@ class FilterViewModel(
     fun showLocation() {
         // добавить clickDebounce
         showLocationTrigger.value = filterParameters
+    }
+
+    fun showIndustry() {
+        showIndustryTrigger.value = filterParameters.industry
     }
 
     fun saveFilterParameters() {

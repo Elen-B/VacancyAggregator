@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.filter.data.dto.AreaDataResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
+import ru.practicum.android.diploma.filter.data.dto.IndustryListTreeResponse
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 
 
@@ -42,6 +43,7 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
             is Request.AreasFullTreeRequest -> AreaListTreeResponse(hhunterApiService.getAreas())
             is Request.AreaDataRequest -> AreaDataResponse(hhunterApiService.getArea(dto.id))
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
+            is Request.IndustryTreeRequest -> IndustryListTreeResponse(hhunterApiService.getIndustries())
             is Request.VacancySearchRequest -> hhunterApiService.getVacancyList(dto.text)
             is Request.VacancyDetailsRequest -> DetailVacancyResponse(hhunterApiService.getDetail(dto.id))
             is Request.SimilarVacancyRequest -> SimilarVacancyResponse(hhunterApiService.getSimilarVacancies(dto.id))
