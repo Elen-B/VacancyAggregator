@@ -20,6 +20,8 @@ class FilterIndustryFragment: Fragment() {
 
     private val adapter = IndustryAdapter(listOf()).apply {
         clickListener = IndustryAdapter.IndustryClickListener { industry ->
+            this.checkedIndustry = industry
+            this.notifyDataSetChanged()
         /*    setFragmentResult(
                 FilterLocationFragment.REGION_RESULT_KEY,
                 bundleOf(FilterLocationFragment.REGION_RESULT_VAL to industry)
