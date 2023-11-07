@@ -24,7 +24,7 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
-class FilterFragment: Fragment() {
+class FilterFragment : Fragment() {
     private lateinit var binding: FragmentFilterBinding
     private val args: FilterFragmentArgs by navArgs()
 
@@ -60,7 +60,10 @@ class FilterFragment: Fragment() {
 
         setFragmentResultListener(FilterIndustryFragment.INDUSTRY_RESULT_KEY) { _, bundle ->
             val industry: Industry? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                bundle.getParcelable(FilterIndustryFragment.INDUSTRY_RESULT_VAL, Industry::class.java)
+                bundle.getParcelable(
+                    FilterIndustryFragment.INDUSTRY_RESULT_VAL,
+                    Industry::class.java
+                )
             } else {
                 bundle.getParcelable(FilterIndustryFragment.INDUSTRY_RESULT_VAL)
             }
@@ -71,11 +74,11 @@ class FilterFragment: Fragment() {
             render(it)
         }
 
-        viewModel.getShowLocationTrigger().observe(viewLifecycleOwner) {filterParameters ->
+        viewModel.getShowLocationTrigger().observe(viewLifecycleOwner) { filterParameters ->
             showLocation(filterParameters.country, filterParameters.region)
         }
 
-        viewModel.getShowIndustryTrigger().observe(viewLifecycleOwner) {industry ->
+        viewModel.getShowIndustryTrigger().observe(viewLifecycleOwner) { industry ->
             showIndustry(industry)
         }
 
@@ -153,6 +156,7 @@ class FilterFragment: Fragment() {
                 setViewData(state.data)
                 setViewAppearance(state)
             }
+
             is FilterScreenState.Modified -> {
                 if (state.update)
                     setViewData(state.data)
@@ -177,18 +181,19 @@ class FilterFragment: Fragment() {
                 !filterParameters.country?.name.isNullOrEmpty() || !filterParameters.region?.name.isNullOrEmpty()
             )
 
-        setMenuEditTextStyle(
-            binding.miFilterIndustry,
-            !filterParameters.industry?.name.isNullOrEmpty()
-        )
+            setMenuEditTextStyle(
+                binding.miFilterIndustry,
+                !filterParameters.industry?.name.isNullOrEmpty()
+            )
 
-        setSalaryEditTextStyle(
-            binding.miFilterSalary,
-            filterParameters.salary != null
-        )
-        binding.btFilterClear.isVisible = !filterParameters.isEmpty()
+            setSalaryEditTextStyle(
+                binding.miFilterSalary,
+                filterParameters.salary != null
+            )
+            binding.btFilterClear.isVisible = !filterParameters.isEmpty()
 
-        binding.btFilterApply.isVisible = state is FilterScreenState.Modified
+            binding.btFilterApply.isVisible = state is FilterScreenState.Modified
+        }
     }
 
     private fun setMenuEditTextStyle(textInputLayout: TextInputLayout, filled: Boolean) {
@@ -198,7 +203,8 @@ class FilterFragment: Fragment() {
             R.color.filter_menu_hint_selector
         }
 
-        val colorStateList = ResourcesCompat.getColorStateList(resources, coloInt, requireContext().theme)
+        val colorStateList =
+            ResourcesCompat.getColorStateList(resources, coloInt, requireContext().theme)
         textInputLayout.setBoxStrokeColorStateList(colorStateList!!)
         textInputLayout.defaultHintTextColor = colorStateList
         textInputLayout.hintTextColor = colorStateList
@@ -216,11 +222,13 @@ class FilterFragment: Fragment() {
             R.color.filter_salary_hint_selector
         }
 
-        val colorStateList = ResourcesCompat.getColorStateList(resources, coloInt, requireContext().theme)
+        val colorStateList =
+            ResourcesCompat.getColorStateList(resources, coloInt, requireContext().theme)
         textInputLayout.setBoxStrokeColorStateList(colorStateList!!)
         textInputLayout.defaultHintTextColor = colorStateList
         textInputLayout.hintTextColor = colorStateList
-        textInputLayout.isEndIconVisible = filled && (textInputLayout.editText?.hasFocus() ?: false)
+        textInputLayout.isEndIconVisible =
+            filled && (textInputLayout.editText?.hasFocus() ?: false)
     }
 
     private fun setViewData(filterParameters: FilterParameters) {
@@ -241,7 +249,7 @@ class FilterFragment: Fragment() {
             country,
             region
         )
-       findNavController().navigate(action)
+        findNavController().navigate(action)
     }
 
     private fun showIndustry(industry: Industry?) {
