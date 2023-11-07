@@ -12,6 +12,8 @@ import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class FilterIndustryViewModel(industry: Industry?, private val filterInteractor: FilterInteractor): ViewModel() {
 
+    private val originalList: MutableList<Industry> = ArrayList()
+    private val filteredList: MutableList<Industry> = ArrayList()
     private var checkedIndustry: Industry?
 
     private val stateLiveData = MutableLiveData<FilterIndustryScreenState>()
@@ -32,7 +34,8 @@ class FilterIndustryViewModel(industry: Industry?, private val filterInteractor:
                 setState(FilterIndustryScreenState.Error)
             } else {
                 if (result.first != null) {
-                    setState(FilterIndustryScreenState.Content(result.first!!, checkedIndustry))
+                    originalList.addAll(result.first!!)
+                    setState(FilterIndustryScreenState.Content(originalList, checkedIndustry))
                 } else {
                     setState(FilterIndustryScreenState.Empty)
                 }
@@ -53,6 +56,27 @@ class FilterIndustryViewModel(industry: Industry?, private val filterInteractor:
                     checkedIndustry
                 )
             )
+        }
+    }
+
+    fun onEditTextChanged(searchQuery: String?) {
+        if (stateLiveData.value is FilterIndustryScreenState.Error)
+            return
+
+        filteredList.clear()
+        if (searchQuery.isNullOrEmpty()) {
+            setState(FilterIndustryScreenState.Content(originalList, checkedIndustry))
+        } else {
+            for (item in originalList) {
+                if (item.name.contains(searchQuery, true)) {
+                    filteredList.add(item)
+                }
+            }
+            if (filteredList.size > 0) {
+                setState(FilterIndustryScreenState.Content(filteredList, checkedIndustry))
+            } else {
+                setState(FilterIndustryScreenState.Empty)
+            }
         }
     }
 

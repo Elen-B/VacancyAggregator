@@ -7,6 +7,11 @@ object IndustryTreeMapper {
     fun map(industryTreeDto: IndustryTreeDto?): List<Industry> {
         if (industryTreeDto == null)
             return emptyList()
-        return  industryTreeDto.industries.map { IndustryMapper.map(it) }
+
+        val root = listOf(IndustryMapper.map(industryTreeDto))
+        val res = industryTreeDto.industries.map { IndustryMapper.map(it) }
+
+
+        return listOf(root, res).flatten()
     }
 }
