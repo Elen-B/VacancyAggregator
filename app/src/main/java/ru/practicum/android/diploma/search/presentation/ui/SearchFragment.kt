@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
+import androidx.core.os.bundleOf
 import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -35,12 +36,10 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModel<VacancySearchViewModel>()
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
-            if (viewModel.clickDebounce()) {
-                //TODO
-                //Переход на экран детализации
-                /* val bundle = bundleOf("id" to vacancy.id)
+            if (viewModel.clickDebounce()) {//Переход на экран детализации
+                                 val bundle = bundleOf("id" to vacancy.id)
                  view?.findNavController()
-                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)*/
+                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
             }
         }
     })

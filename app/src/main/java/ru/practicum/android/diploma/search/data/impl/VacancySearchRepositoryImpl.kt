@@ -30,7 +30,7 @@ class VacancySearchRepositoryImpl(
             Response.RESULT_SUCCESS -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
                 Resource.Success((response as VacancySearchResponse).items.map { it ->
                 SearchVacancy(
-                    it.id?.toInt(),
+                    it.id,
                     it.name,
                     Salary(it.salary?.from, it.salary?.to, it.salary?.currency),
                     Employer(it.employer?.id, it.employer?.name),
