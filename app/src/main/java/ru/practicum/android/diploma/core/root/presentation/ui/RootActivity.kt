@@ -29,7 +29,8 @@ class RootActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.filterFragment, R.id.filterLocationFragment,
-                R.id.locationCountryFragment, R.id.locationRegionFragment -> showBottomNavigationBar(
+                R.id.locationCountryFragment, R.id.locationRegionFragment,
+                R.id.filterIndustryFragment -> showBottomNavigationBar(
                     isVisible = false
                 )
 

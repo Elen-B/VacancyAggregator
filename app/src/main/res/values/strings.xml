@@ -10,6 +10,8 @@
     <string name="network_error">Нет интернета</string>
     <string name="vacancy_error">Не удалось получить список вакансий</string>
     <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="text">Text</string>
+    <string name="foundVacancies">Найдено %1$s вакансий</string>
 
 
     <!-- filter section -->
@@ -47,7 +49,6 @@
     <string name="key_skills">Ключевые навыки</string>
 
 
-
     <!--team section -->
     <string name="team_topbar_header">Команда</string>
     <string name="team_main_title">Над приложением работали</string>
@@ -62,4 +63,7 @@
     <string name="e_mail">E-mail</string>
     <string name="phone">Телефон</string>
     <string name="comment">Комментарий</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="similar_vacancies">Похожие вакансии</string>
 </resources>

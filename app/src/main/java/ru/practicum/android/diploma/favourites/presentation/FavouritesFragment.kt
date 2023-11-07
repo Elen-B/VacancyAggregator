@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
+import ru.practicum.android.diploma.favourites.presentation.adapter.FavouritesVacancyAdapter
 import ru.practicum.android.diploma.favourites.presentation.model.FavouritesState
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
@@ -15,10 +19,15 @@ import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 class FavouritesFragment: Fragment() {
 
 
+
     private val viewModel by viewModel<FavouritesViewModel>()
 
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
+
+    private val favouritesVacancyAdapter = FavouritesVacancyAdapter{
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +40,14 @@ class FavouritesFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-     viewModel.loadFavouriteVacancyList()
+     //viewModel.loadFavouriteVacancyList()
+
+        //Переход на экран детализации
+            /*val bundle = bundleOf("id" to vacancy.id)
+         view?.findNavController()
+             ?.navigate(R.id.action_favouritesFragment_to_detailFragment, bundle)*/
      viewModel.observeState().observe(viewLifecycleOwner) {
+         favouritesVacancyAdapter.setVacancyList(null)
          render(it)
      }
 
@@ -65,5 +80,7 @@ class FavouritesFragment: Fragment() {
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = false
         binding.textNoList.isVisible = false
+        favouritesVacancyAdapter.setVacancyList(vacancyList)
+        binding.rvFavouriteList.adapter = favouritesVacancyAdapter
     }
 }

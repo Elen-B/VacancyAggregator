@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_searchFragment_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
@@ -68,7 +71,11 @@
         android:id="@+id/detailFragment"
         android:name="ru.practicum.android.diploma.details.presentation.DetailFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_similarFragment"
+            app:destination="@id/similarFragment" />
+    </fragment>
     <fragment
         android:id="@+id/teamFragment"
         android:name="ru.practicum.android.diploma.team.presentation.TeamFragment"
@@ -78,10 +85,28 @@
         android:id="@+id/favouritesFragment"
         android:name="ru.practicum.android.diploma.favourites.presentation.FavouritesFragment"
         android:label="FavouritesFragment"
-        tools:layout="@layout/fragment_favourites"/>
+        tools:layout="@layout/fragment_favourites">
+        <action
+            android:id="@+id/action_favouritesFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/filterIndustryFragment"
         android:name="ru.practicum.android.diploma.filter.presentation.ui.FilterIndustryFragment"
         android:label="FilterIndustryFragment"
-        tools:layout="@layout/fragment_filter_industry"/>
+        tools:layout="@layout/fragment_filter_industry">
+        <argument
+            android:name="industry"
+            app:argType="ru.practicum.android.diploma.filter.domain.models.Industry"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/similarFragment"
+        android:name="ru.practicum.android.diploma.details.presentation.SimilarFragment"
+        android:label="fragment_similar"
+        tools:layout="@layout/fragment_similar" >
+        <action
+            android:id="@+id/action_similarFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 </navigation>

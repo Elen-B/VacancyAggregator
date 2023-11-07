@@ -15,9 +15,9 @@ class LocationViewAdapter(private var items: List<Area>) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: LocationViewViewHolder, position: Int) {
-        val track = items[position]
-        holder.bind(track)
-        holder.itemView.setOnClickListener{clickListener?.onCountryClick(track)}
+        val item = items[position]
+        holder.bind(item)
+        holder.itemView.setOnClickListener{clickListener?.onCountryClick(item)}
     }
 
     fun addItems(values: List<Area>) {
