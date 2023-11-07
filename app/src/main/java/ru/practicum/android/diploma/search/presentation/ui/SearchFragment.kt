@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
+import androidx.core.view.doOnAttach
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -80,6 +82,10 @@ class SearchFragment : Fragment() {
             render(it)
         }
 
+        binding.searchEditText.setOnFocusChangeListener {view, hasFocus ->
+            binding.iconSearch.isVisible = !hasFocus && binding.searchEditText.text.isBlank()
+            binding.iconCross.isVisible = hasFocus || binding.searchEditText.text.isNotBlank()
+        }
         binding.searchEditText.doAfterTextChanged {
             if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
                     .isBlank()

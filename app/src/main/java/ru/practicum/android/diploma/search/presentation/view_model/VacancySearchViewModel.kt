@@ -108,6 +108,7 @@ class VacancySearchViewModel(
 
     fun isFilterButtonEnable(){
         viewModelScope.launch {
+            delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
             isFiltered.postValue(filterParameters != null)
         }
