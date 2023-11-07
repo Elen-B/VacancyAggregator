@@ -8,7 +8,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.models.FilterLocationScreenState
+import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SingleEventLiveData
+import ru.practicum.android.diploma.util.debounce
 
 class FilterLocationViewModel(
     country: Area?,
@@ -28,12 +30,27 @@ class FilterLocationViewModel(
     private val applyFilterTrigger = SingleEventLiveData<List<Area?>>()
     fun getApplyFilterTrigger(): LiveData<List<Area?>> = applyFilterTrigger
 
+    private var isClickAllowed = true
+    private val onTrackClickDebounce =
+        debounce<Boolean>(CLICK_DEBOUNCE_DELAY, viewModelScope, false) {
+            isClickAllowed = it
+        }
+
     init {
         setState(FilterLocationScreenState.Content(country, region))
     }
 
     private fun setState(state: FilterLocationScreenState) {
         stateLiveData.value = state
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onTrackClickDebounce(true)
+        }
+        return current
     }
 
     fun onCountryChanged(country: Area?) {
@@ -58,25 +75,27 @@ class FilterLocationViewModel(
                         region = region
                     )
                 } else {
-                    (stateLiveData.value as FilterLocationScreenState.Content).copy(region = region)
+                    (stateLiveData.value as FilterLocationScreenState.Content).copy(region = null)
                 }
             setState(newState)
         }
     }
 
     fun showCountry() {
-        showCountryTrigger.value = Unit
+        if (clickDebounce()) {
+            showCountryTrigger.value = Unit
+        }
     }
 
     fun showRegion() {
-        if (/*clickDebounce() &&*/ stateLiveData.value is FilterLocationScreenState.Content) {
+        if (clickDebounce() && stateLiveData.value is FilterLocationScreenState.Content) {
             showRegionTrigger.value =
                 (stateLiveData.value as FilterLocationScreenState.Content).country
         }
     }
 
     fun applyFilter() {
-        if (/*clickDebounce() &&*/ stateLiveData.value is FilterLocationScreenState.Content) {
+        if (clickDebounce() && stateLiveData.value is FilterLocationScreenState.Content) {
             applyFilterTrigger.value = listOf(
                 (stateLiveData.value as FilterLocationScreenState.Content).country,
                 (stateLiveData.value as FilterLocationScreenState.Content).region,

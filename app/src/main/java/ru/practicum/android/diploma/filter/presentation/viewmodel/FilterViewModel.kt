@@ -3,12 +3,15 @@ package ru.practicum.android.diploma.filter.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SingleEventLiveData
+import ru.practicum.android.diploma.util.debounce
 
 class FilterViewModel(
     filter: FilterParameters?,
@@ -28,6 +31,12 @@ class FilterViewModel(
 
     private val saveFilterTrigger = SingleEventLiveData<Unit>()
     fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
+
+    private var isClickAllowed = true
+    private val onTrackClickDebounce =
+        debounce<Boolean>(CLICK_DEBOUNCE_DELAY, viewModelScope, false) {
+            isClickAllowed = it
+        }
 
     init {
         setState(FilterScreenState.Started(filterParameters, true))
@@ -62,6 +71,15 @@ class FilterViewModel(
             setState(newState)
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onTrackClickDebounce(true)
+        }
+        return current
+    }
+
     fun onSalaryChanged(value: String) {
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
@@ -90,15 +108,20 @@ class FilterViewModel(
     }
 
     fun showLocation() {
-        // добавить clickDebounce
-        showLocationTrigger.value = filterParameters
+        if (clickDebounce()) {
+            showLocationTrigger.value = filterParameters
+        }
     }
 
     fun showIndustry() {
-        showIndustryTrigger.value = filterParameters.industry
+        if (clickDebounce()) {
+            showIndustryTrigger.value = filterParameters.industry
+        }
     }
 
     fun saveFilterParameters() {
-        filterLocalInteractor.saveFilterParameters(filterParameters)
+        if (clickDebounce()) {
+            filterLocalInteractor.saveFilterParameters(filterParameters)
+        }
     }
 }
