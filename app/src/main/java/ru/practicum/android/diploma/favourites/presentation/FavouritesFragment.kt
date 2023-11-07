@@ -25,7 +25,7 @@ class FavouritesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val favouritesVacancyAdapter = FavouritesVacancyAdapter { vacancy ->
-//Переход на экран детализации
+
         val bundle = bundleOf("id" to vacancy.id)
         view?.findNavController()
             ?.navigate(R.id.action_favouritesFragment_to_detailFragment, bundle)
