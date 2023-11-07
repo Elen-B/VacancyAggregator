@@ -33,6 +33,7 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail =
                 postfix = this.contacts.phones.first().number
             )
         },
+        url = this.url
     )
 
 

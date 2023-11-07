@@ -49,7 +49,7 @@ class SimilarFragment : Fragment() {
                 }
 
                 is SimilarState.Loading -> {
-
+                        setLoad()
                 }
             }
         }
@@ -70,9 +70,11 @@ class SimilarFragment : Fragment() {
             tvError.text = getString(message)
         }
         binding.rvSimilar.isVisible = false
+        binding.progress.isVisible = false
     }
 
     private fun setData(data: List<ProfessionSimillar>) {
+        binding.rvSimilar.isVisible = true
         binding.rvSimilar.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.VERTICAL, false
         )
@@ -86,5 +88,19 @@ class SimilarFragment : Fragment() {
             }
         val adapter = SimilarAdapter(data, stateClickListener, requireContext())
         binding.rvSimilar.adapter = adapter
+        binding.progress.isVisible = false
+        with(binding.include) {
+            imError.isVisible = false
+            tvError.isVisible = false
+        }
+    }
+
+    private fun setLoad() {
+        binding.rvSimilar.isVisible = false
+        binding.progress.isVisible = true
+        with(binding.include) {
+            imError.isVisible = false
+            tvError.isVisible = false
+        }
     }
 }

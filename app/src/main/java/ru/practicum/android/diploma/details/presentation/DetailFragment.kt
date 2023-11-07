@@ -181,5 +181,11 @@ class DetailFragment : Fragment() {
             val bundle = bundleOf("id_vacancy" to professionDetail.id)
             view?.findNavController()?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
         }
+        binding.share.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, professionDetail.url)
+            startActivity(Intent.createChooser(shareIntent, "Поделиться ссылкой"))
+        }
     }
 }

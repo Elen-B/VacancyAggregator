@@ -20,4 +20,5 @@ data class ProfessionDetail(
     val contactName: String?,
     val email: String?,
     val comment:String?,
+    val url:String
 )
