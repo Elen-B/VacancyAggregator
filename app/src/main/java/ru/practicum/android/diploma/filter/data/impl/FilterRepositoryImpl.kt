@@ -22,7 +22,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 AreaMapper.map(
                     areaTreeDto
                 )
-            })
+            }.sortedBy { it.id == OTHER_COUNTRIES_ID })
             else -> Resource.Error("")
         }
     }
@@ -82,5 +82,9 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
 
             else -> Resource.Error("")
         }
+    }
+
+    companion object {
+        private const val OTHER_COUNTRIES_ID = "1001"
     }
 }
