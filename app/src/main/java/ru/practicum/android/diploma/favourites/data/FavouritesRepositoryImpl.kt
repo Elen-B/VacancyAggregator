@@ -26,7 +26,7 @@ class FavouritesRepositoryImpl(
             val listVacancyEntity = appDatabase.vacancyDao().getListVacancy()
             val listVacancy = listVacancyEntity.map {
                 SearchVacancy(
-                    it.id.toInt(),
+                    it.id,
                     it.name,
                     vacancyConvertor.createSalary(it.salary),
                     vacancyConvertor.createEmployer(it.employer),
@@ -40,9 +40,12 @@ class FavouritesRepositoryImpl(
         }
     }
 
-    override suspend fun getVacancyById(id: Int): SearchVacancy {
-        return vacancyConvertor.map(appDatabase.vacancyDao().getCurrentVacancy(id.toString()))
+    override suspend fun getVacancyById(id: String): SearchVacancy {
+        return vacancyConvertor.map(appDatabase.vacancyDao().getCurrentVacancy(id))
     }
 
-
+    override suspend fun inFavourites(id: String): Boolean {
+        val vacancyListId = appDatabase.vacancyDao().getListId()
+        return vacancyListId.contains(id)
+    }
 }

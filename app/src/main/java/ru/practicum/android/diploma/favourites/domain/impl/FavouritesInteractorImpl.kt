@@ -25,7 +25,11 @@ class FavouritesInteractorImpl(private val favouritesRepository: FavouritesRepos
         }
     }
 
-    override suspend fun getVacancyById(id: Int): SearchVacancy{
+    override suspend fun getVacancyById(id: String): SearchVacancy{
         return favouritesRepository.getVacancyById(id)
+    }
+
+    override suspend fun inFavourites(id: String): Boolean {
+        return favouritesRepository.inFavourites(id)
     }
 }

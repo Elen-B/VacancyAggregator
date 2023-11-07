@@ -8,5 +8,6 @@ interface FavouritesRepository {
     suspend fun insertVacancy(searchVacancy: SearchVacancy)
     suspend fun deleteVacancy(searchVacancy: SearchVacancy)
     suspend fun getListVacancy(): Flow<Resource<List<SearchVacancy>>>
-    suspend fun getVacancyById(id: Int): SearchVacancy
+    suspend fun getVacancyById(id: String): SearchVacancy
+    suspend fun inFavourites(id: String): Boolean
 }
