@@ -22,9 +22,8 @@ class FilterInteractorImpl(private val repository: FilterRepository): FilterInte
         }
     }
 
-    override suspend fun getCuntryByRegion(id: String): Area? {
-        val region = repository.getArea(id)
-        var parent = when (region) {
+    override suspend fun getCountryByRegion(id: String): Area? {
+        var parent = when (val region = repository.getArea(id)) {
             is Resource.Success -> region.data
             is Resource.Error -> null
         }
