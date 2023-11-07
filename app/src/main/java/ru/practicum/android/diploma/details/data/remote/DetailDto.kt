@@ -23,5 +23,7 @@ data class DetailDto(
     @SerializedName("key_skills")
     val keySkills: List<KeySkill>?,
     @SerializedName("contacts")
-    val contacts: Contacts?
+    val contacts: Contacts?,
+    @SerializedName("alternate_url")
+    val url: String
 )
