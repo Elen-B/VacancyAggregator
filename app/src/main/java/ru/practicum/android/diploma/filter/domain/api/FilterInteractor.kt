@@ -8,7 +8,7 @@ interface FilterInteractor {
 
     suspend fun getAreas(id: String): Pair<List<Area>?, String?>
 
-    suspend fun getCuntryByRegion(id: String): Area?
+    suspend fun getCountryByRegion(id: String): Area?
 
     suspend fun getIndustries(): Pair<List<Industry>?, String?>
 }

@@ -3,9 +3,7 @@ package ru.practicum.android.diploma.filter.data.impl
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
-import ru.practicum.android.diploma.filter.data.dto.AreaDataResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
-import ru.practicum.android.diploma.filter.data.dto.AreaResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryListTreeResponse
 import ru.practicum.android.diploma.filter.data.mapper.AreaMapper
@@ -20,9 +18,9 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
     override suspend fun getCountries(): Resource<List<Area>> {
         val response = networkClient.doRequest(Request.CountryRequest)
         return when (response.resultCode) {
-            Response.RESULT_SUCCESS -> Resource.Success((response as AreaResponse).results.map { areaDto ->
+            Response.RESULT_SUCCESS -> Resource.Success((response as AreaListTreeResponse).results.map { areaTreeDto ->
                 AreaMapper.map(
-                    areaDto
+                    areaTreeDto
                 )
             })
             else -> Resource.Error("")
@@ -57,11 +55,11 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
     }
 
     override suspend fun getArea(id: String): Resource<Area> {
-        val response = networkClient.doRequest(Request.AreaDataRequest(id))
+        val response = networkClient.doRequest(Request.AreaTreeRequest(id))
         return when (response.resultCode) {
             Response.RESULT_SUCCESS -> {
                 val area =
-                    if ((response as AreaDataResponse).results != null) AreaMapper.map((response).results!!)
+                    if ((response as AreaTreeResponse).results != null) AreaMapper.map((response).results!!)
                     else null
 
                 Resource.Success(area)

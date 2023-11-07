@@ -52,7 +52,7 @@ class FilterLocationViewModel(
         viewModelScope.launch {
             val newState =
                 if (region != null) {
-                    val country = filterInteractor.getCuntryByRegion(region.id)
+                    val country = filterInteractor.getCountryByRegion(region.id)
                     (stateLiveData.value as FilterLocationScreenState.Content).copy(
                         country = country,
                         region = region
