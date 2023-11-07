@@ -21,7 +21,7 @@ class VacancyConvertor(private var json: Gson) {
 
     fun map(vacancy: VacancyEntity): SearchVacancy {
         return SearchVacancy(
-            id = vacancy.id.toInt(),
+            id = vacancy.id,
             name = vacancy.name,
             salary = createSalary(vacancy.salary),
             employer = createEmployer(vacancy.employer),
