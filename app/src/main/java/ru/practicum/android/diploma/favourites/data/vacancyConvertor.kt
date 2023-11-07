@@ -29,17 +29,17 @@ class VacancyConvertor(private var json: Gson) {
         )
     }
 
-    private fun createSalary(jsonSalary: String): Salary {
+     fun createSalary(jsonSalary: String): Salary {
         var newSalary = Salary(from = "", to = "", currency = CurrencyType.RUR, gross = false)
-        if (!jsonSalary.isNullOrEmpty()){
+        if (jsonSalary.isNotEmpty()){
             newSalary =  json.fromJson(jsonSalary, object : TypeToken<Salary>(){}.type)
         }
         return newSalary
     }
 
-    private fun createEmployer(jsonEmployer: String): Employer {
+     fun createEmployer(jsonEmployer: String): Employer {
         var newEmployer = Employer(id = "", name = "")
-        if (!jsonEmployer.isNullOrEmpty()){
+        if (jsonEmployer.isNotEmpty()){
             newEmployer = json.fromJson(jsonEmployer, object : TypeToken<Employer>(){}.type)
         }
         return newEmployer

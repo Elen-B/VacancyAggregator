@@ -14,7 +14,7 @@ import ru.practicum.android.diploma.search.data.impl.VacancySearchRepositoryImpl
 import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 
 val repositoryModule = module {
-    single <DetailRepository> {
+    single<DetailRepository> {
         DetailRepositoryImpl(get())
     }
 
@@ -26,8 +26,8 @@ val repositoryModule = module {
     single<VacancySearchRepository> {
         VacancySearchRepositoryImpl(get())
     }
-    single<FavouritesRepository>{
-        FavouritesRepositoryImpl()
+    single<FavouritesRepository> {
+        FavouritesRepositoryImpl(get(), get())
     }
 
     single<FilterLocalRepository> {
