@@ -44,7 +44,7 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
             is Request.AreaDataRequest -> AreaDataResponse(hhunterApiService.getArea(dto.id))
             is Request.CountryRequest -> AreaResponse(hhunterApiService.getCountries())
             is Request.IndustryTreeRequest -> IndustryListTreeResponse(hhunterApiService.getIndustries())
-            is Request.VacancySearchRequest -> hhunterApiService.getVacancyList(dto.text)
+            is Request.VacancySearchRequest -> hhunterApiService.getVacancyList(dto.option)
             is Request.VacancyDetailsRequest -> DetailVacancyResponse(hhunterApiService.getDetail(dto.id))
             is Request.SimilarVacancyRequest -> SimilarVacancyResponse(hhunterApiService.getSimilarVacancies(dto.id))
             else -> Response().apply { resultCode = Response.RESULT_UNKNOWN_REQUEST }

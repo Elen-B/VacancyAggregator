@@ -22,13 +22,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/image_filter"
         android:layout_width="@dimen/edit_text_height"
         android:layout_height="@dimen/edit_text_height"
         android:layout_marginTop="@dimen/margin_8"
         android:layout_marginEnd="@dimen/margin_12"
         android:backgroundTint="?attr/colorPrimary"
-        android:src="@drawable/menu_search"
+        android:src="@drawable/image_filter_passive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

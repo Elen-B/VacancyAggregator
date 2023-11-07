@@ -6,7 +6,7 @@ sealed interface Request {
 
     data class AreaTreeRequest(val id: String): Request
 
-    data class VacancySearchRequest(val text: String): Request
+    data class VacancySearchRequest(val option: HashMap<String,String>): Request
 
     object CountryRequest: Request
 
