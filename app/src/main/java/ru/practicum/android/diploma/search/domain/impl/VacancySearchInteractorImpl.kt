@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
 
 class VacancySearchInteractorImpl(private val repository: VacancySearchRepository): VacancySearchInteractor {
-    override fun searchVacancy(text: String): Flow<Pair<String?, Resource<List<SearchVacancy>>>> {
-        return repository.searchVacancy(text)
+    override fun searchVacancy(option: HashMap<String,String>): Flow<Pair<String?, Resource<List<SearchVacancy>>>> {
+        return repository.searchVacancy(option)
     }
 }

@@ -24,8 +24,8 @@ class VacancySearchRepositoryImpl(
     private val networkClient: NetworkClient,
 ) :
     VacancySearchRepository {
-    override fun searchVacancy(text: String): Flow<Pair<String?, Resource<List<SearchVacancy>>>> = flow {
-        val response = networkClient.doRequest(Request.VacancySearchRequest(text))
+    override fun searchVacancy(option: HashMap<String,String>): Flow<Pair<String?, Resource<List<SearchVacancy>>>> = flow {
+        val response = networkClient.doRequest(Request.VacancySearchRequest(option))
         when (response.resultCode) {
             Response.RESULT_SUCCESS -> emit(Pair<String?, Resource<List<SearchVacancy>>>((response as VacancySearchResponse).found,
                 Resource.Success((response as VacancySearchResponse).items.map { it ->

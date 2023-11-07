@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.core.network
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaDto
@@ -43,7 +44,7 @@ interface HhunterApi {
 
     @GET("vacancies")
     suspend fun getVacancyList(
-        @Query("text") vacancy: String
+        @QueryMap option: HashMap<String,String>
     ): VacancySearchResponse
 
 }

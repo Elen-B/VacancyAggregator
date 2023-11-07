@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,28 +7,39 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.search.presentation.FilterMapper
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 
-class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : ViewModel() {
+class VacancySearchViewModel(
+    private val searchInteractor: VacancySearchInteractor,
+    private val filterInteractor: FilterLocalInteractor) : ViewModel() {
 
+    private var filterParameters: FilterParameters? = null
     private var latestSearchText: String? = null
     private var searchJob: Job? = null
     private var isClickAllowed = true
     private val stateLiveData = MutableLiveData<VacancyState>()
     private val foundVacanciesCount = MutableLiveData<String?>(null)
+    private val isFiltered = MutableLiveData<Boolean>(false)
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
+    fun observeisFiltered(): LiveData<Boolean> = isFiltered
 
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
         if (latestSearchText == changedText && !forceButtonClick) {
             return
+        }
+        val searchOption = hashMapOf<String,String>("text" to changedText)
+        if(filterParameters != null){
+            searchOption.putAll(FilterMapper.getMap(filterParameters!!))
         }
         latestSearchText = changedText
 
@@ -37,16 +47,16 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
         searchJob = viewModelScope.launch {
             if(!forceButtonClick){
             delay(SEARCH_DEBOUNCE_DELAY)}
-            searchRequest(changedText)
+            searchRequest(searchOption)
         }
     }
 
-    private fun searchRequest(newSearchText: String) {
-        if (newSearchText.isNotEmpty()) {
+    private fun searchRequest(searchOptions: HashMap<String,String>) {
+        if (searchOptions.isNotEmpty()) {
             renderState(VacancyState.Loading)
             viewModelScope.launch {
-                interactor
-                    .searchVacancy(newSearchText)
+                searchInteractor
+                    .searchVacancy(searchOptions)
                     .collect { pair ->
                         processResult(
                             pair.second.data,
@@ -95,4 +105,13 @@ class VacancySearchViewModel(private val interactor: VacancySearchInteractor) : 
     private fun renderState(state: VacancyState) {
         stateLiveData.postValue(state)
     }
+
+    fun isFilterButtonEnable(){
+        viewModelScope.launch {
+            filterParameters = filterInteractor.getFilterParameters()
+            isFiltered.postValue(filterParameters != null)
+        }
+    }
+
+    fun getFilter(): FilterParameters? = filterParameters
 }

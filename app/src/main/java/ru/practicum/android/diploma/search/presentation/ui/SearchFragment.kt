@@ -61,6 +61,12 @@ class SearchFragment : Fragment() {
         viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
         }
+        viewModel.observeisFiltered().observe(viewLifecycleOwner){isFilterEnable ->
+            if(isFilterEnable)
+                binding.imageFilter.setImageResource(R.drawable.image_filter_active)
+            else
+                binding.imageFilter.setImageResource(R.drawable.image_filter_passive)
+        }
 /*
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (binding.searchEditText.hasFocus()) {
@@ -92,7 +98,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.searchDebounce(binding.searchEditText.text.toString(), true)
             }
             false
@@ -102,10 +108,9 @@ class SearchFragment : Fragment() {
             binding.searchEditText.setText("")
         }
 
-        binding.imageButton.setOnClickListener {
-            // исправить на использование viewModel в задаче применения фильтра к поиску
+        binding.imageFilter.setOnClickListener {
             val action = SearchFragmentDirections.actionSearchFragmentToFilterFragment(
-                filter = null
+                filter = viewModel.getFilter()
             )
             findNavController().navigate(action)
         }
@@ -175,5 +180,10 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.isFilterButtonEnable()
     }
 }
