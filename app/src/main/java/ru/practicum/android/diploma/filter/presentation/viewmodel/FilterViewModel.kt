@@ -17,8 +17,8 @@ class FilterViewModel(
     filter: FilterParameters?,
     private val filterLocalInteractor: FilterLocalInteractor
 ) : ViewModel() {
-    private val filterParameters: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
-    private val originalFilter: FilterParameters by lazy { filterLocalInteractor.getFilterParameters() ?: FilterParameters() }
+    private val filterParameters: FilterParameters by lazy { filter ?: FilterParameters() }
+    private val originalFilter: FilterParameters by lazy { filter?.copy() ?: FilterParameters() }
 
     private val stateLiveData = MutableLiveData<FilterScreenState>()
     fun observeState(): LiveData<FilterScreenState> = stateLiveData
@@ -93,8 +93,7 @@ class FilterViewModel(
 
     fun onIndustryChanged(industry: Industry?) {
         val newFilterParameters = filterParameters.copy(industry = industry)
-        setFilterParameters(newFilterParameters)
-        setState(getCurrentState(newFilterParameters, true))
+        setStateEx(newFilterParameters, true)
     }
 
     fun onFSalaryRequiredChanged(checked: Boolean) {
