@@ -19,6 +19,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
+import ru.practicum.android.diploma.search.domain.models.CurrencyType
+import ru.practicum.android.diploma.search.domain.models.Employer
+import ru.practicum.android.diploma.search.domain.models.Salary
+import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.formattedNumber
 import ru.practicum.android.diploma.util.setSymbolByCurrency
 
@@ -26,6 +30,10 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val viewModel: DetailViewModel by viewModel()
     private val binding get() = _binding!!
+    private var isFavourites = false
+    private var searchVacancy =
+        SearchVacancy("", "", Salary("", "", CurrencyType.RUR, false), Employer("", ""), "")
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,10 +46,12 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(viewLifecycleOwner) {result->
+        viewModel.state.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is DetailState.Success -> {
                     setData(result.data)
+
+                    getVacancy(result.data)
                 }
 
                 is DetailState.Error -> {
@@ -54,9 +64,44 @@ class DetailFragment : Fragment() {
             }
         }
 
+        //Проверяем есть ли вакансия в избраанных
+        viewModel.inFavourites(searchVacancy.id.toString())
+        viewModel.observeStateInFavourites().observe(viewLifecycleOwner) {
+            isFavourites = it
+        }
+
+        //Добавляем или удаляем вакансию из избранных
+        binding.favorite.setOnClickListener {
+            isFavourites = if (isFavourites) {
+                binding.favorite.setImageResource(R.drawable.trailing_icon_2__1_)
+                false
+            } else {
+                binding.favorite.setImageResource(R.drawable.trailing_icon_2)
+                true
+            }
+            viewModel.addFavourites(vacancy = searchVacancy, isFavourites = isFavourites)
+        }
+
         binding.back.setOnClickListener {
             view.findNavController().popBackStack()
         }
+    }
+
+    private fun getVacancy(vacancy: ProfessionDetail) {
+        val salary = Salary(
+            vacancy.salaryFrom?.toString(),
+            vacancy.salaryTo?.toString(),
+            CurrencyType.RUR,
+            gross = false
+        )
+        val employer = Employer(vacancy.employerId, vacancy.employerName)
+        searchVacancy = SearchVacancy(
+            id = vacancy.id,
+            name = vacancy.name,
+            salary = salary,
+            employer = employer,
+            logo = vacancy.employerLogo
+        )
     }
 
     @SuppressLint("SetTextI18n")
@@ -65,7 +110,8 @@ class DetailFragment : Fragment() {
         val from = getString(R.string.from)
         val to = getString(R.string.to)
         val notSalary = getString(R.string.not_salary)
-        val description = Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        val description =
+            Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
         if (professionDetail.salaryFrom == null && professionDetail.salaryTo == null) {
             binding.salary.text = notSalary
         } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
@@ -106,13 +152,13 @@ class DetailFragment : Fragment() {
         }
         binding.employerName.text = professionDetail.employerName
         binding.employerCity.text = professionDetail.employerCity
-        if (professionDetail.employerLogo!=null) {
+        if (professionDetail.employerLogo != null) {
             Glide
                 .with(requireContext())
                 .load(professionDetail.employerLogo)
                 .into(binding.employerLogo)
         }
-        if (professionDetail.description!=null&&professionDetail.description!="...") {
+        if (professionDetail.description != null && professionDetail.description != "...") {
             binding.vacancyDescription.isVisible = true
             binding.description.isVisible = true
             binding.description.text = description
@@ -120,7 +166,7 @@ class DetailFragment : Fragment() {
             binding.vacancyDescription.isVisible = false
             binding.description.isVisible = false
         }
-        if (professionDetail.keySkills!=null&&professionDetail.keySkills!="") {
+        if (professionDetail.keySkills != null && professionDetail.keySkills != "") {
             binding.keySkills.isVisible = true
             binding.keySkillsContent.isVisible = true
             binding.keySkillsContent.text = professionDetail.keySkills
@@ -128,11 +174,11 @@ class DetailFragment : Fragment() {
             binding.keySkills.isVisible = false
             binding.keySkillsContent.isVisible = false
         }
-        binding.contacts.isVisible = !(professionDetail.comment==null
-                &&professionDetail.phone==null
-                &&professionDetail.email==null
-                &&professionDetail.contactName==null)
-        if (professionDetail.comment!=null) {
+        binding.contacts.isVisible = !(professionDetail.comment == null
+                && professionDetail.phone == null
+                && professionDetail.email == null
+                && professionDetail.contactName == null)
+        if (professionDetail.comment != null) {
             binding.commentName.isVisible = true
             binding.comment.isVisible = true
             binding.comment.text = professionDetail.comment
@@ -141,7 +187,7 @@ class DetailFragment : Fragment() {
             binding.comment.isVisible = false
         }
 
-        if (professionDetail.contactName!=null) {
+        if (professionDetail.contactName != null) {
             binding.contactFace.isVisible = true
             binding.contactName.isVisible = true
             binding.contactName.text = professionDetail.contactName
@@ -149,7 +195,7 @@ class DetailFragment : Fragment() {
             binding.contactFace.isVisible = false
             binding.contactName.isVisible = false
         }
-        if (professionDetail.phone!=null) {
+        if (professionDetail.phone != null) {
             binding.phoneName.isVisible = true
             binding.phone.isVisible = true
             binding.phone.text = professionDetail.phone
@@ -158,7 +204,7 @@ class DetailFragment : Fragment() {
             binding.phone.isVisible = false
         }
 
-        if (professionDetail.email!=null) {
+        if (professionDetail.email != null) {
             binding.emailName.isVisible = true
             binding.email.isVisible = true
             binding.email.text = professionDetail.email
@@ -179,7 +225,8 @@ class DetailFragment : Fragment() {
         }
         binding.btSimilar.setOnClickListener {
             val bundle = bundleOf("id_vacancy" to professionDetail.id)
-            view?.findNavController()?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
+            view?.findNavController()
+                ?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
         }
         binding.share.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)

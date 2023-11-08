@@ -19,14 +19,16 @@ import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 class FavouritesFragment : Fragment() {
 
 
-
     private val viewModel by viewModel<FavouritesViewModel>()
 
     private var _binding: FragmentFavouritesBinding? = null
     private val binding get() = _binding!!
 
-    private val favouritesVacancyAdapter = FavouritesVacancyAdapter {
+    private val favouritesVacancyAdapter = FavouritesVacancyAdapter { vacancy ->
 
+        val bundle = bundleOf("id" to vacancy.id)
+        view?.findNavController()
+            ?.navigate(R.id.action_favouritesFragment_to_detailFragment, bundle)
     }
 
     override fun onCreateView(
@@ -42,14 +44,10 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadFavouriteVacancyList()
-   //Переход на экран детализации
-            /*val bundle = bundleOf("id" to vacancy.id)
-         view?.findNavController()
-             ?.navigate(R.id.action_favouritesFragment_to_detailFragment, bundle)*/     viewModel.observeState().observe(viewLifecycleOwner) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             favouritesVacancyAdapter.setVacancyList(null)
             render(it)
         }
-
     }
 
     private fun render(state: FavouritesState) {

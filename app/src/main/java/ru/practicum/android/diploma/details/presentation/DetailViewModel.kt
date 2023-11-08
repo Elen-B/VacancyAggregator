@@ -1,19 +1,26 @@
 package ru.practicum.android.diploma.details.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActor
+import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
+import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val favouritesInteractor: FavouritesInteractor
 ) : ViewModel() {
     private val _state = MutableLiveData<DetailState>(DetailState.Loading)
     val state = _state
+
+    private var inFavouritesLiveDataMutable = MutableLiveData<Boolean>()
+    fun observeStateInFavourites(): LiveData<Boolean>  = inFavouritesLiveDataMutable
 
     init {
         getData()
@@ -35,6 +42,19 @@ class DetailViewModel (
                         }
                 }
             }
+        }
+    }
+    //Проверяем есть ли вакансия в избраанных
+    fun inFavourites(id: String){
+        viewModelScope.launch {
+            inFavouritesLiveDataMutable.value = favouritesInteractor.inFavourites(id)
+        }
+    }
+    //Добавляем или удаляем вакансию из избранных
+    fun addFavourites(vacancy: SearchVacancy, isFavourites: Boolean){
+        viewModelScope.launch {
+            if (isFavourites) favouritesInteractor.insertVacancy(vacancy)
+            else favouritesInteractor.deleteVacancy(vacancy)
         }
     }
 }

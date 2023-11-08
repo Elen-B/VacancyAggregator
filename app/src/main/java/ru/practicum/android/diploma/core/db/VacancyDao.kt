@@ -21,4 +21,6 @@ interface VacancyDao {
     @Query("SELECT * FROM vacancy_table WHERE id = :id")
     suspend fun getCurrentVacancy(id: String): VacancyEntity
 
+    @Query("SELECT id FROM vacancy_table")
+    suspend fun getListId(): List<String>
 }
