@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterIndustryScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 

@@ -19,9 +19,9 @@ import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
 
 class FilterFragment : Fragment() {

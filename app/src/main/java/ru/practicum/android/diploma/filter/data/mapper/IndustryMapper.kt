@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.filter.data.mapper
 
 import ru.practicum.android.diploma.filter.data.dto.IndustryDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryTreeDto
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 
 object IndustryMapper {
     fun map(industryDto: IndustryDto): Industry {

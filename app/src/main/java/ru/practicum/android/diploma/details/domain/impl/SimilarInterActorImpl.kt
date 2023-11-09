@@ -1,6 +1,7 @@
-package ru.practicum.android.diploma.details.domain.usecase
+package ru.practicum.android.diploma.details.domain.impl
 
-import ru.practicum.android.diploma.details.domain.impl.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 import ru.practicum.android.diploma.util.Resource
 

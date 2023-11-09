@@ -6,10 +6,10 @@ import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterLocation
 import ru.practicum.android.diploma.details.presentation.DetailViewModel
 import ru.practicum.android.diploma.details.presentation.SimilarViewModel
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationCountryViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationRegionViewModel

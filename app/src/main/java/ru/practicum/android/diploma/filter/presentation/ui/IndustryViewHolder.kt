@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 
 class IndustryViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parentView.context)
