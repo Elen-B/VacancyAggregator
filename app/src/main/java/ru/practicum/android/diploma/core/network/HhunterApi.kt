@@ -5,8 +5,8 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.details.data.SimilarVacancyResponse
 import ru.practicum.android.diploma.details.data.remote.DetailDto
-import ru.practicum.android.diploma.details.data.remote.SimilarVacancyDto
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryTreeDto
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
@@ -28,7 +28,7 @@ interface HhunterApi {
     @GET("vacancies/{vacancy_id}/similar_vacancies")
     suspend fun getSimilarVacancies(
         @Path("vacancy_id") vacancy: String
-    ): SimilarVacancyDto
+    ): SimilarVacancyResponse
 
     @GET("areas")
     suspend fun getAreas(): List<AreaTreeDto>

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.details.presentation
+package ru.practicum.android.diploma.details.presentation.models
 
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 

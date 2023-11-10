@@ -2,7 +2,9 @@ package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.data.DetailRepositoryImpl
+import ru.practicum.android.diploma.details.data.impl.SimilarRepositoryImpl
 import ru.practicum.android.diploma.details.domain.api.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.SimilarRepository
 import ru.practicum.android.diploma.favourites.data.FavouritesRepositoryImpl
 import ru.practicum.android.diploma.favourites.data.VacancyConvertor
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesRepository
@@ -22,16 +24,20 @@ val repositoryModule = module {
         FilterRepositoryImpl(get())
     }
 
-
     single<VacancySearchRepository> {
         VacancySearchRepositoryImpl(get())
     }
+
     single<FavouritesRepository> {
         FavouritesRepositoryImpl(get(), get())
     }
 
     single<FilterLocalRepository> {
         FilterLocalRepositoryImpl(get(), get())
+    }
+
+    single<SimilarRepository> {
+        SimilarRepositoryImpl(get())
     }
 
     factory {

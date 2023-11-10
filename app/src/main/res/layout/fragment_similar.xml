@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".details.presentation.SimilarFragment">
+    android:background="?attr/selectableItemBackground">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tint="@color/base_text"
-        android:src="@drawable/baseline_arrow_back_24"
-        android:layout_marginStart="@dimen/margin_12"
-        app:layout_constraintTop_toTopOf="@id/similarVacancy"
-        app:layout_constraintBottom_toBottomOf="@id/similarVacancy"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/similarVacancy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_12"
-        android:layout_marginTop="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_16"
-        android:paddingBottom="@dimen/margin_8"
-        android:text="@string/similar_vacancies"
-        android:textColor="@color/base_text"
-        android:textSize="@dimen/header_text_size"
-        app:layout_constraintStart_toEndOf="@id/back"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/btTopBarBack"
+            style="@style/FilterBackImageButtonStyle"
+            android:layout_marginVertical="@dimen/margin_8"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/tvTopBarTitle"
+            style="@style/FilterTopBarTextStyle"
+            android:layout_marginStart="@dimen/margin_8"
+            android:text="@string/similar_vacancies"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSimilar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_16"
-        app:layout_constraintTop_toBottomOf="@id/similarVacancy"/>
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_similar"
+        app:layout_constraintTop_toBottomOf="@id/topLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
     
     <ProgressBar
         android:id="@+id/progress"

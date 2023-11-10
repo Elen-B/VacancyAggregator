@@ -5,7 +5,7 @@
     android:theme="@style/Theme.PracticumAndroidDiploma"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".details.presentation.DetailFragment">
+    tools:context=".details.presentation.ui.DetailFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/back"
