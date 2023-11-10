@@ -6,40 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.activity.addCallback
+import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
-import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
+import ru.practicum.android.diploma.search.presentation.SearchPagerAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
-import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 
 
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<VacancySearchViewModel>()
-    private val adapter = SearchVacancyAdapter(object : ItemClickListener {
+    private val adapter = SearchPagerAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
             if (viewModel.clickDebounce()) {//Переход на экран детализации
-                                 val bundle = bundleOf("id" to vacancy.id)
-                 view?.findNavController()
-                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
+                val bundle = bundleOf("id" to vacancy.id)
+                view?.findNavController()
+                    ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
             }
         }
     })
@@ -59,29 +54,57 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.adapter = adapter
 
 
-        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
+        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner) {
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
         }
-        viewModel.observeisFiltered().observe(viewLifecycleOwner){isFilterEnable ->
-            if(isFilterEnable)
+        viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
+            if (isFilterEnable)
                 binding.imageFilter.setImageResource(R.drawable.image_filter_active)
             else
                 binding.imageFilter.setImageResource(R.drawable.image_filter_passive)
         }
-/*
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (binding.searchEditText.hasFocus()) {
-                binding.searchEditText.clearFocus()
-            } else {
-                requireActivity().onBackPressed()
+
+        viewModel.getVacancies().observe(viewLifecycleOwner) { pagingData ->
+            Log.i("Errrror","observe2")
+            adapter.submitData(lifecycle, pagingData)
+        }
+        viewModel.observeVacanciesList().observe(viewLifecycleOwner) { pager ->
+            Log.i("Errrror","observe")
+            adapter.submitData(lifecycle, pager)
+        }
+        adapter.addLoadStateListener { loadState ->
+            // show empty list
+            if (loadState.refresh is LoadState.Loading ||
+                loadState.append is LoadState.Loading
+            )
+                showContent()
+            //binding.progressDialog.isVisible = true
+            else {
+                //binding.progressDialog.isVisible = false
+                // If we have an error, show a toast
+                val errorState = when {
+                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                    loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                    else -> null
+                }
+                errorState?.let {
+                    Toast.makeText(requireContext(), it.error.toString(), Toast.LENGTH_LONG).show()
+                }
             }
         }
-*/
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        /*
+                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                    if (binding.searchEditText.hasFocus()) {
+                        binding.searchEditText.clearFocus()
+                    } else {
+                        requireActivity().onBackPressed()
+                    }
+                }
+        */
 
-        binding.searchEditText.setOnFocusChangeListener {view, hasFocus ->
+
+        binding.searchEditText.setOnFocusChangeListener { view, hasFocus ->
             binding.iconSearch.isVisible = !hasFocus && binding.searchEditText.text.isBlank()
             binding.iconCross.isVisible = hasFocus || binding.searchEditText.text.isNotBlank()
         }
@@ -96,7 +119,7 @@ class SearchFragment : Fragment() {
             } else if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
                     .isNotEmpty()
             ) {
-                viewModel.searchDebounce(binding.searchEditText.text.toString())
+                viewModel.getVacancies(hashMapOf("text" to binding.searchEditText.text.toString()))
                 binding.iconSearch.visibility = View.GONE
                 binding.iconCross.visibility = View.VISIBLE
             }
@@ -104,7 +127,7 @@ class SearchFragment : Fragment() {
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.searchDebounce(binding.searchEditText.text.toString(), true)
+                viewModel.getVacancies(hashMapOf("text" to binding.searchEditText.text.toString()))
             }
             false
         }
@@ -121,14 +144,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun render(state: VacancyState) {
-        when (state) {
-            is VacancyState.Content -> showContent(state.vacancy)
-            is VacancyState.Empty -> showEmpty(state.message)
-            is VacancyState.Error -> showError(state.errorMessage)
-            is VacancyState.Loading -> showLoading()
-        }
-    }
+
+
     private fun showLoading() {
         if (binding.searchEditText.text.isBlank()) {
             return
@@ -161,16 +178,13 @@ class SearchFragment : Fragment() {
         binding.textVacancyCount.visibility = View.GONE
     }
 
-    private fun showContent(contentTracks: List<SearchVacancy>) {
+    private fun showContent() {
         binding.progressBar.visibility = View.GONE
         if (binding.searchEditText.text.isBlank()) {
             return
         }
         binding.imageCover.visibility = View.GONE
         binding.textVacancyCount.visibility = View.VISIBLE
-        adapter.searchVacancyList.clear()
-        adapter.searchVacancyList.addAll(contentTracks)
-        adapter.notifyDataSetChanged()
         binding.recyclerViewSearch.visibility = View.VISIBLE
     }
 

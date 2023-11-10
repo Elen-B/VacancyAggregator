@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import ru.practicum.android.diploma.core.network.NetworkClient
@@ -14,7 +15,6 @@ class VacancyPageSource(
 ) : PagingSource<Int, SearchVacancy>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, SearchVacancy> {
-
         return try {
             val position = params.key ?: 1
             option.put(PAGE, position.toString())

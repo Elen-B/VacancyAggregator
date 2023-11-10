@@ -1,18 +1,17 @@
 package ru.practicum.android.diploma.search.presentation.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
@@ -35,86 +34,15 @@ class VacancySearchViewModel(
     private val stateLiveData = MutableLiveData<VacancyState>()
     private val foundVacanciesCount = MutableLiveData<String?>(null)
     private val isFiltered = MutableLiveData<Boolean>(false)
+    private val vacanciesList = MutableLiveData<PagingData<SearchVacancy>>()
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
+    fun observeVacanciesList(): LiveData<PagingData<SearchVacancy>> = vacanciesList
+    fun getVacancies(option: HashMap<String,String> = HashMap()): LiveData<PagingData<SearchVacancy>> {
 
+        return searchInteractor.searchVacancy(option).asLiveData()
 
-    fun getVacancies(option: HashMap<String,String>): LiveData<PagingData<SearchVacancy>> {
-        return searchInteractor.searchVacancy(option).cachedIn(viewModelScope).asLiveData()
-    }
-
-    private val searchQuery = MutableLiveData<HashMap<String,String>>()
-
-    val myData: LiveData<PagingData<SearchVacancy>> = searchQuery.switchMap { query ->
-        searchInteractor.searchVacancy(query)
-            .cachedIn(viewModelScope)
-            .asLiveData()
-    }
-
-    val loadState: LiveData<CombinedLoadStates> = searchQuery.switchMap { query ->
-        searchInteractor.searchVacancy(query)
-        }.asLiveData()
-    }
-
-    fun setSearchQuery(query: String) {
-        searchQuery.value = query
-    }
-    fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
-        if (latestSearchText == changedText && !forceButtonClick) {
-            return
-        }
-        val searchOption = hashMapOf<String,String>("text" to changedText)
-        if(filterParameters != null){
-            searchOption.putAll(FilterMapper.getMap(filterParameters!!))
-        }
-        latestSearchText = changedText
-
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            if(!forceButtonClick){
-            delay(SEARCH_DEBOUNCE_DELAY)}
-            searchRequest(searchOption)
-        }
-    }
-
-    private fun searchRequest(searchOptions: HashMap<String,String>) {
-        if (searchOptions.isNotEmpty()) {
-            renderState(VacancyState.Loading)
-            viewModelScope.launch {
-                searchInteractor
-                    .searchVacancy(searchOptions)
-                    .collect { pair ->
-                        processResult(
-                            pair.second.data,
-                            pair.second.message
-                        ).apply { foundVacanciesCount.postValue(pair.first) }
-                    }
-            }
-        }
-    }
-
-    private fun processResult(
-        foundVacancies: List<SearchVacancy>?,
-        message: String?
-    ) {
-        val vacancies = mutableListOf<SearchVacancy>()
-        if (foundVacancies != null) {
-            vacancies.addAll(foundVacancies)
-        }
-        when {
-            message == NETWORK_ERROR -> {
-                renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
-            }
-
-            message == VACANCY_ERROR || foundVacancies.isNullOrEmpty() -> {
-                renderState(VacancyState.Empty(message = VACANCY_ERROR))
-            }
-
-            else -> {
-                renderState(VacancyState.Content(vacancy = vacancies))
-            }
-        }
     }
 
     fun clickDebounce(): Boolean {
@@ -127,10 +55,6 @@ class VacancySearchViewModel(
             }
         }
         return current
-    }
-
-    private fun renderState(state: VacancyState) {
-        stateLiveData.postValue(state)
     }
 
     fun isFilterButtonEnable(){
