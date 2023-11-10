@@ -45,11 +45,11 @@
             app:destination="@id/locationRegionFragment" />
         <argument
             android:name="country"
-            app:argType="ru.practicum.android.diploma.filter.domain.models.Area"
+            app:argType="ru.practicum.android.diploma.core.domain.models.Area"
             app:nullable="true" />
         <argument
             android:name="region"
-            app:argType="ru.practicum.android.diploma.filter.domain.models.Area"
+            app:argType="ru.practicum.android.diploma.core.domain.models.Area"
             app:nullable="true" />
     </fragment>
     <fragment
@@ -64,7 +64,7 @@
         tools:layout="@layout/fragment_location_region">
         <argument
             android:name="country"
-            app:argType="ru.practicum.android.diploma.filter.domain.models.Area"
+            app:argType="ru.practicum.android.diploma.core.domain.models.Area"
             app:nullable="true" />
     </fragment>
     <fragment
@@ -97,7 +97,7 @@
         tools:layout="@layout/fragment_filter_industry">
         <argument
             android:name="industry"
-            app:argType="ru.practicum.android.diploma.filter.domain.models.Industry"
+            app:argType="ru.practicum.android.diploma.core.domain.models.Industry"
             app:nullable="true" />
     </fragment>
     <fragment

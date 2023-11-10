@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActor
+import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
 import ru.practicum.android.diploma.util.Resource
 
 class SimilarViewModel (

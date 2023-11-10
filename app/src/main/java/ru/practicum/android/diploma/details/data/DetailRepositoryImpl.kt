@@ -4,7 +4,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
-import ru.practicum.android.diploma.details.domain.impl.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.DetailRepository
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 import ru.practicum.android.diploma.util.Resource

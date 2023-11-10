@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.filter.domain.api
 
-import ru.practicum.android.diploma.filter.domain.models.Area
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.util.Resource
 
 interface FilterRepository {

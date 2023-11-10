@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.details.data.DetailRepositoryImpl
-import ru.practicum.android.diploma.details.domain.impl.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.DetailRepository
 import ru.practicum.android.diploma.favourites.data.FavouritesRepositoryImpl
 import ru.practicum.android.diploma.favourites.data.VacancyConvertor
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesRepository

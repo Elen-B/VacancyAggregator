@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.filter.data.mapper
 
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 
 object AreaTreeMapper {
     fun map(areaTreeDto: AreaTreeDto?): List<Area> {

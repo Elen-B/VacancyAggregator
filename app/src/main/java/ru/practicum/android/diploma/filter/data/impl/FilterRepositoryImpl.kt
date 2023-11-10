@@ -10,8 +10,8 @@ import ru.practicum.android.diploma.filter.data.mapper.AreaMapper
 import ru.practicum.android.diploma.filter.data.mapper.AreaTreeMapper
 import ru.practicum.android.diploma.filter.data.mapper.IndustryTreeMapper
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
-import ru.practicum.android.diploma.filter.domain.models.Area
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.util.Resource
 
 class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRepository {
