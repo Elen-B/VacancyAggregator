@@ -12,6 +12,7 @@
         android:layout_marginStart="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_8"
         app:cardCornerRadius="@dimen/margin_12"
+        app:cardElevation="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -19,6 +20,8 @@
             android:id="@+id/similarLogo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/bg_item_image"
+            android:scaleType="centerInside"
             android:src="@drawable/vacancy_item_search_placeholder" />
     </androidx.cardview.widget.CardView>
 
