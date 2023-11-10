@@ -3,9 +3,16 @@ package ru.practicum.android.diploma.search.presentation.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
@@ -21,7 +28,6 @@ import ru.practicum.android.diploma.util.VACANCY_ERROR
 class VacancySearchViewModel(
     private val searchInteractor: VacancySearchInteractor,
     private val filterInteractor: FilterLocalInteractor) : ViewModel() {
-
     private var filterParameters: FilterParameters? = null
     private var latestSearchText: String? = null
     private var searchJob: Job? = null
@@ -33,6 +39,27 @@ class VacancySearchViewModel(
     fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
 
+
+    fun getVacancies(option: HashMap<String,String>): LiveData<PagingData<SearchVacancy>> {
+        return searchInteractor.searchVacancy(option).cachedIn(viewModelScope).asLiveData()
+    }
+
+    private val searchQuery = MutableLiveData<HashMap<String,String>>()
+
+    val myData: LiveData<PagingData<SearchVacancy>> = searchQuery.switchMap { query ->
+        searchInteractor.searchVacancy(query)
+            .cachedIn(viewModelScope)
+            .asLiveData()
+    }
+
+    val loadState: LiveData<CombinedLoadStates> = searchQuery.switchMap { query ->
+        searchInteractor.searchVacancy(query)
+        }.asLiveData()
+    }
+
+    fun setSearchQuery(query: String) {
+        searchQuery.value = query
+    }
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
         if (latestSearchText == changedText && !forceButtonClick) {
             return

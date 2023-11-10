@@ -30,7 +30,8 @@ class SearchVacancyViewHolder(
             .into(logView)
         nameView.text = vacancy.name
         employerView.text = vacancy.employer?.name
-        salaryView.text = vacancy.salary?.getSalaryToTextView() ?: "Зарплата не указана"
+        salaryView.text =
+            vacancy.salary?.getSalaryToTextView() ?: R.string.salary_not_specified.toString()
         itemView.setOnClickListener { clickListener.onVacancyClick(vacancy) }
     }
 }

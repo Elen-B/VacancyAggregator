@@ -11,6 +11,8 @@ const val LOG_IMAGE = "90"
 const val NETWORK_ERROR = "Нет интернета"
 const val VACANCY_ERROR = "Не удалось получить список вакансий"
 const val UNKNOWN_ERROR = "Неизвестная ошибка"
+const val NETWORK_PAGE_SIZE = 20
+const val PAGE = "page"
 
 const val BASE_URL = "https://api.hh.ru/"
 
