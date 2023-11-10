@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
-import ru.practicum.android.diploma.details.presentation.models.DetailState
+import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource

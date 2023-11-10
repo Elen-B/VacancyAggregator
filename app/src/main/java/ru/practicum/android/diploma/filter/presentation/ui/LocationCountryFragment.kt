@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentLocationCountryBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationCountryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.filter.presentation.models.LocationCountryScreenState
+import ru.practicum.android.diploma.filter.presentation.state.LocationCountryScreenState
 
 class LocationCountryFragment: Fragment() {
     private lateinit var binding: FragmentLocationCountryBinding

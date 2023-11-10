@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.core.network.NetworkClient
 import ru.practicum.android.diploma.core.network.dto.Request
 import ru.practicum.android.diploma.core.network.dto.Response
-import ru.practicum.android.diploma.details.data.SimilarVacancyResponse
+import ru.practicum.android.diploma.details.data.dto.SimilarVacancyResponse
 import ru.practicum.android.diploma.details.domain.api.SimilarRepository
 import ru.practicum.android.diploma.util.Resource
 

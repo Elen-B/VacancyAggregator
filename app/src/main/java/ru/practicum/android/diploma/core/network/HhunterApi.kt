@@ -5,7 +5,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.BuildConfig
-import ru.practicum.android.diploma.details.data.SimilarVacancyResponse
+import ru.practicum.android.diploma.details.data.dto.SimilarVacancyResponse
 import ru.practicum.android.diploma.details.data.remote.DetailDto
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeDto
 import ru.practicum.android.diploma.filter.data.dto.IndustryTreeDto

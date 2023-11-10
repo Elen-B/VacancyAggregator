@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSimilarBinding
-import ru.practicum.android.diploma.details.presentation.models.SimilarState
+import ru.practicum.android.diploma.details.presentation.state.SimilarState
 import ru.practicum.android.diploma.details.presentation.viewmodel.SimilarViewModel
 
 class SimilarFragment : Fragment() {
@@ -48,11 +47,6 @@ class SimilarFragment : Fragment() {
             }
 
             is SimilarState.Error -> {
-                Toast.makeText(
-                    requireContext(),
-                    getString(state.message.toInt()),
-                    Toast.LENGTH_LONG
-                ).show()
                 setError(
                     message = state.message.toInt(),
                     imagePath = state.errorImagePath
@@ -70,11 +64,10 @@ class SimilarFragment : Fragment() {
         imagePath: Int
     ) {
         with(binding.include) {
-            imError.isVisible = true
-            tvError.isVisible = true
             imError.setImageResource(imagePath)
             tvError.text = getString(message)
         }
+        binding.include.root.isVisible = true
         binding.rvSimilar.isVisible = false
         binding.progress.isVisible = false
     }
@@ -95,18 +88,12 @@ class SimilarFragment : Fragment() {
         val adapter = SimilarAdapter(data, stateClickListener)
         binding.rvSimilar.adapter = adapter
         binding.progress.isVisible = false
-        with(binding.include) {
-            imError.isVisible = false
-            tvError.isVisible = false
-        }
+        binding.include.root.isVisible =  false
     }
 
     private fun setLoad() {
         binding.rvSimilar.isVisible = false
         binding.progress.isVisible = true
-        with(binding.include) {
-            imError.isVisible = false
-            tvError.isVisible = false
-        }
+        binding.include.root.isVisible =  false
     }
 }
