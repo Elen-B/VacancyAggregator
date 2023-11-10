@@ -22,7 +22,7 @@ import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.core.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.filter.presentation.state.FilterScreenState
 
 class FilterFragment : Fragment() {
     private lateinit var binding: FragmentFilterBinding

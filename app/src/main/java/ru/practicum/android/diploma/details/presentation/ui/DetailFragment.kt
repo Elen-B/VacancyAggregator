@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.details.presentation
+package ru.practicum.android.diploma.details.presentation.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -19,6 +19,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
+import ru.practicum.android.diploma.details.presentation.state.DetailState
+import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
 import ru.practicum.android.diploma.search.domain.models.CurrencyType
 import ru.practicum.android.diploma.search.domain.models.Employer
 import ru.practicum.android.diploma.search.domain.models.Salary

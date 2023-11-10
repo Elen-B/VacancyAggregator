@@ -204,4 +204,16 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">@dimen/regular_text_size</item>
     </style>
+
+    <style name="SimilarItemHeaderStyle">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+    </style>
+
+    <style name="SimilarItemTextStyle">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">@dimen/regular_text_size</item>
+    </style>
 </resources>

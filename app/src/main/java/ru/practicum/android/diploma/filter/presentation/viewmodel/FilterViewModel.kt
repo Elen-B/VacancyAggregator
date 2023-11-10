@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.core.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.filter.presentation.state.FilterScreenState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SingleEventLiveData
 import ru.practicum.android.diploma.util.debounce

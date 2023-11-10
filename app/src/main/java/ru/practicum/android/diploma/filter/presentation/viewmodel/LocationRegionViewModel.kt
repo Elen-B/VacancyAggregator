@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.core.domain.models.Area
-import ru.practicum.android.diploma.filter.presentation.models.LocationRegionScreenState
+import ru.practicum.android.diploma.filter.presentation.state.LocationRegionScreenState
 
 class LocationRegionViewModel(country: Area?, private val filterInteractor: FilterInteractor) :
     ViewModel() {

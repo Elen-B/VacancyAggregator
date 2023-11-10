@@ -1,14 +1,15 @@
 package ru.practicum.android.diploma.details.domain.impl
 
-import ru.practicum.android.diploma.details.domain.api.DetailRepository
+import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
-import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
+import ru.practicum.android.diploma.details.domain.api.SimilarRepository
 import ru.practicum.android.diploma.util.Resource
 
 class SimilarInterActorImpl(
-    private val repo: DetailRepository
+    private val repository: SimilarRepository
 ): SimilarInterActor {
-    override suspend fun getSimilar(id: String): Resource<List<ProfessionSimillar>> {
-        return  repo.getVacanciesSimilar(id = id)
+
+    override suspend fun getSimilarVacancies(id: String): Resource<List<Vacancy>> {
+        return repository.getSimilarVacancies(id)
     }
 }

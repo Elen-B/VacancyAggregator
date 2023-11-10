@@ -1,32 +1,30 @@
-package ru.practicum.android.diploma.details.presentation
+package ru.practicum.android.diploma.details.presentation.ui
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.ItemSimilarBinding
-import ru.practicum.android.diploma.details.domain.models.ProfessionSimillar
 
 class SimilarAdapter(
-    private val similarsVacancies: List<ProfessionSimillar>,
-    private val onClickListener: OnStateClickListener,
-    private val context: Context
+    private val similarVacancies: List<Vacancy>,
+    private val onClickListener: OnStateClickListener
 ) : RecyclerView.Adapter<SimilarHolder>() {
     interface OnStateClickListener {
-        fun onStateClick(item: ProfessionSimillar, position: Int)
+        fun onStateClick(item: Vacancy, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return SimilarHolder(ItemSimilarBinding.inflate(inflater, parent, false), context)
+        return SimilarHolder(ItemSimilarBinding.inflate(inflater, parent, false))
     }
 
     override fun getItemCount(): Int {
-        return similarsVacancies.size
+        return similarVacancies.size
     }
 
     override fun onBindViewHolder(holder: SimilarHolder, position: Int) {
-        val item: ProfessionSimillar = similarsVacancies[position]
+        val item: Vacancy = similarVacancies[position]
         holder.bind(item)
         holder.itemView.setOnClickListener {
             onClickListener.onStateClick(item, position)

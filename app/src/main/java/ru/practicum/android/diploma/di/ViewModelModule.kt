@@ -3,8 +3,8 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterLocationViewModel
-import ru.practicum.android.diploma.details.presentation.DetailViewModel
-import ru.practicum.android.diploma.details.presentation.SimilarViewModel
+import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
+import ru.practicum.android.diploma.details.presentation.viewmodel.SimilarViewModel
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
 import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filter.presentation.models
+package ru.practicum.android.diploma.filter.presentation.state
 
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 
