@@ -7,8 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
+import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
+import ru.practicum.android.diploma.search.domain.models.CurrencyType
+import ru.practicum.android.diploma.search.domain.models.Employer
+import ru.practicum.android.diploma.search.domain.models.Salary
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
 
@@ -20,7 +24,7 @@ class DetailViewModel (
     private val _state = MutableLiveData<DetailState>(DetailState.Loading)
     val state = _state
 
-    private var inFavouritesLiveDataMutable = MutableLiveData<Boolean>()
+    private val inFavouritesLiveDataMutable = MutableLiveData(false)
     fun observeStateInFavourites(): LiveData<Boolean>  = inFavouritesLiveDataMutable
 
     init {
@@ -43,19 +47,56 @@ class DetailViewModel (
                         }
                 }
             }
+            if (_state.value is DetailState.Success) {
+                setFavouriteState(favouritesInteractor.inFavourites(id))
+            } else {
+                setFavouriteState(false)
+            }
         }
     }
-    //Проверяем есть ли вакансия в избраанных
-    fun inFavourites(id: String){
+
+    private fun setFavouriteState(isFavourite: Boolean) {
+        inFavouritesLiveDataMutable.value = isFavourite
+    }
+
+    private fun getVacancy(vacancy: ProfessionDetail): SearchVacancy {
+        val salary = Salary(
+            vacancy.salaryFrom?.toString(),
+            vacancy.salaryTo?.toString(),
+            CurrencyType.RUR,
+            gross = false
+        )
+        val employer = Employer(vacancy.employerId, vacancy.employerName)
+        return SearchVacancy(
+            id = vacancy.id,
+            name = vacancy.name,
+            salary = salary,
+            employer = employer,
+            logo = vacancy.employerLogo
+        )
+    }
+
+    private fun insertFavouriteVacancy(vacancy: SearchVacancy) {
         viewModelScope.launch {
-            inFavouritesLiveDataMutable.value = favouritesInteractor.inFavourites(id)
+            favouritesInteractor.insertVacancy(vacancy)
         }
     }
-    //Добавляем или удаляем вакансию из избранных
-    fun addFavourites(vacancy: SearchVacancy, isFavourites: Boolean){
+
+    private fun deleteFavouriteVacancy(vacancy: SearchVacancy) {
         viewModelScope.launch {
-            if (isFavourites) favouritesInteractor.insertVacancy(vacancy)
-            else favouritesInteractor.deleteVacancy(vacancy)
+            favouritesInteractor.deleteVacancy(vacancy)
+        }
+    }
+
+    fun onFavouriteClick() {
+        inFavouritesLiveDataMutable.value = !(inFavouritesLiveDataMutable.value ?: true)
+                if (state.value is DetailState.Success) {
+            val vacancy = getVacancy((state.value as DetailState.Success).data)
+            if (inFavouritesLiveDataMutable.value == true) {
+                insertFavouriteVacancy(vacancy)
+            } else {
+                deleteFavouriteVacancy(vacancy)
+            }
         }
     }
 }
