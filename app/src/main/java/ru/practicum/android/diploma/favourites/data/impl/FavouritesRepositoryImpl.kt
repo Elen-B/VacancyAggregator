@@ -77,8 +77,9 @@ class FavouritesRepositoryImpl(
         }
     }
 
-    override suspend fun getVacancyById(id: String): ProfessionDetail {
-        val vacancyEntity = appDatabase.vacancyDao().getCurrentVacancy(id)
+    override suspend fun getVacancyById(id: String): ProfessionDetail? {
+        val vacancyEntity = appDatabase.vacancyDao().getCurrentVacancy(id) ?: return null
+
         val employmentEntity = vacancyEntity.employmentId?.let {
             appDatabase.vacancyDao().getEmployment(
                 it

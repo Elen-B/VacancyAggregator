@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
@@ -30,12 +31,33 @@ class DetailViewModel (
     private fun getData() {
         viewModelScope.launch {
             val id = savedStateHandle.get<String>("id") ?: return@launch
+            val inFavourites = favouritesInteractor.inFavourites(id)
             when (val resultData = detailsInterActor.getDetails(id = id)) {
                 is Resource.Error -> {
-                    _state.value =
-                        DetailState.Error(
-                            message = resultData.message ?: "An unknown error",)
+                    if (inFavourites) {
+                        try {
+                            val vacancy = favouritesInteractor.getVacancyById(id)
+                            if (vacancy != null)
+                                _state.value = DetailState.Success(vacancy)
+                            else
+                                _state.value =
+                                    DetailState.Error(
+                                        message = UNKNOWN_ERROR,
+                                    )
+                        } catch (_: Exception) {
+                            _state.value =
+                                DetailState.Error(
+                                    message = resultData.message ?: UNKNOWN_ERROR,
+                                )
+                        }
+                    } else {
+                        _state.value =
+                            DetailState.Error(
+                                message = resultData.message ?: UNKNOWN_ERROR,
+                            )
+                    }
                 }
+
                 is Resource.Success -> {
                     _state.value =
                         resultData.data?.let {
