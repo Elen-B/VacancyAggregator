@@ -8,7 +8,6 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
@@ -42,27 +41,11 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.state.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is DetailState.Success -> {
-                    setData(result.data)
-                }
-
-                is DetailState.Error -> {
-                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
-                }
-
-                is DetailState.Loading -> {
-
-                }
-            }
+            render(result)
         }
 
         viewModel.observeStateInFavourites().observe(viewLifecycleOwner) { isFavourite ->
             renderFavourite(isFavourite)
-        }
-
-        binding.favorite.setOnClickListener {
-            viewModel.onFavouriteClick()
         }
 
         binding.back.setOnClickListener {
@@ -75,6 +58,22 @@ class DetailFragment : Fragment() {
             binding.favorite.setImageResource(R.drawable.trailing_icon_2)
         } else {
             binding.favorite.setImageResource(R.drawable.trailing_icon_2__1_)
+        }
+    }
+
+    private fun render(state: DetailState) {
+        when (state) {
+            is DetailState.Success -> {
+                setData(state.data)
+            }
+
+            is DetailState.Error -> {
+                showError()
+            }
+
+            is DetailState.Loading -> {
+                showProgress()
+            }
         }
     }
 
@@ -110,103 +109,118 @@ class DetailFragment : Fragment() {
                     )
                 }"
         }
-        if (professionDetail.experienceName == null) {
-            binding.experience.isVisible = false
-            binding.requiredExperience.isVisible = false
-        } else {
-            binding.experience.isVisible = true
-            binding.requiredExperience.isVisible = true
-            binding.experience.text = professionDetail.experienceName
-        }
-        if (professionDetail.employmentName == null) {
-            binding.employment.isVisible = false
-        } else {
-            binding.employment.isVisible = true
-            binding.employment.text = professionDetail.employmentName
-        }
+
+        binding.grExperience.isVisible = !professionDetail.experienceName.isNullOrEmpty()
+        binding.experience.text = professionDetail.experienceName.orEmpty()
+
+        binding.employment.isVisible = !professionDetail.employmentName.isNullOrEmpty()
+        binding.employment.text = professionDetail.employmentName.orEmpty()
         binding.employerName.text = professionDetail.employerName
-        binding.employerCity.text = professionDetail.employerCity
-        if (professionDetail.employerLogo != null) {
-            Glide
-                .with(requireContext())
-                .load(professionDetail.employerLogo)
-                .into(binding.employerLogo)
-        }
+        binding.employerCity.text = professionDetail.employerCity.orEmpty()
+
+        Glide
+            .with(requireContext())
+            .load(professionDetail.employerLogo)
+            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .into(binding.employerLogo)
+
         if (professionDetail.description != null && professionDetail.description != "...") {
-            binding.vacancyDescription.isVisible = true
-            binding.description.isVisible = true
+            binding.grDescription.isVisible = true
             binding.description.text = description
         } else {
-            binding.vacancyDescription.isVisible = false
-            binding.description.isVisible = false
+            binding.grDescription.isVisible = false
         }
-        if (professionDetail.keySkills != null && professionDetail.keySkills != "") {
-            binding.keySkills.isVisible = true
-            binding.keySkillsContent.isVisible = true
-            binding.keySkillsContent.text = professionDetail.keySkills
-        } else {
-            binding.keySkills.isVisible = false
-            binding.keySkillsContent.isVisible = false
-        }
+
+        binding.grSkills.isVisible = !professionDetail.keySkills.isNullOrEmpty()
+        binding.keySkillsContent.text = professionDetail.keySkills.orEmpty()
+
         binding.contacts.isVisible = !(professionDetail.comment == null
                 && professionDetail.phone == null
                 && professionDetail.email == null
                 && professionDetail.contactName == null)
-        if (professionDetail.comment != null) {
-            binding.commentName.isVisible = true
-            binding.comment.isVisible = true
-            binding.comment.text = professionDetail.comment
-        } else {
-            binding.commentName.isVisible = false
-            binding.comment.isVisible = false
-        }
 
-        if (professionDetail.contactName != null) {
-            binding.contactFace.isVisible = true
-            binding.contactName.isVisible = true
-            binding.contactName.text = professionDetail.contactName
-        } else {
-            binding.contactFace.isVisible = false
-            binding.contactName.isVisible = false
-        }
-        if (professionDetail.phone != null) {
-            binding.phoneName.isVisible = true
-            binding.phone.isVisible = true
-            binding.phone.text = professionDetail.phone
-        } else {
-            binding.phoneName.isVisible = false
-            binding.phone.isVisible = false
-        }
+        binding.grComment.isVisible = !professionDetail.comment.isNullOrEmpty()
+        binding.comment.text = professionDetail.comment.orEmpty()
 
-        if (professionDetail.email != null) {
-            binding.emailName.isVisible = true
-            binding.email.isVisible = true
-            binding.email.text = professionDetail.email
-        } else {
-            binding.emailName.isVisible = false
-            binding.email.isVisible = false
-        }
+        binding.grContact.isVisible = !professionDetail.contactName.isNullOrEmpty()
+        binding.contactName.text = professionDetail.contactName.orEmpty()
+
+        binding.grPhone.isVisible = !professionDetail.phone.isNullOrEmpty()
+        binding.phone.text = professionDetail.phone.orEmpty()
+
+        binding.grEmail.isVisible = !professionDetail.email.isNullOrEmpty()
+        binding.email.text = professionDetail.email.orEmpty()
+
+        setDetailsContentListeners(professionDetail)
+
+        binding.progress.isVisible = false
+        binding.scroll.isVisible = true
+        binding.phDetailsError.isVisible = false
+    }
+
+    private fun setDetailsContentListeners(professionDetail: ProfessionDetail) {
         binding.email.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO)
-            intent.data = Uri.parse("mailto:${professionDetail.email}")
-            if (intent.resolveActivity(requireActivity().packageManager) != null) {
-                startActivity(intent)
-            }
+            actionSendEmail(professionDetail.email)
         }
+
         binding.phone.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${professionDetail.phone}"))
-            startActivity(intent)
+            actionDial(professionDetail.phone)
         }
+
         binding.btSimilar.setOnClickListener {
             val bundle = bundleOf("id_vacancy" to professionDetail.id)
             view?.findNavController()
                 ?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
         }
+
         binding.share.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, professionDetail.url)
-            startActivity(Intent.createChooser(shareIntent, "Поделиться ссылкой"))
+            actionShare(professionDetail.url)
         }
+
+        binding.favorite.setOnClickListener {
+            viewModel.onFavouriteClick()
+        }
+    }
+
+    private fun actionSendEmail(email: String?) {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:${email}")
+        try {
+            startActivity(intent)
+        } catch (_: Exception) {}
+    }
+
+    private fun actionDial(phoneNumber: String?) {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}"))
+        try {
+            startActivity(intent)
+        } catch (_: Exception) {}
+    }
+
+    private fun actionShare(url: String) {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url)
+        try {
+            startActivity(
+                Intent.createChooser(
+                    shareIntent,
+                    getString(R.string.share_message_title)
+                )
+            )
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun showProgress() {
+        binding.progress.isVisible = true
+        binding.scroll.isVisible = false
+        binding.phDetailsError.isVisible = false
+    }
+
+    private fun showError() {
+        binding.progress.isVisible = false
+        binding.scroll.isVisible = false
+        binding.phDetailsError.isVisible = true
     }
 }

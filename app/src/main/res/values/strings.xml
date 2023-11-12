@@ -47,6 +47,8 @@
     <string name="not_salary">Зарплата не указана</string>
     <string name="vacancy_description">Описание вакансии</string>
     <string name="key_skills">Ключевые навыки</string>
+    <string name="error_details">Ошибка сервера</string>
+    <string name="share_message_title">Поделиться ссылкой</string>
 
 
     <!--team section -->
