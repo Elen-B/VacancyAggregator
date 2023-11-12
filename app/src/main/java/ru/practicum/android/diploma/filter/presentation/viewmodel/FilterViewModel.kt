@@ -84,26 +84,31 @@ class FilterViewModel(
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
         setStateEx(newFilterParameters, false)
+        saveFilterParameters()
     }
 
     fun onLocationChanged(country: Area?, region: Area?) {
         val newFilterParameters = filterParameters.copy(country = country, region = region)
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun onIndustryChanged(industry: Industry?) {
         val newFilterParameters = filterParameters.copy(industry = industry)
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun onFSalaryRequiredChanged(checked: Boolean) {
         val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
         setStateEx(newFilterParameters, false)
+        saveFilterParameters()
     }
 
     fun onClearFilterClick() {
         val newFilterParameters = FilterParameters()
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun showLocation() {
@@ -118,9 +123,7 @@ class FilterViewModel(
         }
     }
 
-    fun saveFilterParameters() {
-        if (clickDebounce()) {
-            filterLocalInteractor.saveFilterParameters(filterParameters)
-        }
+    private fun saveFilterParameters() {
+        filterLocalInteractor.saveFilterParameters(filterParameters)
     }
 }

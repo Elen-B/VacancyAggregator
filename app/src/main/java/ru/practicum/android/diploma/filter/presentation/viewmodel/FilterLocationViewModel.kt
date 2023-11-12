@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.core.domain.models.Area
+import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.FilterSaveMode
 import ru.practicum.android.diploma.filter.presentation.state.FilterLocationScreenState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SingleEventLiveData
@@ -15,7 +18,8 @@ import ru.practicum.android.diploma.util.debounce
 class FilterLocationViewModel(
     country: Area?,
     region: Area?,
-    private val filterInteractor: FilterInteractor
+    private val filterInteractor: FilterInteractor,
+    private val filterLocalInteractor: FilterLocalInteractor
 ): ViewModel()  {
 
     private val stateLiveData = MutableLiveData<FilterLocationScreenState>()
@@ -63,6 +67,10 @@ class FilterLocationViewModel(
         else
             (stateLiveData.value as FilterLocationScreenState.Content).copy(country = country)
         setState(newState)
+        filterLocalInteractor.saveFilterParameters(
+            FilterParameters(country = newState.country, region = newState.region),
+            FilterSaveMode.LOCATION
+        )
     }
 
     fun onRegionChanged(region: Area?) {
@@ -78,6 +86,10 @@ class FilterLocationViewModel(
                     (stateLiveData.value as FilterLocationScreenState.Content).copy(region = null)
                 }
             setState(newState)
+            filterLocalInteractor.saveFilterParameters(
+                FilterParameters(country = newState.country, region = newState.region),
+                FilterSaveMode.LOCATION
+            )
         }
     }
 
