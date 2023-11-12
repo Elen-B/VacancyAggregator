@@ -38,7 +38,7 @@ class DetailViewModel (
                         try {
                             val vacancy = favouritesInteractor.getVacancyById(id)
                             if (vacancy != null)
-                                _state.value = DetailState.Success(vacancy)
+                                _state.value = DetailState.Success(vacancy, true)
                             else
                                 _state.value =
                                     DetailState.Error(

@@ -62,7 +62,7 @@ class DetailFragment : Fragment() {
     private fun render(state: DetailState) {
         when (state) {
             is DetailState.Success -> {
-                setData(state.data)
+                setData(state.data, state.fromDb)
             }
 
             is DetailState.Error -> {
@@ -76,7 +76,7 @@ class DetailFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setData(professionDetail: ProfessionDetail) {
+    private fun setData(professionDetail: ProfessionDetail, fromDB: Boolean) {
         binding.vacancyName.text = professionDetail.name
         binding.salary.text = professionDetail.salary?.getSalaryToTextView() ?: getString(R.string.not_salary)
 
@@ -127,6 +127,7 @@ class DetailFragment : Fragment() {
         binding.progress.isVisible = false
         binding.scroll.isVisible = true
         binding.phDetailsError.isVisible = false
+        binding.btSimilar.isVisible = !fromDB
     }
 
     private fun setDetailsContentListeners(professionDetail: ProfessionDetail) {
