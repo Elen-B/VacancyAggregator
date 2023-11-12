@@ -10,10 +10,6 @@ import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
-import ru.practicum.android.diploma.search.domain.models.CurrencyType
-import ru.practicum.android.diploma.search.domain.models.Employer
-import ru.practicum.android.diploma.search.domain.models.Salary
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
 
 class DetailViewModel (
@@ -59,30 +55,13 @@ class DetailViewModel (
         inFavouritesLiveDataMutable.value = isFavourite
     }
 
-    private fun getVacancy(vacancy: ProfessionDetail): SearchVacancy {
-        val salary = Salary(
-            vacancy.salaryFrom?.toString(),
-            vacancy.salaryTo?.toString(),
-            CurrencyType.RUR,
-            gross = false
-        )
-        val employer = Employer(vacancy.employerId, vacancy.employerName)
-        return SearchVacancy(
-            id = vacancy.id,
-            name = vacancy.name,
-            salary = salary,
-            employer = employer,
-            logo = vacancy.employerLogo
-        )
-    }
-
-    private fun insertFavouriteVacancy(vacancy: SearchVacancy) {
+    private fun insertFavouriteVacancy(vacancy: ProfessionDetail) {
         viewModelScope.launch {
             favouritesInteractor.insertVacancy(vacancy)
         }
     }
 
-    private fun deleteFavouriteVacancy(vacancy: SearchVacancy) {
+    private fun deleteFavouriteVacancy(vacancy: ProfessionDetail) {
         viewModelScope.launch {
             favouritesInteractor.deleteVacancy(vacancy)
         }
@@ -90,8 +69,8 @@ class DetailViewModel (
 
     fun onFavouriteClick() {
         inFavouritesLiveDataMutable.value = !(inFavouritesLiveDataMutable.value ?: true)
-                if (state.value is DetailState.Success) {
-            val vacancy = getVacancy((state.value as DetailState.Success).data)
+        if (state.value is DetailState.Success) {
+            val vacancy = (state.value as DetailState.Success).data
             if (inFavouritesLiveDataMutable.value == true) {
                 insertFavouriteVacancy(vacancy)
             } else {

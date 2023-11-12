@@ -11,10 +11,10 @@ import androidx.navigation.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavouritesBinding
+import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.favourites.presentation.adapter.FavouritesVacancyAdapter
 import ru.practicum.android.diploma.favourites.presentation.state.FavouritesState
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
 class FavouritesFragment : Fragment() {
 
@@ -74,7 +74,7 @@ class FavouritesFragment : Fragment() {
         binding.rvFavouriteList.isVisible = false
     }
 
-    private fun showContent(vacancyList: List<SearchVacancy>) {
+    private fun showContent(vacancyList: List<ProfessionDetail>) {
         binding.imageListEmpty.isVisible = false
         binding.textListEmpty.isVisible = false
         binding.imageNoList.isVisible = false

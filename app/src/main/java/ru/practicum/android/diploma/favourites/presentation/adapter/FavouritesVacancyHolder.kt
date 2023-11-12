@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 
 class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.vacancy_item, parent, false)
@@ -18,10 +18,10 @@ class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val salary: TextView = itemView.findViewById(R.id.text_salary)
     private val logo: ImageView = itemView.findViewById(R.id.image_placeholder)
 
-    fun bind(model: SearchVacancy) {
+    fun bind(model: ProfessionDetail) {
         Glide
             .with(itemView)
-            .load(model.logo)
+            .load(model.employer?.logo)
             .placeholder(R.drawable.vacancy_item_search_placeholder)
             .into(logo)
 
