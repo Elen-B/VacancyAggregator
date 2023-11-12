@@ -15,6 +15,7 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
     fun observeState(): LiveData<FavouritesState> = favouritesLiveDataMutable
 
     fun loadFavouriteVacancyList() {
+        setState(FavouritesState.Loading)
         viewModelScope.launch {
             favouritesInteractor.getListVacancy().collect { pair ->
                 processResult(pair.first, pair.second)
@@ -26,22 +27,22 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
 
         when (message) {
             ERROR -> {
-                renderState(FavouritesState.Error)
+                setState(FavouritesState.Error)
             }
 
             EMPTY -> {
-                renderState(FavouritesState.Empty)
+                setState(FavouritesState.Empty)
             }
 
             else -> {
                 if (vacancyList != null) {
-                    renderState(FavouritesState.Content(vacancyList))
+                    setState(FavouritesState.Content(vacancyList))
                 }
             }
         }
     }
 
-    private fun renderState(state: FavouritesState) {
+    private fun setState(state: FavouritesState) {
         favouritesLiveDataMutable.postValue(state)
     }
 
