@@ -28,7 +28,29 @@ class FavouritesRepositoryImpl(
     }
 
     override suspend fun deleteVacancy(vacancy: ProfessionDetail) {
+        val employmentId = vacancy.employment?.id
+        val employerId = vacancy.employer?.id
+        val experienceId = vacancy.experience?.id
+
         appDatabase.vacancyDao().deleteVacancy(VacancyDbMapper.map(vacancy))
+
+        /* удаление неиспользуемых значений из справочников */
+        val listVacancyEntity = appDatabase.vacancyDao().getListVacancy()
+        employmentId?.let {
+            val filteredList =  listVacancyEntity.filter { it.employmentId == employmentId }
+            if (filteredList.isEmpty())
+                deleteEmployment(employmentId)
+        }
+        employerId?.let {
+            val filteredList =  listVacancyEntity.filter { it.employerId == employerId }
+            if (filteredList.isEmpty())
+                deleteEmployer(employerId)
+        }
+        experienceId?.let {
+            val filteredList =  listVacancyEntity.filter { it.experienceId == experienceId }
+            if (filteredList.isEmpty())
+                deleteExperience(experienceId)
+        }
     }
 
     override suspend fun getListVacancy(): Flow<Resource<List<ProfessionDetail>>> = flow {
@@ -78,5 +100,17 @@ class FavouritesRepositoryImpl(
     override suspend fun inFavourites(id: String): Boolean {
         val vacancyListId = appDatabase.vacancyDao().getListId()
         return vacancyListId.contains(id)
+    }
+
+    private suspend fun deleteEmployment(id: String){
+        appDatabase.vacancyDao().deleteEmployment(id)
+    }
+
+    private suspend fun deleteEmployer(id: String){
+        appDatabase.vacancyDao().deleteEmployer(id)
+    }
+
+    private suspend fun deleteExperience(id: String){
+        appDatabase.vacancyDao().deleteExperience(id)
     }
 }

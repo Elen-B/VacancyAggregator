@@ -33,8 +33,8 @@ interface VacancyDao {
     @Query("SELECT * FROM employment WHERE id = :id")
     suspend fun getEmployment(id: String): EmploymentEntity
 
-    @Delete
-    suspend fun deleteEmployment(employment: EmploymentEntity)
+    @Query("DELETE FROM employment where id = :id")
+    suspend fun deleteEmployment(id: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEmployer(employer: EmployerEntity)
@@ -42,8 +42,8 @@ interface VacancyDao {
     @Query("SELECT * FROM employer WHERE id = :id")
     suspend fun getEmployer(id: String): EmployerEntity
 
-    @Delete
-    suspend fun deleteEmployer(employer: EmployerEntity)
+    @Query("DELETE FROM employer where id = :id")
+    suspend fun deleteEmployer(id: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExperience(experience: ExperienceEntity)
@@ -51,6 +51,6 @@ interface VacancyDao {
     @Query("SELECT * FROM experience WHERE id = :id")
     suspend fun getExperience(id: String): ExperienceEntity
 
-    @Delete
-    suspend fun deleteExperience(experience: ExperienceEntity)
+    @Query("DELETE FROM experience where id = :id")
+    suspend fun deleteExperience(id: String)
 }
