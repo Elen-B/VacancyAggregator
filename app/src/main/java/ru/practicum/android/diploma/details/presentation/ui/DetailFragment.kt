@@ -21,10 +21,6 @@ import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
-import ru.practicum.android.diploma.search.domain.models.CurrencyType
-import ru.practicum.android.diploma.search.domain.models.Employer
-import ru.practicum.android.diploma.search.domain.models.Salary
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.formattedNumber
 import ru.practicum.android.diploma.util.setSymbolByCurrency
 
@@ -32,9 +28,6 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val viewModel: DetailViewModel by viewModel()
     private val binding get() = _binding!!
-    private var isFavourites = false
-    private var searchVacancy =
-        SearchVacancy("", "", Salary("", "", CurrencyType.RUR, false), Employer("", ""), "")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,8 +45,6 @@ class DetailFragment : Fragment() {
             when (result) {
                 is DetailState.Success -> {
                     setData(result.data)
-
-                    getVacancy(result.data)
                 }
 
                 is DetailState.Error -> {
@@ -66,22 +57,12 @@ class DetailFragment : Fragment() {
             }
         }
 
-        //Проверяем есть ли вакансия в избраанных
-        viewModel.inFavourites(searchVacancy.id.toString())
-        viewModel.observeStateInFavourites().observe(viewLifecycleOwner) {
-            isFavourites = it
+        viewModel.observeStateInFavourites().observe(viewLifecycleOwner) { isFavourite ->
+            renderFavourite(isFavourite)
         }
 
-        //Добавляем или удаляем вакансию из избранных
         binding.favorite.setOnClickListener {
-            isFavourites = if (isFavourites) {
-                binding.favorite.setImageResource(R.drawable.trailing_icon_2__1_)
-                false
-            } else {
-                binding.favorite.setImageResource(R.drawable.trailing_icon_2)
-                true
-            }
-            viewModel.addFavourites(vacancy = searchVacancy, isFavourites = isFavourites)
+            viewModel.onFavouriteClick()
         }
 
         binding.back.setOnClickListener {
@@ -89,21 +70,12 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun getVacancy(vacancy: ProfessionDetail) {
-        val salary = Salary(
-            vacancy.salaryFrom?.toString(),
-            vacancy.salaryTo?.toString(),
-            CurrencyType.RUR,
-            gross = false
-        )
-        val employer = Employer(vacancy.employerId, vacancy.employerName)
-        searchVacancy = SearchVacancy(
-            id = vacancy.id,
-            name = vacancy.name,
-            salary = salary,
-            employer = employer,
-            logo = vacancy.employerLogo
-        )
+    private fun renderFavourite(isFavourite: Boolean) {
+        if (isFavourite) {
+            binding.favorite.setImageResource(R.drawable.trailing_icon_2)
+        } else {
+            binding.favorite.setImageResource(R.drawable.trailing_icon_2__1_)
+        }
     }
 
     @SuppressLint("SetTextI18n")

@@ -7,10 +7,17 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.core.domain.models.Industry
+import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.FilterSaveMode
 import ru.practicum.android.diploma.filter.presentation.state.FilterIndustryScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
-class FilterIndustryViewModel(industry: Industry?, private val filterInteractor: FilterInteractor): ViewModel() {
+class FilterIndustryViewModel(
+    industry: Industry?,
+    private val filterInteractor: FilterInteractor,
+    private val filterLocalInteractor: FilterLocalInteractor
+) : ViewModel() {
 
     private val originalList: MutableList<Industry> = ArrayList()
     private val filteredList: MutableList<Industry> = ArrayList()
@@ -81,9 +88,14 @@ class FilterIndustryViewModel(industry: Industry?, private val filterInteractor:
     }
 
     fun applyFilter() {
-        if (/*clickDebounce() &&*/ stateLiveData.value is FilterIndustryScreenState.Content) {
-            applyFilterTrigger.value =
+        if (stateLiveData.value is FilterIndustryScreenState.Content) {
+            val checkedIndustry =
                 (stateLiveData.value as FilterIndustryScreenState.Content).checkedIndustry
+            filterLocalInteractor.saveFilterParameters(
+                FilterParameters(industry = checkedIndustry),
+                FilterSaveMode.INDUSTRY
+            )
+            applyFilterTrigger.value = checkedIndustry
         }
     }
 }

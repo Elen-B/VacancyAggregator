@@ -119,7 +119,7 @@ class FilterFragment : Fragment() {
             viewModel.onSalaryChanged(text.toString())
         }
 
-        binding.miFilterSalary.editText?.setOnEditorActionListener { _, actionId, keyEvent ->
+        binding.miFilterSalary.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.miFilterSalary.editText?.clearFocus()
                 binding.miFilterSalary.isEndIconVisible = false
@@ -141,7 +141,6 @@ class FilterFragment : Fragment() {
         }
 
         binding.btFilterApply.setOnClickListener {
-            viewModel.saveFilterParameters()
             findNavController().navigateUp()
         }
 
@@ -191,8 +190,7 @@ class FilterFragment : Fragment() {
                 filterParameters.salary != null
             )
             binding.btFilterClear.isVisible = !filterParameters.isEmpty()
-
-            binding.btFilterApply.isVisible = state is FilterScreenState.Modified
+            binding.btFilterApply.isVisible = !filterParameters.isEmpty()
         }
     }
 
