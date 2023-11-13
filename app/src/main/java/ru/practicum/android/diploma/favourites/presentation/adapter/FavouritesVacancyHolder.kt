@@ -22,7 +22,7 @@ class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         Glide
             .with(itemView)
             .load(model.employer?.logo)
-            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .placeholder(R.drawable.ic_logo)
             .into(logo)
 
         name.text = model.name

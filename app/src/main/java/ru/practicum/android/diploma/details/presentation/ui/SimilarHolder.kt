@@ -14,7 +14,7 @@ class SimilarHolder (private val binding: ItemSimilarBinding):
         Glide
             .with(this.itemView.context)
             .load(item.employer?.logo)
-            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .placeholder(R.drawable.ic_logo)
             .into(binding.similarLogo)
         binding.nameSimilar.text = if (item.area!=null) {
             "${item.name}, ${item.area.name}"

@@ -123,7 +123,8 @@
                             android:id="@+id/employerLogo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/vacancy_item_search_placeholder" />
+                            android:background="?attr/colorPrimary"
+                            android:src="@drawable/ic_logo" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.appcompat.widget.AppCompatTextView

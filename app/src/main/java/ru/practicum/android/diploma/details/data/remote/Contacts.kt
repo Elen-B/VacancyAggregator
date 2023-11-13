@@ -8,5 +8,5 @@ data class Contacts(
     @SerializedName("name")
     val name: String?,
     @SerializedName("phones")
-    val phones: List<Phone>
+    val phones: List<Phone>?
 )

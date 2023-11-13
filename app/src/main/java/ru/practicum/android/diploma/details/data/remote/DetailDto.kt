@@ -25,5 +25,5 @@ data class DetailDto(
     @SerializedName("contacts")
     val contacts: Contacts?,
     @SerializedName("alternate_url")
-    val url: String
+    val url: String?
 )

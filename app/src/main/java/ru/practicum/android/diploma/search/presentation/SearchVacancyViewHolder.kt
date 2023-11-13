@@ -26,7 +26,7 @@ class SearchVacancyViewHolder(
     fun bind(vacancy: SearchVacancy) {
         Glide.with(itemView)
             .load(vacancy.logo)
-            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .placeholder(R.drawable.ic_logo)
             .into(logView)
         nameView.text = vacancy.name
         employerView.text = vacancy.employer?.name

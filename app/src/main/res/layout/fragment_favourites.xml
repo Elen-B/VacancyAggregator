@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_190"
-        android:src="@drawable/no_list_1x"
+        android:src="@drawable/error_show_cat"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/heading_favourites"
         app:layout_constraintEnd_toEndOf="parent"
