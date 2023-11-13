@@ -1,33 +1,29 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
-import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.VACANCY_ID
 
 
 class SearchFragment : Fragment() {
@@ -37,9 +33,9 @@ class SearchFragment : Fragment() {
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
         override fun onVacancyClick(vacancy: SearchVacancy) {
             if (viewModel.clickDebounce()) {//Переход на экран детализации
-                                 val bundle = bundleOf("id" to vacancy.id)
-                 view?.findNavController()
-                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
+                val bundle = bundleOf(VACANCY_ID to vacancy.id)
+                view?.findNavController()
+                    ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
             }
         }
     })
@@ -59,47 +55,48 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.adapter = adapter
 
 
-        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
+        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner) {
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
         }
-        viewModel.observeisFiltered().observe(viewLifecycleOwner){isFilterEnable ->
-            if(isFilterEnable)
+        viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
+            if (isFilterEnable)
                 binding.imageFilter.setImageResource(R.drawable.image_filter_active)
             else
                 binding.imageFilter.setImageResource(R.drawable.image_filter_passive)
         }
-/*
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (binding.searchEditText.hasFocus()) {
                 binding.searchEditText.clearFocus()
             } else {
-                requireActivity().onBackPressed()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
-*/
+
+        viewModel.observeCoverImageVisible().observe(viewLifecycleOwner) {
+            binding.imageCover.isVisible = it
+        }
+
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        binding.searchEditText.setOnFocusChangeListener {view, hasFocus ->
-            binding.iconSearch.isVisible = !hasFocus && binding.searchEditText.text.isBlank()
-            binding.iconCross.isVisible = hasFocus || binding.searchEditText.text.isNotBlank()
+        viewModel.observeIconVisible().observe(viewLifecycleOwner) { searchTextIsEmpty ->
+            binding.iconSearch.isVisible = searchTextIsEmpty
+            binding.iconCross.isVisible = !searchTextIsEmpty
+            if (searchTextIsEmpty) {
+                getDefaultView()
+            }
+        }
+
+        binding.searchEditText.setOnFocusChangeListener { view, hasFocus ->
+            viewModel.setFocus(binding.searchEditText.text.isEmpty())
         }
         binding.searchEditText.doAfterTextChanged {
-            if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
-                    .isBlank()
-            ) {
-                getDefaultView()
-                binding.searchEditText.clearFocus()
-                binding.iconSearch.visibility = View.VISIBLE
-                binding.iconCross.visibility = View.GONE
-            } else if (binding.searchEditText.hasFocus() && binding.searchEditText.text.toString()
-                    .isNotEmpty()
-            ) {
-                viewModel.searchDebounce(binding.searchEditText.text.toString())
-                binding.iconSearch.visibility = View.GONE
-                binding.iconCross.visibility = View.VISIBLE
-            }
+            viewModel.setFocus(
+                binding.searchEditText.text.toString().isEmpty()
+            )
+            viewModel.searchDebounce(binding.searchEditText.text.toString())
         }
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -111,6 +108,8 @@ class SearchFragment : Fragment() {
 
         binding.iconCross.setOnClickListener {
             binding.searchEditText.setText("")
+            viewModel.setFocus(true)
+            getDefaultView()
         }
 
         binding.imageFilter.setOnClickListener {
@@ -122,6 +121,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun render(state: VacancyState) {
+        viewModel.setVisibleCoverImage(false)
         when (state) {
             is VacancyState.Content -> showContent(state.vacancy)
             is VacancyState.Empty -> showEmpty(state.message)
@@ -129,6 +129,7 @@ class SearchFragment : Fragment() {
             is VacancyState.Loading -> showLoading()
         }
     }
+
     private fun showLoading() {
         if (binding.searchEditText.text.isBlank()) {
             return
@@ -145,6 +146,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showError(errorMessage: String) {
+        hideKeyboard()
         binding.progressBar.visibility = View.GONE
         binding.imageConnectionError.visibility = View.VISIBLE
         binding.textConnectionError.visibility = View.VISIBLE
@@ -175,7 +177,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun getDefaultView() {
-        binding.imageCover.visibility = View.VISIBLE
+        viewModel.setVisibleCoverImage(true)
         binding.imageConnectionError.visibility = View.GONE
         binding.textConnectionError.visibility = View.GONE
         binding.imageVacancyError.visibility = View.GONE
@@ -190,5 +192,12 @@ class SearchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.isFilterButtonEnable()
+    }
+
+    fun hideKeyboard() {
+        binding.searchEditText.clearFocus()
+        val inputMethodManager =
+            requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
     }
 }

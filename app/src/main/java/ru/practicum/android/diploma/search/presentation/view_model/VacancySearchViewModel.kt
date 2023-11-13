@@ -20,7 +20,8 @@ import ru.practicum.android.diploma.util.VACANCY_ERROR
 
 class VacancySearchViewModel(
     private val searchInteractor: VacancySearchInteractor,
-    private val filterInteractor: FilterLocalInteractor) : ViewModel() {
+    private val filterInteractor: FilterLocalInteractor
+) : ViewModel() {
 
     private var filterParameters: FilterParameters? = null
     private var latestSearchText: String? = null
@@ -29,29 +30,38 @@ class VacancySearchViewModel(
     private val stateLiveData = MutableLiveData<VacancyState>()
     private val foundVacanciesCount = MutableLiveData<String?>(null)
     private val isFiltered = MutableLiveData<Boolean>(false)
+    private val iconVisible = MutableLiveData<Boolean>()
+    private val imageCoverIsVisible = MutableLiveData<Boolean>()
+    fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
+    fun observeIconVisible(): LiveData<Boolean> = iconVisible
 
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
-        if (latestSearchText == changedText && !forceButtonClick) {
+        if(changedText.isEmpty()){
+            searchJob?.cancel()
             return
         }
-        val searchOption = hashMapOf<String,String>("text" to changedText)
-        if(filterParameters != null){
+        else if (latestSearchText == changedText && !forceButtonClick) {
+            return
+        }
+        val searchOption = hashMapOf<String, String>("text" to changedText)
+        if (filterParameters != null) {
             searchOption.putAll(FilterMapper.getMap(filterParameters!!))
         }
         latestSearchText = changedText
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            if(!forceButtonClick){
-            delay(SEARCH_DEBOUNCE_DELAY)}
+            if (!forceButtonClick) {
+                delay(SEARCH_DEBOUNCE_DELAY)
+            }
             searchRequest(searchOption)
         }
     }
 
-    private fun searchRequest(searchOptions: HashMap<String,String>) {
+    private fun searchRequest(searchOptions: HashMap<String, String>) {
         if (searchOptions.isNotEmpty()) {
             renderState(VacancyState.Loading)
             viewModelScope.launch {
@@ -106,7 +116,7 @@ class VacancySearchViewModel(
         stateLiveData.postValue(state)
     }
 
-    fun isFilterButtonEnable(){
+    fun isFilterButtonEnable() {
         viewModelScope.launch {
             delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
@@ -115,4 +125,12 @@ class VacancySearchViewModel(
     }
 
     fun getFilter(): FilterParameters? = filterParameters
+
+    fun setFocus(textIsEmpty: Boolean) {
+        iconVisible.postValue(textIsEmpty)
+    }
+
+    fun setVisibleCoverImage(isVisible: Boolean){
+        imageCoverIsVisible.postValue(isVisible)
+    }
 }
