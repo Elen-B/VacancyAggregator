@@ -10,8 +10,11 @@ import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
+import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.SingleEventLiveData
 import ru.practicum.android.diploma.util.UNKNOWN_ERROR
+import ru.practicum.android.diploma.util.debounce
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
@@ -23,6 +26,18 @@ class DetailViewModel (
 
     private val inFavouritesLiveDataMutable = MutableLiveData(false)
     fun observeStateInFavourites(): LiveData<Boolean>  = inFavouritesLiveDataMutable
+
+    private val shareVacancyTrigger = SingleEventLiveData<String>()
+    fun getShareVacancyTrigger(): LiveData<String> = shareVacancyTrigger
+
+    private val showSimilarVacanciesTrigger = SingleEventLiveData<String>()
+    fun getShowSimilarVacanciesTrigger(): LiveData<String> = showSimilarVacanciesTrigger
+
+    private var isClickAllowed = true
+    private val onClickDebounce =
+        debounce<Boolean>(CLICK_DEBOUNCE_DELAY, viewModelScope, false) {
+            isClickAllowed = it
+        }
 
     init {
         getData()
@@ -89,6 +104,15 @@ class DetailViewModel (
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            onClickDebounce(true)
+        }
+        return current
+    }
+
     fun onFavouriteClick() {
         inFavouritesLiveDataMutable.value = !(inFavouritesLiveDataMutable.value ?: true)
         if (state.value is DetailState.Success) {
@@ -98,6 +122,18 @@ class DetailViewModel (
             } else {
                 deleteFavouriteVacancy(vacancy)
             }
+        }
+    }
+
+    fun shareVacancy(url: String) {
+        if (clickDebounce()) {
+            shareVacancyTrigger.value = url
+        }
+    }
+
+    fun showSimilarVacancies(id: String) {
+        if (clickDebounce()) {
+            showSimilarVacanciesTrigger.value = id
         }
     }
 }
