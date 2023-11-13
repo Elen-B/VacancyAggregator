@@ -29,8 +29,8 @@ class FilterViewModel(
     private val showIndustryTrigger = SingleEventLiveData<Industry?>()
     fun getShowIndustryTrigger(): LiveData<Industry?> = showIndustryTrigger
 
-    private val saveFilterTrigger = SingleEventLiveData<Unit>()
-    fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
+    private val saveFilterTrigger = SingleEventLiveData<FilterParameters>()
+    fun getSaveFilterTrigger(): LiveData<FilterParameters> = saveFilterTrigger
 
     private var isClickAllowed = true
     private val onTrackClickDebounce =
@@ -121,6 +121,10 @@ class FilterViewModel(
         if (clickDebounce()) {
             showIndustryTrigger.value = filterParameters.industry
         }
+    }
+
+    fun applyFilter() {
+        saveFilterTrigger.value = filterParameters
     }
 
     private fun saveFilterParameters() {

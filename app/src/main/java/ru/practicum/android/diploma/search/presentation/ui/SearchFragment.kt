@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +12,7 @@ import androidx.core.view.doOnAttach
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
 import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
@@ -58,6 +61,17 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
 
+        setFragmentResultListener(FilterFragment.FILTER_RESULT_KEY) { _, bundle ->
+            val filterParameters: FilterParameters? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                bundle.getParcelable(
+                    FilterFragment.FILTER_RESULT_VAL,
+                    FilterParameters::class.java
+                )
+            } else {
+                bundle.getParcelable(FilterFragment.FILTER_RESULT_VAL)
+            }
+            // example: viewModel.forceSearch(filterParameters)
+        }
 
         viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner){
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))

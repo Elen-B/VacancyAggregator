@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -82,8 +84,8 @@ class FilterFragment : Fragment() {
             showIndustry(industry)
         }
 
-        viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
+        viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) { filterParameters ->
+            applyFilter(filterParameters)
         }
 
         binding.miFilterLocation.editText?.setOnClickListener {
@@ -141,7 +143,7 @@ class FilterFragment : Fragment() {
         }
 
         binding.btFilterApply.setOnClickListener {
-            findNavController().navigateUp()
+            viewModel.applyFilter()
         }
 
         binding.btFilterClear.setOnClickListener {
@@ -255,5 +257,20 @@ class FilterFragment : Fragment() {
             industry
         )
         findNavController().navigate(action)
+    }
+
+    private fun applyFilter(filterParameters: FilterParameters) {
+        setFragmentResult(
+            FILTER_RESULT_KEY,
+            bundleOf(
+                FILTER_RESULT_VAL to filterParameters
+            )
+        )
+        findNavController().navigateUp()
+    }
+
+    companion object {
+        const val FILTER_RESULT_KEY = "filter_key"
+        const val FILTER_RESULT_VAL = "filter_val"
     }
 }
