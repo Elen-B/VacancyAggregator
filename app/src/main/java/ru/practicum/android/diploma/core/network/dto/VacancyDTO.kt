@@ -14,7 +14,7 @@ data class VacancyDTO(
 data class SalaryDTO(
     val from: String?,
     val to: String?,
-    val currency: Currency?,
+    val currency: String?,
     val gross: Boolean = false
 )
 
