@@ -135,10 +135,8 @@ class SearchFragment : Fragment() {
             return
         }
         binding.imageCover.visibility = View.GONE
-        binding.imageConnectionError.visibility = View.GONE
-        binding.textConnectionError.visibility = View.GONE
-        binding.imageVacancyError.visibility = View.GONE
-        binding.textVacancyError.visibility = View.GONE
+        binding.groupConnectionError.isVisible = false
+        binding.groupVacancyError.isVisible = false
         binding.viewElement.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
@@ -148,17 +146,14 @@ class SearchFragment : Fragment() {
     private fun showError(errorMessage: String) {
         hideKeyboard()
         binding.progressBar.visibility = View.GONE
-        binding.imageConnectionError.visibility = View.VISIBLE
-        binding.textConnectionError.visibility = View.VISIBLE
-        binding.textConnectionError.setText(errorMessage)
+        binding.groupConnectionError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
     }
 
     private fun showEmpty(message: String) {
         binding.progressBar.visibility = View.GONE
-        binding.imageVacancyError.visibility = View.VISIBLE
-        binding.textVacancyError.visibility = View.VISIBLE
+        binding.groupVacancyError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
     }
@@ -178,10 +173,8 @@ class SearchFragment : Fragment() {
 
     private fun getDefaultView() {
         viewModel.setVisibleCoverImage(true)
-        binding.imageConnectionError.visibility = View.GONE
-        binding.textConnectionError.visibility = View.GONE
-        binding.imageVacancyError.visibility = View.GONE
-        binding.textVacancyError.visibility = View.GONE
+        binding.groupConnectionError.isVisible = false
+        binding.groupVacancyError.isVisible = false
         binding.viewElement.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
         binding.progressBar.visibility = View.GONE

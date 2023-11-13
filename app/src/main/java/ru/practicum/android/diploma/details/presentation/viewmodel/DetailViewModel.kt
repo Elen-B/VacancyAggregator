@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.UNKNOWN_ERROR
+import ru.practicum.android.diploma.util.VACANCY_ID
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
@@ -30,7 +31,7 @@ class DetailViewModel (
 
     private fun getData() {
         viewModelScope.launch {
-            val id = savedStateHandle.get<String>("id") ?: return@launch
+            val id = savedStateHandle.get<String>(VACANCY_ID) ?: return@launch
             val inFavourites = favouritesInteractor.inFavourites(id)
             when (val resultData = detailsInterActor.getDetails(id = id)) {
                 is Resource.Error -> {

@@ -114,6 +114,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_edit_text" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_connection_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="image_connection_error,text_connection_error" />
+
     <ImageView
         android:id="@+id/image_connection_error"
         style="@style/ErrorNetworkImage"
@@ -145,6 +152,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_vacancy_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="image_vacancy_error,text_vacancy_error" />
 
     <ImageView
         android:id="@+id/image_vacancy_error"

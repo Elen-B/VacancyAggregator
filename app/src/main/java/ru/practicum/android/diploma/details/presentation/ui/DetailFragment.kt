@@ -20,6 +20,7 @@ import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
+import ru.practicum.android.diploma.util.VACANCY_ID
 
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
@@ -140,7 +141,7 @@ class DetailFragment : Fragment() {
         }
 
         binding.btSimilar.setOnClickListener {
-            val bundle = bundleOf("id_vacancy" to professionDetail.id)
+            val bundle = bundleOf(VACANCY_ID to professionDetail.id)
             view?.findNavController()
                 ?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
         }
