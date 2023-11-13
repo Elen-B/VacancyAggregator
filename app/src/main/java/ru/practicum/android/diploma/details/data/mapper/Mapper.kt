@@ -45,16 +45,18 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail {
         salary = salary,
         description = this.description,
         keySkills = this.keySkills?.mapToString(),
-        comment = this.contacts?.phones?.first()?.comment,
+        comment = if (this.contacts != null && this.contacts.phones?.isNotEmpty() == true) {
+            this.contacts.phones.first().comment.toString()
+        } else null,
         contactName = this.contacts?.name,
         email = this.contacts?.email,
-        phone = if (this.contacts == null || this.contacts.phones.isEmpty()) null else {
+        phone = if (this.contacts != null && this.contacts.phones?.isNotEmpty() == true) {
             convertStringToSting(
                 prefix = this.contacts.phones.first().country,
                 middle = this.contacts.phones.first().city,
                 postfix = this.contacts.phones.first().number
             )
-        },
+        } else null,
         url = this.url
     )
 }

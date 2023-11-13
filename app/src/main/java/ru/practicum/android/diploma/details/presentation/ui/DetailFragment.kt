@@ -91,7 +91,7 @@ class DetailFragment : Fragment() {
         Glide
             .with(requireContext())
             .load(professionDetail.employer?.logo)
-            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .placeholder(R.drawable.ic_logo)
             .into(binding.employerLogo)
 
         if (professionDetail.description != null && professionDetail.description != "...") {
