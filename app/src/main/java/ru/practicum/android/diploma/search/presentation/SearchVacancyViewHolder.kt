@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.core.domain.models.Vacancy
+import ru.practicum.android.diploma.util.SALARY_NOT_SPECIFIED
 
 class SearchVacancyViewHolder(
     parent: ViewGroup,
@@ -22,18 +24,18 @@ class SearchVacancyViewHolder(
     var salaryView: TextView = itemView.findViewById(R.id.text_salary)
 
 
-    fun bind(vacancy: SearchVacancy) {
+    fun bind(vacancy: Vacancy) {
         Glide.with(itemView)
-            .load(vacancy.logo)
+            .load(vacancy.employer?.logo)
             .placeholder(R.drawable.vacancy_item_search_placeholder)
             .into(logView)
-        nameView.text = vacancy.name
+        nameView.text = "${vacancy.name}, ${vacancy.area?.name}"
         employerView.text = vacancy.employer?.name
-        salaryView.text = vacancy.salary?.getSalaryToTextView() ?: "Зарплата не указана"
+        salaryView.text = vacancy.salary?.getSalaryToTextView() ?: SALARY_NOT_SPECIFIED
         itemView.setOnClickListener { clickListener.onVacancyClick(vacancy) }
     }
 }
 
 interface ItemClickListener {
-    fun onVacancyClick(vacancy: SearchVacancy)
+    fun onVacancyClick(vacancy: Vacancy)
 }

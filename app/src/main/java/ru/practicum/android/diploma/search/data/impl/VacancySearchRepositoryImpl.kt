@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.core.network.dto.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.presentation.VacancyState
+import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
@@ -24,17 +25,19 @@ class VacancySearchRepositoryImpl(
             val response = networkClient.doRequest(Request.VacancySearchRequest(option))
             when (response.resultCode) {
                 Response.RESULT_SUCCESS -> {
-                    emit(Resource.Success<VacancyState>(option.get("found")?.let {
-                        VacancyState.Content(
-                            (response as VacancySearchResponse).items.map { VacancyMapper.map(it) },
-                            it
+                    emit(
+                        Resource.Success<VacancyState>(
+                            VacancyState.Content(
+                                (response as VacancySearchResponse).items.map { VacancyMapper.map(it) },
+                                (response as VacancySearchResponse).found
+                            )
                         )
-                    }))
+                    )
                 }
 
                 Response.RESULT_NETWORK_ERROR -> emit(
                     Resource.Error<VacancyState>(
-                        "NETWORK_ERROR"
+                        NETWORK_ERROR
                     )
                 )
 

@@ -42,6 +42,7 @@ class VacancySearchViewModel(
         debounce<Boolean>(SEARCH_DEBOUNCE_DELAY, viewModelScope, false) {
             isClickAllowed = it
         }
+
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
         if (changedText.isEmpty()) {
             searchJob?.cancel()
@@ -82,13 +83,18 @@ class VacancySearchViewModel(
         message: String?
     ) {
         val vacancies = mutableListOf<Vacancy>()
-        vacancies.let { it.addAll((vacancyState as VacancyState.Content).vacancy) }
+        vacancyState?.let {
+            val list = (vacancyState as VacancyState.Content).vacancy
+            vacancies.addAll(list)
+        }
+
+
         when {
             message == NETWORK_ERROR -> {
                 renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
             }
 
-            message == VACANCY_ERROR || vacancies.isNullOrEmpty() -> {
+            message == VACANCY_ERROR && vacancies.isNullOrEmpty() -> {
                 renderState(VacancyState.Empty(message = VACANCY_ERROR))
             }
 
@@ -102,6 +108,7 @@ class VacancySearchViewModel(
             }
         }
     }
+
     fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {

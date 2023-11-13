@@ -2,13 +2,11 @@ package ru.practicum.android.diploma.search.presentation.ui
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -60,18 +58,6 @@ class SearchFragment : Fragment() {
                 binding.imageFilter.setImageResource(R.drawable.image_filter_active)
             else
                 binding.imageFilter.setImageResource(R.drawable.image_filter_passive)
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            try {
-                if (binding.searchEditText.hasFocus()) {
-                    binding.searchEditText.clearFocus()
-                } else {
-                    requireActivity().onBackPressedDispatcher.onBackPressed()
-                }
-            } catch (e: Exception) {
-               Log.i("Error",e.printStackTrace().toString())
-            }
         }
 
         viewModel.observeCoverImageVisible().observe(viewLifecycleOwner) {
@@ -153,6 +139,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty(message: String) {
+        hideKeyboard()
         binding.progressBar.visibility = View.GONE
         binding.groupVacancyError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
@@ -160,7 +147,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(contentTracks: List<Vacancy>, count: String) {
-        binding.textVacancyCount.text = count
+        binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
         binding.progressBar.visibility = View.GONE
         if (binding.searchEditText.text.isBlank()) {
             return
