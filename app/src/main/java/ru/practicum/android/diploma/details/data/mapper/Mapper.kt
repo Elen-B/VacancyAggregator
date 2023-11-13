@@ -35,6 +35,10 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail {
         currency = Currency.getCurrency(this.salary?.currency.toString())
     )
 
+    val comment = if (this.contacts != null && this.contacts.phones?.isNotEmpty() == true) {
+        this.contacts.phones.first().comment
+    } else null
+
     return ProfessionDetail(
         id = this.id,
         name = this.name,
@@ -45,9 +49,7 @@ fun DetailDto.mapToProfessionDetail(): ProfessionDetail {
         salary = salary,
         description = this.description,
         keySkills = this.keySkills?.mapToString(),
-        comment = if (this.contacts != null && this.contacts.phones?.isNotEmpty() == true) {
-            this.contacts.phones.first().comment.toString()
-        } else null,
+        comment = comment,
         contactName = this.contacts?.name,
         email = this.contacts?.email,
         phone = if (this.contacts != null && this.contacts.phones?.isNotEmpty() == true) {

@@ -4,21 +4,22 @@ import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
 import ru.practicum.android.diploma.filter.domain.api.FilterRepository
 import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.core.domain.models.Industry
+import ru.practicum.android.diploma.filter.domain.models.ParamData
 import ru.practicum.android.diploma.util.Resource
 
 class FilterInteractorImpl(private val repository: FilterRepository): FilterInteractor {
-    override suspend fun getCountries(): Pair<List<Area>?, String?> {
+    override suspend fun getCountries(): ParamData<List<Area>?> {
         return when(val res = repository.getCountries()) {
-            is Resource.Success -> Pair(res.data, null)
-            is Resource.Error -> Pair(null, res.message)
+            is Resource.Success -> ParamData(res.data)
+            is Resource.Error -> ParamData(isError = true)
         }
     }
 
-    override suspend fun getAreas(id: String): Pair<List<Area>?, String?> {
+    override suspend fun getAreas(id: String): ParamData<List<Area>?> {
         val res = if (id.isEmpty()) repository.getAreas() else repository.getAreas(id)
         return when(res) {
-            is Resource.Success -> Pair(res.data, null)
-            is Resource.Error -> Pair(null, res.message)
+            is Resource.Success -> ParamData(res.data)
+            is Resource.Error -> ParamData(isError = true)
         }
     }
 
@@ -39,10 +40,10 @@ class FilterInteractorImpl(private val repository: FilterRepository): FilterInte
         return parent
     }
 
-    override suspend fun getIndustries(): Pair<List<Industry>?, String?> {
+    override suspend fun getIndustries(): ParamData<List<Industry>?> {
         return when(val res = repository.getIndustries()) {
-            is Resource.Success -> Pair(res.data, null)
-            is Resource.Error -> Pair(null, res.message)
+            is Resource.Success -> ParamData(res.data)
+            is Resource.Error -> ParamData(isError = true)
         }
     }
 }

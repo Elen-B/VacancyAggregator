@@ -23,7 +23,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                     areaTreeDto
                 )
             }.sortedBy { it.id == OTHER_COUNTRIES_ID })
-            else -> Resource.Error("")
+            else -> Resource.Error()
         }
     }
 
@@ -35,7 +35,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 Resource.Success(flattenArea)
             }
 
-            else -> Resource.Error("")
+            else -> Resource.Error()
         }
     }
 
@@ -50,7 +50,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 Resource.Success(flattenArea)
             }
 
-            else -> Resource.Error("")
+            else -> Resource.Error()
         }
     }
 
@@ -65,7 +65,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 Resource.Success(area)
             }
 
-            else -> Resource.Error("")
+            else -> Resource.Error()
         }
     }
 
@@ -80,7 +80,7 @@ class FilterRepositoryImpl(private val networkClient: NetworkClient) : FilterRep
                 Resource.Success(flattenIndustry)
             }
 
-            else -> Resource.Error("")
+            else -> Resource.Error()
         }
     }
 

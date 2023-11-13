@@ -27,7 +27,7 @@ class FilterLocalInteractorImpl(private val filterLocalRepository: FilterLocalRe
                 industry = filterParameters?.industry,
             )
 
-            else -> {null}
+            else -> null
         }
         if ((newFilter == null) || newFilter.isEmpty())
             filterLocalRepository.removeFilterParameters()
