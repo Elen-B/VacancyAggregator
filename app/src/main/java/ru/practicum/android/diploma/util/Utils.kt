@@ -12,6 +12,7 @@ const val NETWORK_ERROR = "Нет интернета"
 const val VACANCY_ERROR = "Не удалось получить список вакансий"
 const val UNKNOWN_ERROR = "Неизвестная ошибка"
 const val VACANCY_ID = "id"
+const val TEXT = "text"
 
 const val BASE_URL = "https://api.hh.ru/"
 

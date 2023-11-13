@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
@@ -31,8 +31,8 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<VacancySearchViewModel>()
     private val adapter = SearchVacancyAdapter(object : ItemClickListener {
-        override fun onVacancyClick(vacancy: SearchVacancy) {
-            if (viewModel.clickDebounce()) {//Переход на экран детализации
+        override fun onVacancyClick(vacancy: Vacancy) {
+            if (viewModel.clickDebounce()) {
                 val bundle = bundleOf(VACANCY_ID to vacancy.id)
                 view?.findNavController()
                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
@@ -54,10 +54,6 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
 
-
-        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner) {
-            binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
-        }
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
             if (isFilterEnable)
                 binding.imageFilter.setImageResource(R.drawable.image_filter_active)
@@ -123,7 +119,7 @@ class SearchFragment : Fragment() {
     private fun render(state: VacancyState) {
         viewModel.setVisibleCoverImage(false)
         when (state) {
-            is VacancyState.Content -> showContent(state.vacancy)
+            is VacancyState.Content -> showContent(state.vacancy, state.count)
             is VacancyState.Empty -> showEmpty(state.message)
             is VacancyState.Error -> showError(state.errorMessage)
             is VacancyState.Loading -> showLoading()
@@ -158,7 +154,8 @@ class SearchFragment : Fragment() {
         binding.textVacancyCount.visibility = View.GONE
     }
 
-    private fun showContent(contentTracks: List<SearchVacancy>) {
+    private fun showContent(contentTracks: List<Vacancy>, count: String) {
+        binding.textVacancyCount.text = count
         binding.progressBar.visibility = View.GONE
         if (binding.searchEditText.text.isBlank()) {
             return
