@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:text="@string/error_industry_message"
-        app:drawableTopCompat="@drawable/error_filter"
+        app:drawableTopCompat="@drawable/error_show_cat"
 
         app:layout_constraintTop_toBottomOf="@id/edIndustrySearch"
         app:layout_constraintStart_toStartOf="parent"
