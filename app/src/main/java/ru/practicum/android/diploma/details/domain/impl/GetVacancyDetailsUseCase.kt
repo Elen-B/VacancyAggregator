@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.util.Resource
 
-class DetailsInterActorImpl(
+class GetVacancyDetailsUseCase(
     private val repo: DetailRepository
 ): DetailsInterActor {
     override suspend fun getDetails (

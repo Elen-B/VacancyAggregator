@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.presentation.state.FavouritesState
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 
 class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor) : ViewModel() {
 
@@ -15,6 +15,7 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
     fun observeState(): LiveData<FavouritesState> = favouritesLiveDataMutable
 
     fun loadFavouriteVacancyList() {
+        setState(FavouritesState.Loading)
         viewModelScope.launch {
             favouritesInteractor.getListVacancy().collect { pair ->
                 processResult(pair.first, pair.second)
@@ -22,26 +23,26 @@ class FavouritesViewModel(private val favouritesInteractor: FavouritesInteractor
         }
     }
 
-    private fun processResult(vacancyList: List<SearchVacancy>?, message: String?) {
+    private fun processResult(vacancyList: List<ProfessionDetail>?, message: String?) {
 
         when (message) {
             ERROR -> {
-                renderState(FavouritesState.Error)
+                setState(FavouritesState.Error)
             }
 
             EMPTY -> {
-                renderState(FavouritesState.Empty)
+                setState(FavouritesState.Empty)
             }
 
             else -> {
                 if (vacancyList != null) {
-                    renderState(FavouritesState.Content(vacancyList))
+                    setState(FavouritesState.Content(vacancyList))
                 }
             }
         }
     }
 
-    private fun renderState(state: FavouritesState) {
+    private fun setState(state: FavouritesState) {
         favouritesLiveDataMutable.postValue(state)
     }
 

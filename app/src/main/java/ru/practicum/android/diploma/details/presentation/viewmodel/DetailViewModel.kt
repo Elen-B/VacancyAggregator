@@ -10,11 +10,8 @@ import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
-import ru.practicum.android.diploma.search.domain.models.CurrencyType
-import ru.practicum.android.diploma.search.domain.models.Employer
-import ru.practicum.android.diploma.search.domain.models.Salary
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 
 class DetailViewModel (
     private val detailsInterActor: DetailsInterActor,
@@ -34,12 +31,33 @@ class DetailViewModel (
     private fun getData() {
         viewModelScope.launch {
             val id = savedStateHandle.get<String>("id") ?: return@launch
+            val inFavourites = favouritesInteractor.inFavourites(id)
             when (val resultData = detailsInterActor.getDetails(id = id)) {
                 is Resource.Error -> {
-                    _state.value =
-                        DetailState.Error(
-                            message = resultData.message ?: "An unknown error",)
+                    if (inFavourites) {
+                        try {
+                            val vacancy = favouritesInteractor.getVacancyById(id)
+                            if (vacancy != null)
+                                _state.value = DetailState.Success(vacancy, true)
+                            else
+                                _state.value =
+                                    DetailState.Error(
+                                        message = UNKNOWN_ERROR,
+                                    )
+                        } catch (_: Exception) {
+                            _state.value =
+                                DetailState.Error(
+                                    message = resultData.message ?: UNKNOWN_ERROR,
+                                )
+                        }
+                    } else {
+                        _state.value =
+                            DetailState.Error(
+                                message = resultData.message ?: UNKNOWN_ERROR,
+                            )
+                    }
                 }
+
                 is Resource.Success -> {
                     _state.value =
                         resultData.data?.let {
@@ -59,30 +77,13 @@ class DetailViewModel (
         inFavouritesLiveDataMutable.value = isFavourite
     }
 
-    private fun getVacancy(vacancy: ProfessionDetail): SearchVacancy {
-        val salary = Salary(
-            vacancy.salaryFrom?.toString(),
-            vacancy.salaryTo?.toString(),
-            CurrencyType.RUR,
-            gross = false
-        )
-        val employer = Employer(vacancy.employerId, vacancy.employerName)
-        return SearchVacancy(
-            id = vacancy.id,
-            name = vacancy.name,
-            salary = salary,
-            employer = employer,
-            logo = vacancy.employerLogo
-        )
-    }
-
-    private fun insertFavouriteVacancy(vacancy: SearchVacancy) {
+    private fun insertFavouriteVacancy(vacancy: ProfessionDetail) {
         viewModelScope.launch {
             favouritesInteractor.insertVacancy(vacancy)
         }
     }
 
-    private fun deleteFavouriteVacancy(vacancy: SearchVacancy) {
+    private fun deleteFavouriteVacancy(vacancy: ProfessionDetail) {
         viewModelScope.launch {
             favouritesInteractor.deleteVacancy(vacancy)
         }
@@ -90,8 +91,8 @@ class DetailViewModel (
 
     fun onFavouriteClick() {
         inFavouritesLiveDataMutable.value = !(inFavouritesLiveDataMutable.value ?: true)
-                if (state.value is DetailState.Success) {
-            val vacancy = getVacancy((state.value as DetailState.Success).data)
+        if (state.value is DetailState.Success) {
+            val vacancy = (state.value as DetailState.Success).data
             if (inFavouritesLiveDataMutable.value == true) {
                 insertFavouriteVacancy(vacancy)
             } else {

@@ -20,8 +20,6 @@ import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
-import ru.practicum.android.diploma.util.formattedNumber
-import ru.practicum.android.diploma.util.setSymbolByCurrency
 
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
@@ -64,7 +62,7 @@ class DetailFragment : Fragment() {
     private fun render(state: DetailState) {
         when (state) {
             is DetailState.Success -> {
-                setData(state.data)
+                setData(state.data, state.fromDb)
             }
 
             is DetailState.Error -> {
@@ -78,55 +76,28 @@ class DetailFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setData(professionDetail: ProfessionDetail) {
+    private fun setData(professionDetail: ProfessionDetail, fromDB: Boolean) {
         binding.vacancyName.text = professionDetail.name
-        val from = getString(R.string.from)
-        val to = getString(R.string.to)
-        val notSalary = getString(R.string.not_salary)
-        val description =
-            Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-        if (professionDetail.salaryFrom == null && professionDetail.salaryTo == null) {
-            binding.salary.text = notSalary
-        } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo == null) {
-            binding.salary.text =
-                "$from ${professionDetail.salaryFrom.formattedNumber()} ${
-                    setSymbolByCurrency(
-                        professionDetail.salaryCurrency
-                    )
-                }"
-        } else if (professionDetail.salaryFrom == null && professionDetail.salaryTo != null) {
-            binding.salary.text =
-                "$to ${professionDetail.salaryTo.formattedNumber()} ${
-                    setSymbolByCurrency(
-                        professionDetail.salaryCurrency
-                    )
-                }"
-        } else if (professionDetail.salaryFrom != null && professionDetail.salaryTo != null) {
-            binding.salary.text =
-                "$from ${professionDetail.salaryFrom.formattedNumber()} $to ${professionDetail.salaryTo.formattedNumber()} ${
-                    setSymbolByCurrency(
-                        professionDetail.salaryCurrency
-                    )
-                }"
-        }
+        binding.salary.text = professionDetail.salary?.getSalaryToTextView() ?: getString(R.string.not_salary)
 
-        binding.grExperience.isVisible = !professionDetail.experienceName.isNullOrEmpty()
-        binding.experience.text = professionDetail.experienceName.orEmpty()
+        binding.grExperience.isVisible = professionDetail.experience != null
+        binding.experience.text = professionDetail.experience?.name.orEmpty()
 
-        binding.employment.isVisible = !professionDetail.employmentName.isNullOrEmpty()
-        binding.employment.text = professionDetail.employmentName.orEmpty()
-        binding.employerName.text = professionDetail.employerName
-        binding.employerCity.text = professionDetail.employerCity.orEmpty()
+        binding.employment.isVisible = professionDetail.employment != null
+        binding.employment.text = professionDetail.employment?.name.orEmpty()
+        binding.employerName.text = professionDetail.employer?.name.orEmpty()
+        binding.employerCity.text = professionDetail.address.orEmpty()
 
         Glide
             .with(requireContext())
-            .load(professionDetail.employerLogo)
+            .load(professionDetail.employer?.logo)
             .placeholder(R.drawable.vacancy_item_search_placeholder)
             .into(binding.employerLogo)
 
         if (professionDetail.description != null && professionDetail.description != "...") {
             binding.grDescription.isVisible = true
-            binding.description.text = description
+            binding.description.text =
+                Html.fromHtml(professionDetail.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
         } else {
             binding.grDescription.isVisible = false
         }
@@ -156,6 +127,7 @@ class DetailFragment : Fragment() {
         binding.progress.isVisible = false
         binding.scroll.isVisible = true
         binding.phDetailsError.isVisible = false
+        binding.btSimilar.isVisible = !fromDB
     }
 
     private fun setDetailsContentListeners(professionDetail: ProfessionDetail) {
@@ -174,7 +146,7 @@ class DetailFragment : Fragment() {
         }
 
         binding.share.setOnClickListener {
-            actionShare(professionDetail.url)
+            professionDetail.url?.let { it1 -> actionShare(it1) }
         }
 
         binding.favorite.setOnClickListener {
@@ -187,14 +159,16 @@ class DetailFragment : Fragment() {
         intent.data = Uri.parse("mailto:${email}")
         try {
             startActivity(intent)
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     private fun actionDial(phoneNumber: String?) {
         val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${phoneNumber}"))
         try {
             startActivity(intent)
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     private fun actionShare(url: String) {

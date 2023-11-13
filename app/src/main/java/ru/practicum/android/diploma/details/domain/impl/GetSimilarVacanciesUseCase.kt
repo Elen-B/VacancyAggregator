@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
 import ru.practicum.android.diploma.details.domain.api.SimilarRepository
 import ru.practicum.android.diploma.util.Resource
 
-class SimilarInterActorImpl(
+class GetSimilarVacanciesUseCase(
     private val repository: SimilarRepository
 ): SimilarInterActor {
 
