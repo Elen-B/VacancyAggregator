@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.data.impl
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,6 +14,7 @@ import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 
@@ -25,14 +27,22 @@ class VacancySearchRepositoryImpl(
             val response = networkClient.doRequest(Request.VacancySearchRequest(option))
             when (response.resultCode) {
                 Response.RESULT_SUCCESS -> {
-                    emit(
-                        Resource.Success<VacancyState>(
-                            VacancyState.Content(
-                                (response as VacancySearchResponse).items.map { VacancyMapper.map(it) },
-                                (response as VacancySearchResponse).found
+                    if ((response as VacancySearchResponse).items.isEmpty()) {
+                        emit(Resource.Error<VacancyState>(VACANCY_ERROR))
+                    } else {
+                        emit(
+                            Resource.Success<VacancyState>(
+                                VacancyState.Content(
+                                    (response as VacancySearchResponse).items.map {
+                                        VacancyMapper.map(
+                                            it
+                                        )
+                                    },
+                                    (response as VacancySearchResponse).found
+                                )
                             )
                         )
-                    )
+                    }
                 }
 
                 Response.RESULT_NETWORK_ERROR -> emit(
@@ -41,13 +51,9 @@ class VacancySearchRepositoryImpl(
                     )
                 )
 
-                Response.RESULT_BAD_REQUEST -> emit(
-                    Resource.Error<VacancyState>(VACANCY_ERROR)
-                )
-
                 else -> emit(
                     Resource.Error<VacancyState>(
-                        UNKNOWN_ERROR
+                        SERVER_ERROR
                     )
                 )
             }

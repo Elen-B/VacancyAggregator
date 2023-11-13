@@ -14,8 +14,11 @@ import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
 import ru.practicum.android.diploma.search.presentation.FilterMapper
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.FIFTY
 import ru.practicum.android.diploma.util.NETWORK_ERROR
+import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
+import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.TEXT
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 import ru.practicum.android.diploma.util.debounce
@@ -50,7 +53,7 @@ class VacancySearchViewModel(
         } else if (latestSearchText == changedText && !forceButtonClick) {
             return
         }
-        val searchOption = hashMapOf<String, String>(TEXT to changedText)
+        val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to FIFTY)
         filterParameters?.let {
             searchOption.putAll(FilterMapper.getMap(it))
         }
@@ -88,14 +91,17 @@ class VacancySearchViewModel(
             vacancies.addAll(list)
         }
 
-
-        when {
-            message == NETWORK_ERROR -> {
+        when (message) {
+            NETWORK_ERROR -> {
                 renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
             }
 
-            message == VACANCY_ERROR && vacancies.isNullOrEmpty() -> {
+            VACANCY_ERROR -> {
                 renderState(VacancyState.Empty(message = VACANCY_ERROR))
+            }
+
+            SERVER_ERROR -> {
+                renderState(VacancyState.Error(errorMessage = SERVER_ERROR))
             }
 
             else -> {

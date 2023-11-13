@@ -22,6 +22,7 @@ import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
+import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
 
@@ -132,8 +133,13 @@ class SearchFragment : Fragment() {
 
     private fun showError(errorMessage: String) {
         hideKeyboard()
+        if(errorMessage == SERVER_ERROR){
+            binding.groupServerError.isVisible = true
+        }
+        else{
+            binding.groupConnectionError.isVisible = true
+        }
         binding.progressBar.visibility = View.GONE
-        binding.groupConnectionError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
     }
