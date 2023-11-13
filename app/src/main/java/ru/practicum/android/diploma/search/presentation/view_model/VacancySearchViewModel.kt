@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.TEXT
 import ru.practicum.android.diploma.util.VACANCY_ERROR
+import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchViewModel(
     private val searchInteractor: VacancySearchInteractor,
@@ -37,6 +38,10 @@ class VacancySearchViewModel(
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
     fun observeIconVisible(): LiveData<Boolean> = iconVisible
 
+    private val onClickDebounce =
+        debounce<Boolean>(SEARCH_DEBOUNCE_DELAY, viewModelScope, false) {
+            isClickAllowed = it
+        }
     fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
         if (changedText.isEmpty()) {
             searchJob?.cancel()
@@ -97,15 +102,11 @@ class VacancySearchViewModel(
             }
         }
     }
-
     fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            viewModelScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
+            onClickDebounce(true)
         }
         return current
     }
@@ -131,4 +132,5 @@ class VacancySearchViewModel(
     fun setVisibleCoverImage(isVisible: Boolean) {
         imageCoverIsVisible.postValue(isVisible)
     }
+
 }

@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.search.presentation.ui
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,10 +63,14 @@ class SearchFragment : Fragment() {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (binding.searchEditText.hasFocus()) {
-                binding.searchEditText.clearFocus()
-            } else {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+            try {
+                if (binding.searchEditText.hasFocus()) {
+                    binding.searchEditText.clearFocus()
+                } else {
+                    requireActivity().onBackPressedDispatcher.onBackPressed()
+                }
+            } catch (e: Exception) {
+               Log.i("Error",e.printStackTrace().toString())
             }
         }
 
