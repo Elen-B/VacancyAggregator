@@ -20,7 +20,7 @@
     </style>
 
     <style name="ErrorVacancyImage">
-        <item name="android:src">@drawable/error_vacancy_lm</item>
+        <item name="android:src">@drawable/error_show_cat</item>
     </style>
 
     <attr name="bottomNavigationViewBackground" format="color" />

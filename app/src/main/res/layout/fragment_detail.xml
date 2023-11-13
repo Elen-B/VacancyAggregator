@@ -123,7 +123,8 @@
                             android:id="@+id/employerLogo"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/vacancy_item_search_placeholder" />
+                            android:background="?attr/colorPrimary"
+                            android:src="@drawable/ic_logo" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -205,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginTop="@dimen/margin_32"
+                android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/vacancy_description"
 
                 app:layout_constraintTop_toBottomOf="@id/employment"
@@ -385,7 +386,7 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/comment"
                 style="@style/DetailsTextStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
@@ -404,6 +405,7 @@
             <Button
                 android:id="@+id/btSimilar"
                 style="@style/FilterBlueButtonStyle"
+                android:layout_marginTop="@dimen/margin_24"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
                 android:layout_marginBottom="@dimen/margin_24"

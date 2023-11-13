@@ -9,7 +9,7 @@
     </style>
 
     <style name="ErrorVacancyImage">
-        <item name="android:src">@drawable/error_vacancy_dm</item>
+        <item name="android:src">@drawable/error_show_cat</item>
     </style>
 
     <style name="ErrorServerImage">

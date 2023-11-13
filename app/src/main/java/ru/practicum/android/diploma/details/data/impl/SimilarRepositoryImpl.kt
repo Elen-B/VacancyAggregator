@@ -27,10 +27,10 @@ class SimilarRepositoryImpl(private val networkClient: NetworkClient): SimilarRe
                 errorImagePath = R.drawable.error_connection_lm)
             Response.RESULT_BAD_REQUEST -> Resource.Error(
                 message = R.string.vacancy_error.toString(),
-                errorImagePath = R.drawable.error_vacancy_dm)
+                errorImagePath = R.drawable.error_show_cat)
             else -> Resource.Error(
                 message = R.string.unknown_error.toString(),
-                errorImagePath = R.drawable.error_vacancy_dm)
+                errorImagePath = R.drawable.error_show_cat)
         }
     }
 }

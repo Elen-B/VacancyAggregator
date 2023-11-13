@@ -47,6 +47,14 @@ class DetailFragment : Fragment() {
             renderFavourite(isFavourite)
         }
 
+        viewModel.getShareVacancyTrigger().observe(viewLifecycleOwner) { url ->
+            actionShare(url)
+        }
+
+        viewModel.getShowSimilarVacanciesTrigger().observe(viewLifecycleOwner) { id ->
+            showSimilarVacancies(id)
+        }
+
         binding.back.setOnClickListener {
             view.findNavController().popBackStack()
         }
@@ -92,7 +100,7 @@ class DetailFragment : Fragment() {
         Glide
             .with(requireContext())
             .load(professionDetail.employer?.logo)
-            .placeholder(R.drawable.vacancy_item_search_placeholder)
+            .placeholder(R.drawable.ic_logo)
             .into(binding.employerLogo)
 
         if (professionDetail.description != null && professionDetail.description != "...") {
@@ -141,13 +149,11 @@ class DetailFragment : Fragment() {
         }
 
         binding.btSimilar.setOnClickListener {
-            val bundle = bundleOf(VACANCY_ID to professionDetail.id)
-            view?.findNavController()
-                ?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
+            viewModel.showSimilarVacancies(professionDetail.id)
         }
 
         binding.share.setOnClickListener {
-            professionDetail.url?.let { it1 -> actionShare(it1) }
+            professionDetail.url?.let { url -> viewModel.shareVacancy(url) }
         }
 
         binding.favorite.setOnClickListener {
@@ -185,6 +191,12 @@ class DetailFragment : Fragment() {
             )
         } catch (_: Exception) {
         }
+    }
+
+    private fun showSimilarVacancies(id: String) {
+        val bundle = bundleOf(VACANCY_ID to id)
+        view?.findNavController()
+            ?.navigate(R.id.action_detailFragment_to_similarFragment, bundle)
     }
 
     private fun showProgress() {
