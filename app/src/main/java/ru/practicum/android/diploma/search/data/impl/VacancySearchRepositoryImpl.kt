@@ -1,21 +1,19 @@
 package ru.practicum.android.diploma.search.data.impl
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.core.data.mapper.VacancyMapper
-import ru.practicum.android.diploma.core.network.NetworkClient
-import ru.practicum.android.diploma.core.network.dto.Request
-import ru.practicum.android.diploma.core.network.dto.Response
+import ru.practicum.android.diploma.core.data.network.api.NetworkClient
+import ru.practicum.android.diploma.core.data.network.dto.Request
+import ru.practicum.android.diploma.core.data.network.dto.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.SERVER_ERROR
-import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
 
 class VacancySearchRepositoryImpl(
@@ -28,7 +26,7 @@ class VacancySearchRepositoryImpl(
             when (response.resultCode) {
                 Response.RESULT_SUCCESS -> {
                     if ((response as VacancySearchResponse).items.isEmpty()) {
-                        emit(Resource.Error<VacancyState>(VACANCY_ERROR))
+                        emit(Resource.Error<VacancyState>(VACANCY_ERROR,VacancyState.Empty(VACANCY_ERROR)))
                     } else {
                         emit(
                             Resource.Success<VacancyState>(
@@ -47,13 +45,13 @@ class VacancySearchRepositoryImpl(
 
                 Response.RESULT_NETWORK_ERROR -> emit(
                     Resource.Error<VacancyState>(
-                        NETWORK_ERROR
+                        NETWORK_ERROR,VacancyState.VacancyError(NETWORK_ERROR)
                     )
                 )
 
                 else -> emit(
                     Resource.Error<VacancyState>(
-                        SERVER_ERROR
+                                SERVER_ERROR,VacancyState.ServerError(SERVER_ERROR)
                     )
                 )
             }

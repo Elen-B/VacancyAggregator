@@ -1,5 +1,10 @@
 package ru.practicum.android.diploma.core.domain.models
 
+import ru.practicum.android.diploma.util.COMMA
+import ru.practicum.android.diploma.util.FROM
+import ru.practicum.android.diploma.util.SALARY_NOT_SPECIFIED
+import ru.practicum.android.diploma.util.SPACE
+import ru.practicum.android.diploma.util.TO
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -9,19 +14,19 @@ data class Salary(
     val currency: Currency,
     val gross: Boolean = false
 ){
-    fun getSalaryToTextView(): String{
+    fun getSalaryToText(): String{
         val text = StringBuilder()
         if(from == null && to == null){
-            text.append("Зарплата не указана")
+            text.append(SALARY_NOT_SPECIFIED)
         }
         else if(from == null){
-            text.append("до ${spacedNumber(to)} ${currency.symbol}")
+            text.append("$FROM ${spacedNumber(to)} ${currency.symbol}")
         }
         else if(to == null){
-            text.append("от ${spacedNumber(from)} ${currency.symbol}")
+            text.append("$FROM ${spacedNumber(from)} ${currency.symbol}")
         }
         else{
-            text.append("от ${spacedNumber(from)} до ${spacedNumber(to)} ${currency.symbol}")
+            text.append("$FROM ${spacedNumber(from)} $TO ${spacedNumber(to)} ${currency.symbol}")
         }
         return text.toString()
     }
@@ -30,6 +35,6 @@ data class Salary(
         val numberFormat = NumberFormat.getNumberInstance(Locale.US)
         return numberFormat
             .format(value)
-            .replace(","," ")
+            .replace(COMMA,SPACE)
     }
 }

@@ -22,6 +22,6 @@ class SimilarHolder (private val binding: ItemSimilarBinding):
             item.name
         }
         binding.nameSimilarEmployer.text = item.employer?.name.orEmpty()
-        binding.salarySimilar.text = item.salary?.getSalaryToTextView().orEmpty()
+        binding.salarySimilar.text = item.salary?.getSalaryToText().orEmpty()
     }
 }

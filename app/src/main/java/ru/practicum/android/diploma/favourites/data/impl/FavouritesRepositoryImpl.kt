@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.favourites.data.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import ru.practicum.android.diploma.core.db.AppDatabase
+import ru.practicum.android.diploma.core.data.db.AppDatabase
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.favourites.data.mapper.EmployerDbMapper
 import ru.practicum.android.diploma.favourites.data.mapper.EmploymentDbMapper

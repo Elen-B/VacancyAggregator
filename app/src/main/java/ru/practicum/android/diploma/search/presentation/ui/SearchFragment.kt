@@ -132,7 +132,8 @@ class SearchFragment : Fragment() {
         when (state) {
             is VacancyState.Content -> showContent(state.vacancy, state.count)
             is VacancyState.Empty -> showEmpty(state.message)
-            is VacancyState.Error -> showError(state.errorMessage)
+            is VacancyState.ServerError -> showError(state.errorMessage)
+            is VacancyState.VacancyError -> showError(state.errorMessage)
             is VacancyState.Loading -> showLoading()
         }
     }

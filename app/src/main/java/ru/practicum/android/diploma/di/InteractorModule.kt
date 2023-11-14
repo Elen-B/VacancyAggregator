@@ -16,29 +16,28 @@ import ru.practicum.android.diploma.search.domain.impl.VacancySearchInteractorIm
 
 import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 
-
 val interactorModule = module {
-    single <DetailsInterActor> {
+    factory<DetailsInterActor> {
         GetVacancyDetailsUseCase(get())
     }
 
-    single <FilterInteractor> {
+    factory<FilterInteractor> {
         FilterInteractorImpl(get())
     }
 
-    single <VacancySearchInteractor> {
+    factory<VacancySearchInteractor> {
         VacancySearchInteractorImpl(get())
     }
 
-    single<FavouritesInteractor>{
+    factory<FavouritesInteractor> {
         FavouritesInteractorImpl(get())
     }
 
-    single<FilterLocalInteractor> {
+    factory<FilterLocalInteractor> {
         FilterLocalInteractorImpl(get())
     }
 
-    single <SimilarInterActor> {
+    factory<SimilarInterActor> {
         GetSimilarVacanciesUseCase(get())
     }
 }

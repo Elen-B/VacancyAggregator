@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.favourites.data.mapper
 
-import ru.practicum.android.diploma.core.db.entity.ExperienceEntity
+import ru.practicum.android.diploma.core.data.db.entity.ExperienceEntity
 import ru.practicum.android.diploma.core.domain.models.Experience
 
 object ExperienceDbMapper {

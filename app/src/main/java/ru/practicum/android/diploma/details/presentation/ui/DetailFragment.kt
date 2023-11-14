@@ -87,7 +87,7 @@ class DetailFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setData(professionDetail: ProfessionDetail, fromDB: Boolean) {
         binding.vacancyName.text = professionDetail.name
-        binding.salary.text = professionDetail.salary?.getSalaryToTextView() ?: getString(R.string.not_salary)
+        binding.salary.text = professionDetail.salary?.getSalaryToText() ?: getString(R.string.not_salary)
 
         binding.grExperience.isVisible = professionDetail.experience != null
         binding.experience.text = professionDetail.experience?.name.orEmpty()

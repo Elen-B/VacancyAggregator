@@ -27,6 +27,6 @@ class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
         name.text = model.name
         employer.text = model.employer?.name
-        salary.text = model.salary?.getSalaryToTextView()
+        salary.text = model.salary?.getSalaryToText()
     }
 }

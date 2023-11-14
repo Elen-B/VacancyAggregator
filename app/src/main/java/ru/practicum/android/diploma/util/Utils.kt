@@ -19,6 +19,10 @@ const val AREA = "area"
 const val SALARY = "salary"
 const val INDUSTRY = "industry"
 const val ONLY_WITH_SALARY = "only_with_salary"
+const val FROM = "от"
+const val TO = "до"
+const val SPACE = " "
+const val COMMA = ","
 
 
 const val BASE_URL = "https://api.hh.ru/"

@@ -31,7 +31,7 @@ class SearchVacancyViewHolder(
             .into(logView)
         nameView.text = "${vacancy.name}, ${vacancy.area?.name}"
         employerView.text = vacancy.employer?.name
-        salaryView.text = vacancy.salary?.getSalaryToTextView() ?: SALARY_NOT_SPECIFIED
+        salaryView.text = vacancy.salary?.getSalaryToText() ?: SALARY_NOT_SPECIFIED
         itemView.setOnClickListener { clickListener.onVacancyClick(vacancy) }
     }
 }
