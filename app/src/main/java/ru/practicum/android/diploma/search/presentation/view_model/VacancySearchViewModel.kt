@@ -137,8 +137,8 @@ class VacancySearchViewModel(
 
     fun isFilterButtonEnable() {
         viewModelScope.launch {
-            delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
+            filterMap.clear()
             filterParameters?.toHashMap()?.let { filterMap.putAll(it) }
             isFiltered.postValue(filterParameters != null)
         }
