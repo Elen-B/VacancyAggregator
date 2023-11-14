@@ -22,12 +22,11 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
         return withContext(Dispatchers.IO) {
             try {
                 processRequest(dto).apply {
-                    if(resultCode == 0){
-                        resultCode = Response.RESULT_SUCCESS }
+                    if (resultCode == 0) {
+                        resultCode = Response.RESULT_SUCCESS
+                    }
                 }
-            }
-            catch(e: Exception) {
-
+            } catch (e: Exception) {
                 Response().apply { resultCode = Response.RESULT_BAD_REQUEST }
             }
         }
@@ -40,7 +39,12 @@ class RetrofitNetworkClient(private val hhunterApiService: HhunterApi, val conte
             is Request.CountryRequest -> AreaListTreeResponse(hhunterApiService.getAreas())
             is Request.IndustryTreeRequest -> IndustryListTreeResponse(hhunterApiService.getIndustries())
             is Request.VacancySearchRequest -> hhunterApiService.getVacancyList(dto.option)
-            is Request.VacancyDetailsRequest -> DetailVacancyResponse(hhunterApiService.getDetail(dto.id))
+            is Request.VacancyDetailsRequest -> DetailVacancyResponse(
+                hhunterApiService.getDetail(
+                    dto.id
+                )
+            )
+
             is Request.SimilarVacancyRequest -> hhunterApiService.getSimilarVacancies(dto.id)
         }
     }

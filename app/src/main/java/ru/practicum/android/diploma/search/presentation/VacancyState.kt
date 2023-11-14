@@ -1,13 +1,14 @@
 package ru.practicum.android.diploma.search.presentation
 
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.core.domain.models.Vacancy
 
 sealed interface VacancyState {
 
     object Loading : VacancyState
 
     data class Content(
-        val vacancy: List<SearchVacancy>
+        val vacancy: List<Vacancy>,
+        val count: String
     ) : VacancyState
 
     data class Error(

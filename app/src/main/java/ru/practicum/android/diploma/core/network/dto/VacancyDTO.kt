@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.core.network.dto
 
 import com.google.gson.annotations.SerializedName
-import ru.practicum.android.diploma.search.domain.models.CurrencyType
+import java.util.Currency
 
 data class VacancyDTO(
     val id: String?,
@@ -14,7 +14,7 @@ data class VacancyDTO(
 data class SalaryDTO(
     val from: String?,
     val to: String?,
-    val currency: CurrencyType?,
+    val currency: String?,
     val gross: Boolean = false
 )
 

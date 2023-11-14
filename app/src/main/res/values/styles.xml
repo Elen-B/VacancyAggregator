@@ -15,6 +15,10 @@
         <item name="android:src">@drawable/error_connection_lm</item>
     </style>
 
+    <style name="ErrorServerImage">
+        <item name="android:src">@drawable/server_error_lm</item>
+    </style>
+
     <style name="ErrorVacancyImage">
         <item name="android:src">@drawable/error_show_cat</item>
     </style>

@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
 import ru.practicum.android.diploma.details.presentation.state.SimilarState
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.VACANCY_ID
 
 class SimilarViewModel (
     private val similarInterActor: SimilarInterActor,
@@ -23,7 +24,7 @@ class SimilarViewModel (
 
     private fun getData() {
         viewModelScope.launch {
-            val id = savedStateHandle.get<String>("id_vacancy") ?: return@launch
+            val id = savedStateHandle.get<String>(VACANCY_ID) ?: return@launch
             when (val resultData = similarInterActor.getSimilarVacancies(id = id)) {
                 is Resource.Error -> {
                     _state.value =
