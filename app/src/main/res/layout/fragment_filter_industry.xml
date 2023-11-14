@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btTopBarBack"
+            style="@style/FilterBackImageButtonStyle"
+            android:layout_marginVertical="@dimen/margin_8"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/tvTopBarTitle"
+            style="@style/FilterTopBarTextStyle"
+            android:layout_marginStart="@dimen/margin_8"
+            android:text="@string/industry_topbar_header"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edIndustrySearch"
+        style="@style/FilterRegionEditTextSyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/industry_edittext_hint"
+        android:importantForAutofill="no"
+
+        app:layout_constraintTop_toBottomOf="@id/topLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/ibtIndustrySearch"
+        android:layout_width="@dimen/filter_edittext_image_size"
+        android:layout_height="@dimen/filter_edittext_image_size"
+        android:src="@drawable/icon_search"
+        android:background="?attr/colorSecondary"
+        android:layout_marginEnd="@dimen/margin_4"
+        app:layout_constraintBottom_toBottomOf="@id/edIndustrySearch"
+        app:layout_constraintEnd_toEndOf="@id/edIndustrySearch"
+        app:layout_constraintTop_toTopOf="@id/edIndustrySearch"
+        android:contentDescription="@string/search_content_description"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvIndustryList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_8"
+        tools:listitem="@layout/filter_industry_view"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+
+        app:layout_constraintTop_toBottomOf="@id/edIndustrySearch"
+        app:layout_constraintBottom_toTopOf="@id/btFilterChoose"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/btFilterChoose"
+        style="@style/FilterBlueButtonStyle"
+        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginBottom="@dimen/margin_24"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginEnd="@dimen/margin_16"
+        android:text="@string/filter_button_choose"
+        android:visibility="gone"
+
+        app:layout_constraintTop_toBottomOf="@id/rvIndustryList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/phFilterEmpty"
+        style="@style/FilterPlaceHolderTextViewStyle"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="@string/error_industry_message"
+        app:drawableTopCompat="@drawable/error_filter"
+
+        app:layout_constraintTop_toBottomOf="@id/edIndustrySearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/phFilterError"
+        style="@style/FilterPlaceHolderTextViewStyle"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:text="@string/error_connection_message"
+        app:drawableTopCompat="@drawable/error_connection_filter"
+
+        app:layout_constraintTop_toBottomOf="@id/edIndustrySearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

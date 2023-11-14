@@ -1,3 +1,69 @@
 <resources>
-    <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="app_name">VacancyAggregator</string>
+    <string name="command">Команда</string>
+    <string name="favorite">Избранное</string>
+    <string name="main">Главная</string>
+
+    <!-- search section -->
+    <string name="vacancy_search">Поиск вакансий</string>
+    <string name="enter_request">Введите запрос</string>
+    <string name="network_error">Нет интернета</string>
+    <string name="vacancy_error">Не удалось получить список вакансий</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="text">Text</string>
+    <string name="foundVacancies">Найдено %1$s вакансий</string>
+
+
+    <!-- filter section -->
+    <string name="filter_topbar_header">Настройки фильтрации</string>
+    <string name="filter_location">Место работы</string>
+    <string name="filter_industry">Отрасль</string>
+    <string name="filter_salary_label">Ожидаемая зарплата</string>
+    <string name="filter_salary_hint">Введите сумму</string>
+    <string name="filter_salary_required">Не показывать без зарплаты</string>
+    <string name="filter_button_apply">Применить</string>
+    <string name="filter_button_clear">Сбросить</string>
+    <string name="filter_button_choose">Выбрать</string>
+    <string name="location_topbar_header">Выбор места работы</string>
+    <string name="location_country">Страна</string>
+    <string name="location_region">Регион</string>
+    <string name="country_topbar_header">Выбор страны</string>
+    <string name="region_topbar_header">Выбор региона</string>
+    <string name="region_edittext_hint">Введите регион</string>
+    <string name="error_region_message">Такого региона нет</string>
+    <string name="error_connection_message">Не удалось получить\nсписок</string>
+    <string name="search_content_description">Найти/Очистить</string>
+    <string name="industry_topbar_header">Выбор отрасли</string>
+    <string name="industry_edittext_hint">Введите отрасль</string>
+    <string name="error_industry_message">Такой отрасли нет</string>
+
+    <!-- details section -->
+    <string name="vacancy_name">vacancy name</string>
+    <string name="employer_name">Кировское районное отделение судебных приставов</string>
+    <string name="from">от</string>
+    <string name="to">до</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy">Вакансия</string>
+    <string name="not_salary">Зарплата не указана</string>
+    <string name="vacancy_description">Описание вакансии</string>
+    <string name="key_skills">Ключевые навыки</string>
+
+
+    <!--team section -->
+    <string name="team_topbar_header">Команда</string>
+    <string name="team_main_title">Над приложением работали</string>
+    <string name="team_developer_1">Василий</string>
+    <string name="team_developer_2">Дмитрий</string>
+    <string name="team_developer_3">Елена</string>
+    <string name="team_developer_4">Савелий</string>
+    <string name="list_empty">Список пуст</string>
+    <string name="no_list">Не удалось получить\nсписок вакансий</string>
+    <string name="contacts">Контакты</string>
+    <string name="contact_name">Контактное лицо</string>
+    <string name="e_mail">E-mail</string>
+    <string name="phone">Телефон</string>
+    <string name="comment">Комментарий</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="similar_vacancies">Похожие вакансии</string>
 </resources>
