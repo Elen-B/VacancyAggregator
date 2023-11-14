@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,10 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
@@ -74,9 +71,6 @@ class SearchFragment : Fragment() {
             // example: viewModel.forceSearch(filterParameters)
         }
 
-        viewModel.observeFoundVacanciesCount().observe(viewLifecycleOwner) {
-            binding.textVacancyCount.setText(getString(R.string.foundVacancies, it))
-        }
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
             if (isFilterEnable)
                 binding.imageFilter.setImageResource(R.drawable.image_filter_active)
