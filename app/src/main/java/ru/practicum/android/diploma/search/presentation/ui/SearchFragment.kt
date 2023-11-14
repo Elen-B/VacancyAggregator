@@ -21,6 +21,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
@@ -68,7 +69,7 @@ class SearchFragment : Fragment() {
                 } else {
                     bundle.getParcelable(FilterFragment.FILTER_RESULT_VAL)
                 }
-            // example: viewModel.forceSearch(filterParameters)
+             viewModel.forceSearch(filterParameters)
         }
 
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->

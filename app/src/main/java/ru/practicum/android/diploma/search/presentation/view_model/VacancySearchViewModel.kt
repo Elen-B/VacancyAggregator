@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
 import ru.practicum.android.diploma.search.presentation.FilterMapper
 import ru.practicum.android.diploma.search.presentation.VacancyState
@@ -36,6 +37,7 @@ class VacancySearchViewModel(
     private val isFiltered = MutableLiveData<Boolean>(false)
     private val iconVisible = MutableLiveData<Boolean>()
     private val imageCoverIsVisible = MutableLiveData<Boolean>()
+    private val filterMap = HashMap<String,String>()
     fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
@@ -54,9 +56,7 @@ class VacancySearchViewModel(
             return
         }
         val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to FIFTY)
-        filterParameters?.let {
-            searchOption.putAll(FilterMapper.getMap(it))
-        }
+        searchOption.putAll(filterMap)
         latestSearchText = changedText
 
         searchJob?.cancel()
@@ -128,6 +128,14 @@ class VacancySearchViewModel(
         stateLiveData.postValue(state)
     }
 
+    fun setFocus(textIsEmpty: Boolean) {
+        iconVisible.postValue(textIsEmpty)
+    }
+
+    fun setVisibleCoverImage(isVisible: Boolean) {
+        imageCoverIsVisible.postValue(isVisible)
+    }
+
     fun isFilterButtonEnable() {
         viewModelScope.launch {
             delay(CLICK_DEBOUNCE_DELAY)
@@ -138,12 +146,9 @@ class VacancySearchViewModel(
 
     fun getFilter(): FilterParameters? = filterParameters
 
-    fun setFocus(textIsEmpty: Boolean) {
-        iconVisible.postValue(textIsEmpty)
+    fun forceSearch(filterParameters: FilterParameters?){
+        filterMap.clear()
+        filterParameters?.let { filterMap.putAll(it.toHashMap()) }
+        latestSearchText?.let { searchDebounce(it,true) }
     }
-
-    fun setVisibleCoverImage(isVisible: Boolean) {
-        imageCoverIsVisible.postValue(isVisible)
-    }
-
 }
