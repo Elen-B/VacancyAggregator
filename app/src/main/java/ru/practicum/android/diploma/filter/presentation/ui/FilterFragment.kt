@@ -139,6 +139,12 @@ class FilterFragment : Fragment() {
         }
 
         binding.btTopBarBack.setOnClickListener {
+            setFragmentResult(
+                FILTER_RESULT_KEY,
+                bundleOf(
+                    FILTER_RESULT_VAL to null
+                )
+            )
             findNavController().navigateUp()
         }
 

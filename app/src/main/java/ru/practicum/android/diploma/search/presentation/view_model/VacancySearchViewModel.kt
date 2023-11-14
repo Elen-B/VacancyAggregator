@@ -42,6 +42,10 @@ class VacancySearchViewModel(
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
     fun observeIconVisible(): LiveData<Boolean> = iconVisible
 
+    init {
+        isFilterButtonEnable()
+    }
+
     private val onClickDebounce =
         debounce<Boolean>(SEARCH_DEBOUNCE_DELAY, viewModelScope, false) {
             isClickAllowed = it
@@ -137,9 +141,11 @@ class VacancySearchViewModel(
 
     fun isFilterButtonEnable() {
         viewModelScope.launch {
-            delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
-            filterParameters?.toHashMap()?.let { filterMap.putAll(it) }
+            filterMap.clear()
+            filterParameters?.toHashMap()?.let {
+                filterMap.putAll(it)
+            }
             isFiltered.postValue(filterParameters != null)
         }
     }

@@ -68,7 +68,9 @@ class SearchFragment : Fragment() {
                 } else {
                     bundle.getParcelable(FilterFragment.FILTER_RESULT_VAL)
                 }
-            viewModel.forceSearch(filterParameters)
+            viewModel.isFilterButtonEnable()
+            if (filterParameters != null)
+                viewModel.forceSearch(filterParameters)
         }
 
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
@@ -191,11 +193,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.isFilterButtonEnable()
     }
 
     fun hideKeyboard() {
