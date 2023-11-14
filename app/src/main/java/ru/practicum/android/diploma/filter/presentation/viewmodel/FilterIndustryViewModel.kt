@@ -37,11 +37,11 @@ class FilterIndustryViewModel(
     private fun loadData() {
         viewModelScope.launch {
             val result = filterInteractor.getIndustries()
-            if (result.second != null) {
+            if (result.isError) {
                 setState(FilterIndustryScreenState.Error)
             } else {
-                if (result.first != null) {
-                    originalList.addAll(result.first!!)
+                if (result.data != null) {
+                    originalList.addAll(result.data)
                     setState(FilterIndustryScreenState.Content(originalList, checkedIndustry))
                 } else {
                     setState(FilterIndustryScreenState.Empty)

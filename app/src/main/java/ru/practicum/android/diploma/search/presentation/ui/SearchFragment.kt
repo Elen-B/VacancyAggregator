@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +20,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
@@ -53,6 +57,19 @@ class SearchFragment : Fragment() {
 
         binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = adapter
+
+        setFragmentResultListener(FilterFragment.FILTER_RESULT_KEY) { _, bundle ->
+            val filterParameters: FilterParameters? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    bundle.getParcelable(
+                        FilterFragment.FILTER_RESULT_VAL,
+                        FilterParameters::class.java
+                    )
+                } else {
+                    bundle.getParcelable(FilterFragment.FILTER_RESULT_VAL)
+                }
+            // example: viewModel.forceSearch(filterParameters)
+        }
 
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
             if (isFilterEnable)

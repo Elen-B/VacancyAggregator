@@ -20,11 +20,11 @@ class LocationCountryViewModel(private val filterInteractor: FilterInteractor): 
     private fun loadData() {
         viewModelScope.launch {
             val result = filterInteractor.getCountries()
-            if (!result.second.isNullOrEmpty()) {
+            if (result.isError) {
                 setState(LocationCountryScreenState.Error)
             } else {
-                if (result.first != null) {
-                    setState(LocationCountryScreenState.Content(result.first!!))
+                if (result.data != null) {
+                    setState(LocationCountryScreenState.Content(result.data))
                 } else {
                     setState(LocationCountryScreenState.Error)
                 }
