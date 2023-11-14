@@ -21,7 +21,6 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
@@ -69,7 +68,7 @@ class SearchFragment : Fragment() {
                 } else {
                     bundle.getParcelable(FilterFragment.FILTER_RESULT_VAL)
                 }
-             viewModel.forceSearch(filterParameters)
+            viewModel.forceSearch(filterParameters)
         }
 
         viewModel.observeisFiltered().observe(viewLifecycleOwner) { isFilterEnable ->
@@ -151,10 +150,9 @@ class SearchFragment : Fragment() {
 
     private fun showError(errorMessage: String) {
         hideKeyboard()
-        if(errorMessage == SERVER_ERROR){
+        if (errorMessage == SERVER_ERROR) {
             binding.groupServerError.isVisible = true
-        }
-        else{
+        } else {
             binding.groupConnectionError.isVisible = true
         }
         binding.progressBar.visibility = View.GONE

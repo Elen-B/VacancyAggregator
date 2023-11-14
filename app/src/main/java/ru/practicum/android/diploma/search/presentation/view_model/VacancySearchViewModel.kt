@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
-import ru.practicum.android.diploma.search.presentation.FilterMapper
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.FIFTY
@@ -140,6 +139,7 @@ class VacancySearchViewModel(
         viewModelScope.launch {
             delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
+            filterParameters?.toHashMap()?.let { filterMap.putAll(it) }
             isFiltered.postValue(filterParameters != null)
         }
     }
@@ -147,8 +147,9 @@ class VacancySearchViewModel(
     fun getFilter(): FilterParameters? = filterParameters
 
     fun forceSearch(filterParameters: FilterParameters?){
-        filterMap.clear()
-        filterParameters?.let { filterMap.putAll(it.toHashMap()) }
+        filterParameters?.let {
+            filterMap.clear()
+            filterMap.putAll(it.toHashMap()) }
         latestSearchText?.let { searchDebounce(it,true) }
     }
 }
