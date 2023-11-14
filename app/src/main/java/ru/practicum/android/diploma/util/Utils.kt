@@ -15,6 +15,11 @@ const val PER_PAGE = "per_page"
 const val FIFTY = "50"
 const val TEXT = "text"
 const val FOUND = "found"
+const val AREA = "area"
+const val SALARY = "salary"
+const val INDUSTRY = "industry"
+const val ONLY_WITH_SALARY = "only_with_salary"
+
 
 const val BASE_URL = "https://api.hh.ru/"
 
