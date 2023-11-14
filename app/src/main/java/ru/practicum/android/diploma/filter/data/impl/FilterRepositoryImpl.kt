@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.filter.data.impl
 
-import ru.practicum.android.diploma.core.network.NetworkClient
-import ru.practicum.android.diploma.core.network.dto.Request
-import ru.practicum.android.diploma.core.network.dto.Response
+import ru.practicum.android.diploma.core.data.network.api.NetworkClient
+import ru.practicum.android.diploma.core.data.network.dto.Request
+import ru.practicum.android.diploma.core.data.network.dto.Response
 import ru.practicum.android.diploma.filter.data.dto.AreaListTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.AreaTreeResponse
 import ru.practicum.android.diploma.filter.data.dto.IndustryListTreeResponse

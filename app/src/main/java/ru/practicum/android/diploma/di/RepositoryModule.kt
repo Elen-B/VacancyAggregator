@@ -31,7 +31,7 @@ val repositoryModule = module {
         FavouritesRepositoryImpl(get())
     }
 
-    single<FilterLocalRepository> {
+    factory <FilterLocalRepository> {
         FilterLocalRepositoryImpl(get(), get())
     }
 

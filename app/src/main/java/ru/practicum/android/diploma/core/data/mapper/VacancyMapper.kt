@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.core.data.mapper
 
 import ru.practicum.android.diploma.core.domain.models.Vacancy
-import ru.practicum.android.diploma.core.network.dto.VacancyDTO
+import ru.practicum.android.diploma.core.data.network.dto.VacancyDTO
 
 object VacancyMapper {
     fun map(vacancyDTO: VacancyDTO): Vacancy {

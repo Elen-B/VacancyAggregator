@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
@@ -77,43 +78,7 @@ class VacancySearchViewModel(
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancy(searchOptions)
-                    .collect() {
-                        processResult(it.data, it.message)
-                    }
-            }
-        }
-    }
-
-    private fun processResult(
-        vacancyState: VacancyState?,
-        message: String?
-    ) {
-        val vacancies = mutableListOf<Vacancy>()
-        vacancyState?.let {
-            val list = (vacancyState as VacancyState.Content).vacancy
-            vacancies.addAll(list)
-        }
-
-        when (message) {
-            NETWORK_ERROR -> {
-                renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
-            }
-
-            VACANCY_ERROR -> {
-                renderState(VacancyState.Empty(message = VACANCY_ERROR))
-            }
-
-            SERVER_ERROR -> {
-                renderState(VacancyState.Error(errorMessage = SERVER_ERROR))
-            }
-
-            else -> {
-                renderState(
-                    VacancyState.Content(
-                        vacancy = vacancies,
-                        (vacancyState as VacancyState.Content).count
-                    )
-                )
+                    .first().data?.let { renderState(it) }
             }
         }
     }

@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.favourites.data.mapper
 
-import ru.practicum.android.diploma.core.db.entity.EmployerEntity
-import ru.practicum.android.diploma.core.db.entity.EmploymentEntity
-import ru.practicum.android.diploma.core.db.entity.ExperienceEntity
-import ru.practicum.android.diploma.core.db.entity.VacancyEntity
+import ru.practicum.android.diploma.core.data.db.entity.EmployerEntity
+import ru.practicum.android.diploma.core.data.db.entity.EmploymentEntity
+import ru.practicum.android.diploma.core.data.db.entity.ExperienceEntity
+import ru.practicum.android.diploma.core.data.db.entity.VacancyEntity
 import ru.practicum.android.diploma.core.domain.models.Currency
 import ru.practicum.android.diploma.core.domain.models.Salary
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail

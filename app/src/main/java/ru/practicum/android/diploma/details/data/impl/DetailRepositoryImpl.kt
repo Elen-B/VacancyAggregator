@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.details.data.impl
 
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.core.network.NetworkClient
-import ru.practicum.android.diploma.core.network.dto.Request
-import ru.practicum.android.diploma.core.network.dto.Response
+import ru.practicum.android.diploma.core.data.network.api.NetworkClient
+import ru.practicum.android.diploma.core.data.network.dto.Request
+import ru.practicum.android.diploma.core.data.network.dto.Response
 import ru.practicum.android.diploma.details.data.dto.DetailVacancyResponse
 import ru.practicum.android.diploma.details.data.mapper.mapToProfessionDetail
 import ru.practicum.android.diploma.details.domain.api.DetailRepository

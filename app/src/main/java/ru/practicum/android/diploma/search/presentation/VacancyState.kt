@@ -11,9 +11,14 @@ sealed interface VacancyState {
         val count: String
     ) : VacancyState
 
-    data class Error(
+    data class VacancyError(
         val errorMessage: String
     ) : VacancyState
+
+    data class ServerError(
+        val errorMessage: String
+    ) : VacancyState
+
 
     data class Empty(
         val message: String
