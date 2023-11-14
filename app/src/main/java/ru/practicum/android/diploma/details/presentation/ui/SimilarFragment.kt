@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSimilarBinding
 import ru.practicum.android.diploma.details.presentation.state.SimilarState
 import ru.practicum.android.diploma.details.presentation.viewmodel.SimilarViewModel
+import ru.practicum.android.diploma.util.VACANCY_ID
 
 class SimilarFragment : Fragment() {
     private var _binding: FragmentSimilarBinding? = null
@@ -80,7 +81,7 @@ class SimilarFragment : Fragment() {
         val stateClickListener: SimilarAdapter.OnStateClickListener =
             object : SimilarAdapter.OnStateClickListener {
                 override fun onStateClick(item: Vacancy, position: Int) {
-                    val bundle = bundleOf("id" to item.id)
+                    val bundle = bundleOf(VACANCY_ID to item.id)
                     view?.findNavController()
                         ?.navigate(R.id.action_similarFragment_to_detailFragment, bundle)
                 }
