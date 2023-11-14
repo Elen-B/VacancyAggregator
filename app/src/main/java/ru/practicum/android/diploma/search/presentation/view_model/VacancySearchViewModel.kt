@@ -143,9 +143,7 @@ class VacancySearchViewModel(
         viewModelScope.launch {
             filterParameters = filterInteractor.getFilterParameters()
             filterMap.clear()
-            filterParameters?.toHashMap()?.let {
-                filterMap.putAll(it)
-            }
+            filterParameters?.toHashMap()?.let { filterMap.putAll(it) }
             isFiltered.postValue(filterParameters != null)
         }
     }
