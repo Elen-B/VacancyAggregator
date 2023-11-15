@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -18,12 +19,13 @@ class SearchVacancyViewHolder(
 ) {
 
 
-    var logView: ImageView = itemView.findViewById(R.id.image_placeholder)
-    var nameView: TextView = itemView.findViewById(R.id.text_header)
-    var employerView: TextView = itemView.findViewById(R.id.text_description)
-    var salaryView: TextView = itemView.findViewById(R.id.text_salary)
+    private var logView: ImageView = itemView.findViewById(R.id.image_placeholder)
+    private var nameView: TextView = itemView.findViewById(R.id.text_header)
+    private var employerView: TextView = itemView.findViewById(R.id.text_description)
+    private var salaryView: TextView = itemView.findViewById(R.id.text_salary)
 
 
+    @SuppressLint("SetTextI18n")
     fun bind(vacancy: Vacancy) {
         Glide.with(itemView)
             .load(vacancy.employer?.logo)

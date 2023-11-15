@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.favourites.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -18,6 +19,7 @@ class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val salary: TextView = itemView.findViewById(R.id.text_salary)
     private val logo: ImageView = itemView.findViewById(R.id.image_placeholder)
 
+    @SuppressLint("SetTextI18n")
     fun bind(model: ProfessionDetail) {
         Glide
             .with(itemView)
@@ -25,7 +27,7 @@ class FavouritesVacancyHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .placeholder(R.drawable.ic_logo)
             .into(logo)
 
-        name.text = model.name
+        name.text = "${model.name}, ${model.address.orEmpty()}"
         employer.text = model.employer?.name
         salary.text = model.salary?.getSalaryToText()
     }
