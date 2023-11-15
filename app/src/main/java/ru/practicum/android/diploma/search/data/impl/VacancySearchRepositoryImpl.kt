@@ -12,7 +12,6 @@ import ru.practicum.android.diploma.core.data.network.dto.Response
 import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.presentation.VacancyState
-import ru.practicum.android.diploma.util.FIFTY
 import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.SERVER_ERROR
@@ -44,7 +43,8 @@ class VacancySearchRepositoryImpl(
                                             it
                                         )
                                     },
-                                    (response as VacancySearchResponse).found
+                                    (response as VacancySearchResponse).found,
+                                    response.page.toInt() == response.pages.toInt() - 1
                                 )
                             )
                         )
