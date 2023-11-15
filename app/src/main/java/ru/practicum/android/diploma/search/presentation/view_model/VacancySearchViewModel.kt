@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -14,14 +17,7 @@ import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
 import ru.practicum.android.diploma.search.presentation.VacancyState
-import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
-import ru.practicum.android.diploma.util.FIFTY
-import ru.practicum.android.diploma.util.NETWORK_ERROR
-import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
-import ru.practicum.android.diploma.util.SERVER_ERROR
-import ru.practicum.android.diploma.util.TEXT
-import ru.practicum.android.diploma.util.VACANCY_ERROR
 import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchViewModel(
@@ -37,11 +33,21 @@ class VacancySearchViewModel(
     private val isFiltered = MutableLiveData<Boolean>(false)
     private val iconVisible = MutableLiveData<Boolean>()
     private val imageCoverIsVisible = MutableLiveData<Boolean>()
-    private val filterMap = HashMap<String,String>()
+    private val filterMap = HashMap<String, String>()
+    private val vacanciesList = MutableLiveData<PagingData<Vacancy>>()
     fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
     fun observeIconVisible(): LiveData<Boolean> = iconVisible
+    fun observeVacanciesList(): LiveData<PagingData<Vacancy>> = vacanciesList
+    fun getVacancies(option: HashMap<String, String> = HashMap()) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(3000)
+            val n = searchInteractor.searchVacancy(option).cachedIn(viewModelScope).first()
+            vacanciesList.postValue(n)
+        }
+    }
 
     init {
         isFilterButtonEnable()
@@ -52,36 +58,40 @@ class VacancySearchViewModel(
             isClickAllowed = it
         }
 
-    fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
-        if (changedText.isEmpty()) {
+    /*
+        fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
+            if (changedText.isEmpty()) {
+                searchJob?.cancel()
+                return
+            } else if (latestSearchText == changedText && !forceButtonClick) {
+                return
+            }
+            val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to FIFTY)
+            searchOption.putAll(filterMap)
+            latestSearchText = changedText
+
             searchJob?.cancel()
-            return
-        } else if (latestSearchText == changedText && !forceButtonClick) {
-            return
-        }
-        val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to FIFTY)
-        searchOption.putAll(filterMap)
-        latestSearchText = changedText
-
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            if (!forceButtonClick) {
-                delay(SEARCH_DEBOUNCE_DELAY)
-            }
-            searchRequest(searchOption)
-        }
-    }
-
-    private fun searchRequest(searchOptions: HashMap<String, String>) {
-        if (searchOptions.isNotEmpty()) {
-            renderState(VacancyState.Loading)
-            viewModelScope.launch {
-                searchInteractor
-                    .searchVacancy(searchOptions)
-                    .first().data?.let { renderState(it) }
+            searchJob = viewModelScope.launch {
+                if (!forceButtonClick) {
+                    delay(SEARCH_DEBOUNCE_DELAY)
+                }
+                searchRequest(searchOption)
             }
         }
-    }
+
+
+        private fun searchRequest(searchOptions: HashMap<String, String>) {
+            if (searchOptions.isNotEmpty()) {
+                renderState(VacancyState.Loading)
+                viewModelScope.launch {
+                    searchInteractor
+                        .searchVacancy(searchOptions)
+                        .first().data?.let { renderState(it) }
+                }
+            }
+        }
+
+         */
 
     fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -115,10 +125,14 @@ class VacancySearchViewModel(
 
     fun getFilter(): FilterParameters? = filterParameters
 
-    fun forceSearch(filterParameters: FilterParameters?){
+    /*
+    fun forceSearch(filterParameters: FilterParameters?) {
         filterParameters?.let {
             filterMap.clear()
-            filterMap.putAll(it.toHashMap()) }
-        latestSearchText?.let { searchDebounce(it,true) }
+            filterMap.putAll(it.toHashMap())
+        }
+        latestSearchText?.let { searchDebounce(it, true) }
     }
+
+     */
 }

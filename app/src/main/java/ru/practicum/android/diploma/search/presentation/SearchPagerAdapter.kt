@@ -3,11 +3,11 @@ package ru.practicum.android.diploma.search.presentation
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.core.domain.models.Vacancy
 
 class SearchPagerAdapter(
     private val clickListener: ItemClickListener
-) : PagingDataAdapter<SearchVacancy, SearchVacancyViewHolder>(SearchComparator) {
+) : PagingDataAdapter<Vacancy, SearchVacancyViewHolder>(SearchComparator) {
 
 
     override fun onBindViewHolder(holder: SearchVacancyViewHolder, position: Int) {
@@ -19,12 +19,12 @@ class SearchPagerAdapter(
 
     }
 
-    object SearchComparator : DiffUtil.ItemCallback<SearchVacancy>() {
-        override fun areItemsTheSame(oldItem: SearchVacancy, newItem: SearchVacancy): Boolean {
+    object SearchComparator : DiffUtil.ItemCallback<Vacancy>() {
+        override fun areItemsTheSame(oldItem: Vacancy, newItem: Vacancy): Boolean {
             return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: SearchVacancy, newItem: SearchVacancy): Boolean {
+        override fun areContentsTheSame(oldItem: Vacancy, newItem: Vacancy): Boolean {
             return oldItem == newItem
         }
     }
