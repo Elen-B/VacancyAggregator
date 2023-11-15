@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.core.data.network.dto
 
 import com.google.gson.annotations.SerializedName
-import java.util.Currency
 
 data class VacancyDTO(
     val id: String?,
