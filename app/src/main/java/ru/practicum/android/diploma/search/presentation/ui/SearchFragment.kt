@@ -3,11 +3,13 @@ package ru.practicum.android.diploma.search.presentation.ui
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -23,6 +25,7 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
 import ru.practicum.android.diploma.filter.presentation.ui.FilterFragment
 import ru.practicum.android.diploma.search.presentation.ItemClickListener
+import ru.practicum.android.diploma.search.presentation.OnEndOfListListener
 import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
@@ -41,6 +44,10 @@ class SearchFragment : Fragment() {
                 view?.findNavController()
                     ?.navigate(R.id.action_searchFragment_to_detailFragment, bundle)
             }
+        }
+    }, object : OnEndOfListListener {
+        override fun onEndOfList() {
+            showLoadingUpdate()
         }
     })
 
@@ -130,6 +137,7 @@ class SearchFragment : Fragment() {
     private fun render(state: VacancyState) {
         viewModel.setVisibleCoverImage(false)
         when (state) {
+            is VacancyState.Update -> showUpdate(state.vacancy, state.count)
             is VacancyState.Content -> showContent(state.vacancy, state.count)
             is VacancyState.Empty -> showEmpty(state.message)
             is VacancyState.ServerError -> showError(state.errorMessage)
@@ -150,6 +158,23 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
         binding.textVacancyCount.visibility = View.GONE
     }
+    private fun showLoadingUpdate() {
+        if (binding.searchEditText.text.isBlank()) {
+            return
+        }
+        binding.groupProgressBarBottomUpdate.isVisible = true
+        viewModel.searchDebounce(lastItem = true)
+    }
+    private fun showUpdate(contentTracks: List<Vacancy>, count: String) {
+        binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
+        binding.groupProgressBarBottomUpdate.isVisible = false
+        if (binding.searchEditText.text.isBlank()) {
+            return
+        }
+        adapter.searchVacancyList.addAll(contentTracks)
+        adapter.notifyDataSetChanged()
+        binding.recyclerViewSearch.visibility = View.VISIBLE
+    }
 
     private fun showError(errorMessage: String) {
         hideKeyboard()
@@ -158,6 +183,7 @@ class SearchFragment : Fragment() {
         } else {
             binding.groupConnectionError.isVisible = true
         }
+        binding.groupProgressBarBottomUpdate.isVisible = false
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
@@ -166,6 +192,7 @@ class SearchFragment : Fragment() {
     private fun showEmpty(message: String) {
         hideKeyboard()
         binding.progressBar.visibility = View.GONE
+        binding.groupProgressBarBottomUpdate.isVisible = false
         binding.groupVacancyError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
@@ -187,6 +214,7 @@ class SearchFragment : Fragment() {
 
     private fun getDefaultView() {
         viewModel.setVisibleCoverImage(true)
+        binding.groupServerError.isVisible = false
         binding.groupConnectionError.isVisible = false
         binding.groupVacancyError.isVisible = false
         binding.viewElement.visibility = View.GONE

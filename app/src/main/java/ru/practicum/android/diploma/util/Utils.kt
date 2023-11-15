@@ -23,6 +23,8 @@ const val FROM = "от"
 const val TO = "до"
 const val SPACE = " "
 const val COMMA = ","
+const val ZERO = 0
+const val PAGE = "page"
 
 
 const val BASE_URL = "https://api.hh.ru/"

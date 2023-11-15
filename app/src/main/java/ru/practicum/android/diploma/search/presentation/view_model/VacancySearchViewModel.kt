@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Update
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
@@ -17,6 +18,7 @@ import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.FIFTY
 import ru.practicum.android.diploma.util.NETWORK_ERROR
+import ru.practicum.android.diploma.util.PAGE
 import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SERVER_ERROR
@@ -38,6 +40,7 @@ class VacancySearchViewModel(
     private val iconVisible = MutableLiveData<Boolean>()
     private val imageCoverIsVisible = MutableLiveData<Boolean>()
     private val filterMap = HashMap<String,String>()
+    private var page_number = 0
     fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
@@ -52,29 +55,37 @@ class VacancySearchViewModel(
             isClickAllowed = it
         }
 
-    fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
-        if (changedText.isEmpty()) {
+    fun searchDebounce(changedText: String = "", forceButtonClick: Boolean = false, lastItem: Boolean = false) {
+        var text = changedText
+        if (changedText.isEmpty() && !lastItem) {
             searchJob?.cancel()
             return
-        } else if (latestSearchText == changedText && !forceButtonClick) {
+        } else if (latestSearchText == changedText && !forceButtonClick && !lastItem) {
             return
         }
-        val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to FIFTY)
+        else if(changedText.isEmpty() && lastItem){
+            latestSearchText?.let { text = it }
+            page_number++
+        }
+        else{page_number = 0}
+        val searchOption = hashMapOf<String, String>(TEXT to text, PER_PAGE to FIFTY)
+        if (lastItem) {searchOption.put(PAGE, page_number.toString())  }
         searchOption.putAll(filterMap)
-        latestSearchText = changedText
+        latestSearchText = text
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             if (!forceButtonClick) {
                 delay(SEARCH_DEBOUNCE_DELAY)
             }
-            searchRequest(searchOption)
+            searchRequest(searchOption, lastItem)
         }
     }
 
-    private fun searchRequest(searchOptions: HashMap<String, String>) {
+    private fun searchRequest(searchOptions: HashMap<String, String>, isUpdate: Boolean = false) {
         if (searchOptions.isNotEmpty()) {
-            renderState(VacancyState.Loading)
+            if (!isUpdate) {
+            renderState(VacancyState.Loading)}
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancy(searchOptions)

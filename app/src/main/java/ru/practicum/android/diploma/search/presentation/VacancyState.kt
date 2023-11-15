@@ -11,6 +11,11 @@ sealed interface VacancyState {
         val count: String
     ) : VacancyState
 
+    data class Update(
+        val vacancy: List<Vacancy>,
+        val count: String
+    ) : VacancyState
+
     data class VacancyError(
         val errorMessage: String
     ) : VacancyState
