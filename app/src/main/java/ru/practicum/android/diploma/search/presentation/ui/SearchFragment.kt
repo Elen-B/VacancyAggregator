@@ -252,6 +252,7 @@ class SearchFragment : Fragment() {
     }
 
     fun showToast(text: String) {
+        binding.groupProgressBarBottomUpdate.isVisible = false
         Snackbar.make(requireActivity().findViewById(R.id.container), text, Snackbar.LENGTH_SHORT)
             .setTextColor(resources.getColor(R.color.white, requireContext().theme))
             .setBackgroundTint(resources.getColor(R.color.red, requireContext().theme))
