@@ -35,7 +35,7 @@ class VacancySearchViewModel(
     private val imageCoverIsVisible = MutableLiveData<Boolean>()
     private val filterMap = HashMap<String, String>()
     private var pageNumber: Int = 0
-    private var lastPage: Boolean = false
+    private var lastPage: Boolean = true
     fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
@@ -84,7 +84,8 @@ class VacancySearchViewModel(
 
     private fun searchRequest(searchOptions: HashMap<String, String>, isUpdate: Boolean = false) {
         if (searchOptions.isNotEmpty()) {
-                if (!isUpdate) {
+            if (!isUpdate) {
+                lastPage = true
                 renderState(VacancyState.Loading)
             }
             viewModelScope.launch {
@@ -113,7 +114,7 @@ class VacancySearchViewModel(
         lastPage = when (state) {
             is VacancyState.Content -> state.lastPage
             is VacancyState.Update -> state.lastPage
-            else -> false
+            else -> lastPage
         }
     }
 
