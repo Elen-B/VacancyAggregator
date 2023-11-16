@@ -65,7 +65,10 @@ class VacancySearchViewModel(
 
         val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to TWENTY, PAGE to "0")
         if (update) {
-            searchOption.put(PAGE, (page_number + 1).toString())
+            page_number++
+            searchOption.put(PAGE, page_number.toString())
+        } else {
+            page_number = 0
         }
         searchOption.putAll(filterMap)
         latestSearchText = changedText
@@ -102,25 +105,15 @@ class VacancySearchViewModel(
     }
 
     private fun renderState(state: VacancyState) {
-        stateLiveData.postValue(state)
         updateLocalData(state)
+        stateLiveData.postValue(state)
     }
 
     private fun updateLocalData(state: VacancyState) {
-        when (state) {
-            is VacancyState.Content -> {
-                last_page = state.lastPage
-                page_number = 0
-            }
-
-            is VacancyState.Update -> {
-                last_page = state.lastPage
-                page_number++
-            }
-            else -> {
-                last_page = false
-                page_number = 0
-            }
+        last_page = when (state) {
+            is VacancyState.Content -> state.lastPage
+            is VacancyState.Update -> state.lastPage
+            else -> false
         }
     }
 

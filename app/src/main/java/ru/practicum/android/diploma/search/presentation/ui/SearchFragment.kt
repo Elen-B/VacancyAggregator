@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.search.presentation.ui
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -154,6 +155,7 @@ class SearchFragment : Fragment() {
             return
         }
         binding.imageCover.visibility = View.GONE
+        binding.groupServerError.isVisible = false
         binding.groupConnectionError.isVisible = false
         binding.groupVacancyError.isVisible = false
         binding.viewElement.visibility = View.GONE
@@ -241,6 +243,7 @@ class SearchFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
         binding.recyclerViewSearch.visibility = View.GONE
         binding.textVacancyCount.visibility = View.GONE
+        binding.groupProgressBarBottomUpdate.isVisible = false
     }
 
     fun hideKeyboard() {
