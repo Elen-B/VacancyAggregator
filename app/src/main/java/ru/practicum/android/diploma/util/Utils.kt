@@ -12,7 +12,7 @@ const val SERVER_ERROR = "Ошибка сервера"
 const val SALARY_NOT_SPECIFIED = "Зарплата не указана"
 const val VACANCY_ID = "id"
 const val PER_PAGE = "per_page"
-const val FIFTY = "50"
+const val TWENTY = "20"
 const val TEXT = "text"
 const val FOUND = "found"
 const val AREA = "area"
@@ -23,6 +23,11 @@ const val FROM = "от"
 const val TO = "до"
 const val SPACE = " "
 const val COMMA = ","
+const val ZERO = 0
+const val PAGE = "page"
+const val ONE = 1
+const val CHECK_CONNECTION = "Проверьте подключение к интернету"
+const val ERROR_HAS_OCCURRED = "Произошла ошибка"
 
 
 const val BASE_URL = "https://api.hh.ru/"

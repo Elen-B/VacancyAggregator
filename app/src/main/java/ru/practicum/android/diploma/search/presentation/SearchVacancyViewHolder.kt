@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.util.SALARY_NOT_SPECIFIED
 class SearchVacancyViewHolder(
     parent: ViewGroup,
     private val clickListener: ItemClickListener,
+    private val onEndOfListListener: OnEndOfListListener,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.vacancy_item, parent, false)
 ) {
@@ -40,4 +41,7 @@ class SearchVacancyViewHolder(
 
 interface ItemClickListener {
     fun onVacancyClick(vacancy: Vacancy)
+}
+interface OnEndOfListListener  {
+    fun onEndOfList()
 }
