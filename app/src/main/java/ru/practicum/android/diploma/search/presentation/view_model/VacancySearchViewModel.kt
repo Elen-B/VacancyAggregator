@@ -30,12 +30,12 @@ class VacancySearchViewModel(
     private var searchJob: Job? = null
     private var isClickAllowed = true
     private val stateLiveData = MutableLiveData<VacancyState>()
-    private val isFiltered = MutableLiveData<Boolean>(false)
+    private val isFiltered = MutableLiveData(false)
     private val iconVisible = MutableLiveData<Boolean>()
     private val imageCoverIsVisible = MutableLiveData<Boolean>()
     private val filterMap = HashMap<String, String>()
-    private var page_number: Int = 0
-    private var last_page: Boolean = false
+    private var pageNumber: Int = 0
+    private var lastPage: Boolean = false
     fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
@@ -63,12 +63,12 @@ class VacancySearchViewModel(
             return
         }
 
-        val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to TWENTY, PAGE to "0")
+        val searchOption = hashMapOf(TEXT to changedText, PER_PAGE to TWENTY, PAGE to "0")
         if (update) {
-            page_number++
-            searchOption.put(PAGE, page_number.toString())
+            pageNumber++
+            searchOption.put(PAGE, pageNumber.toString())
         } else {
-            page_number = 0
+            pageNumber = 0
         }
         searchOption.putAll(filterMap)
         latestSearchText = changedText
@@ -110,7 +110,7 @@ class VacancySearchViewModel(
     }
 
     private fun updateLocalData(state: VacancyState) {
-        last_page = when (state) {
+        lastPage = when (state) {
             is VacancyState.Content -> state.lastPage
             is VacancyState.Update -> state.lastPage
             else -> false
@@ -145,6 +145,6 @@ class VacancySearchViewModel(
             searchDebounce(it, true) }
     }
 
-    fun isLastPage(): Boolean = last_page
-    fun getPage(): Int = page_number
+    fun isLastPage(): Boolean = lastPage
+    fun getPage(): Int = pageNumber
 }

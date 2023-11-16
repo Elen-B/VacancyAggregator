@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.search.presentation.ui
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,7 +106,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        binding.searchEditText.setOnFocusChangeListener { view, hasFocus ->
+        binding.searchEditText.setOnFocusChangeListener { _, _ ->
             viewModel.setFocus(binding.searchEditText.text.isEmpty())
         }
         binding.searchEditText.doAfterTextChanged {
@@ -141,9 +140,9 @@ class SearchFragment : Fragment() {
     private fun render(state: VacancyState) {
         viewModel.setVisibleCoverImage(false)
         when (state) {
-            is VacancyState.Update -> showUpdate(state.vacancy, state.count, state.lastPage)
-            is VacancyState.Content -> showContent(state.vacancy, state.count, state.lastPage)
-            is VacancyState.Empty -> showEmpty(state.message)
+            is VacancyState.Update -> showUpdate(state.vacancy, state.count)
+            is VacancyState.Content -> showContent(state.vacancy, state.count)
+            is VacancyState.Empty -> showEmpty()
             is VacancyState.ServerError -> showError(state.errorMessage)
             is VacancyState.VacancyError -> showError(state.errorMessage)
             is VacancyState.Loading -> showLoading()
@@ -172,7 +171,7 @@ class SearchFragment : Fragment() {
         viewModel.searchDebounce(binding.searchEditText.text.toString(), update = true)
     }
 
-    private fun showUpdate(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
+    private fun showUpdate(contentTracks: List<Vacancy>, count: String) {
         binding.textVacancyCount.isVisible = true
         binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
         binding.groupProgressBarBottomUpdate.isVisible = false
@@ -203,7 +202,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showEmpty(message: String) {
+    private fun showEmpty() {
         hideKeyboard()
         binding.progressBar.visibility = View.GONE
         binding.groupProgressBarBottomUpdate.isVisible = false
@@ -212,7 +211,7 @@ class SearchFragment : Fragment() {
         binding.textVacancyCount.visibility = View.GONE
     }
 
-    private fun showContent(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
+    private fun showContent(contentTracks: List<Vacancy>, count: String) {
         if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
             showToast(ERROR_HAS_OCCURRED)
         } else {
@@ -246,14 +245,14 @@ class SearchFragment : Fragment() {
         binding.groupProgressBarBottomUpdate.isVisible = false
     }
 
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         binding.searchEditText.clearFocus()
         val inputMethodManager =
             requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
     }
 
-    fun showToast(text: String) {
+    private fun showToast(text: String) {
         binding.groupProgressBarBottomUpdate.isVisible = false
         Snackbar.make(requireActivity().findViewById(R.id.container), text, Snackbar.LENGTH_SHORT)
             .setTextColor(resources.getColor(R.color.white, requireContext().theme))
