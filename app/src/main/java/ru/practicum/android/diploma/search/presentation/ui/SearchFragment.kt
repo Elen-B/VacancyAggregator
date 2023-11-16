@@ -30,6 +30,7 @@ import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
 import ru.practicum.android.diploma.util.CHECK_CONNECTION
 import ru.practicum.android.diploma.util.ERROR_HAS_OCCURRED
+import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
@@ -187,8 +188,14 @@ class SearchFragment : Fragment() {
 
     private fun showError(errorMessage: String) {
         if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
-            showToast(CHECK_CONNECTION)
-        } else {
+            if(errorMessage == NETWORK_ERROR){
+                showToast(CHECK_CONNECTION)
+            }
+            else{
+                showToast(ERROR_HAS_OCCURRED)
+            }
+            return
+        }
             hideKeyboard()
             if (errorMessage == SERVER_ERROR) {
                 binding.groupServerError.isVisible = true
@@ -199,7 +206,7 @@ class SearchFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             binding.recyclerViewSearch.visibility = View.GONE
             binding.textVacancyCount.visibility = View.GONE
-        }
+
     }
 
     private fun showEmpty() {
@@ -212,9 +219,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(contentTracks: List<Vacancy>, count: String) {
-        if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
-            showToast(ERROR_HAS_OCCURRED)
-        } else {
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
             binding.progressBar.visibility = View.GONE
             if (binding.searchEditText.text.isBlank()) {
@@ -228,8 +232,6 @@ class SearchFragment : Fragment() {
             adapter.notifyDataSetChanged()
             binding.recyclerViewSearch.visibility = View.VISIBLE
             binding.progressBar.isVisible = false
-
-        }
     }
 
     private fun getDefaultView() {
