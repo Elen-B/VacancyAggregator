@@ -8,7 +8,8 @@ sealed interface VacancyState {
 
     data class Content(
         val vacancy: List<Vacancy>,
-        val count: String
+        val count: String,
+        val lastPage: Boolean = false
     ) : VacancyState
 
     data class Update(

@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
-import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -143,7 +141,7 @@ class SearchFragment : Fragment() {
         viewModel.setVisibleCoverImage(false)
         when (state) {
             is VacancyState.Update -> showUpdate(state.vacancy, state.count, state.lastPage)
-            is VacancyState.Content -> showContent(state.vacancy, state.count)
+            is VacancyState.Content -> showContent(state.vacancy, state.count, state.lastPage)
             is VacancyState.Empty -> showEmpty(state.message)
             is VacancyState.ServerError -> showError(state.errorMessage)
             is VacancyState.VacancyError -> showError(state.errorMessage)
@@ -169,7 +167,7 @@ class SearchFragment : Fragment() {
             return
         }
         binding.groupProgressBarBottomUpdate.isVisible = true
-        viewModel.searchDebounce(lastItem = true)
+        viewModel.searchDebounce(update = true)
     }
 
     private fun showUpdate(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
@@ -182,17 +180,15 @@ class SearchFragment : Fragment() {
         adapter.searchVacancyList.addAll(contentTracks)
         adapter.notifyDataSetChanged()
         binding.recyclerViewSearch.visibility = View.VISIBLE
-        if (isPageLast) {
-            viewModel.lastPage()
-            binding.progressBar.isVisible = false
-        }
+        viewModel.lastPage(isPageLast)
+        binding.progressBar.isVisible = false
+
     }
 
     private fun showError(errorMessage: String) {
-        if(viewModel.getPage() != 0 && !viewModel.isLastPage()){
+        if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
             showToast(CHECK_CONNECTION)
-        }
-        else {
+        } else {
             hideKeyboard()
             if (errorMessage == SERVER_ERROR) {
                 binding.groupServerError.isVisible = true
@@ -207,18 +203,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty(message: String) {
-            hideKeyboard()
-            binding.progressBar.visibility = View.GONE
-            binding.groupProgressBarBottomUpdate.isVisible = false
-            binding.groupVacancyError.isVisible = true
-            binding.recyclerViewSearch.visibility = View.GONE
-            binding.textVacancyCount.visibility = View.GONE
+        hideKeyboard()
+        binding.progressBar.visibility = View.GONE
+        binding.groupProgressBarBottomUpdate.isVisible = false
+        binding.groupVacancyError.isVisible = true
+        binding.recyclerViewSearch.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.GONE
     }
 
-    private fun showContent(contentTracks: List<Vacancy>, count: String) {
-        if(viewModel.getPage() != 0 && !viewModel.isLastPage()){
+    private fun showContent(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
+        if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
             showToast(ERROR_HAS_OCCURRED)
-        }else {
+        } else {
             binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
             binding.progressBar.visibility = View.GONE
             if (binding.searchEditText.text.isBlank()) {
@@ -230,6 +226,9 @@ class SearchFragment : Fragment() {
             adapter.searchVacancyList.addAll(contentTracks)
             adapter.notifyDataSetChanged()
             binding.recyclerViewSearch.visibility = View.VISIBLE
+            viewModel.lastPage(isPageLast)
+            binding.progressBar.isVisible = false
+
         }
     }
 
@@ -252,10 +251,10 @@ class SearchFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
     }
 
-    fun showToast(text: String){
-        Snackbar.make(requireActivity().findViewById(R.id.container),text, Snackbar.LENGTH_SHORT)
-            .setTextColor( resources.getColor (R.color.white, requireContext().theme))
-            .setBackgroundTint(resources.getColor (R.color.red, requireContext().theme))
+    fun showToast(text: String) {
+        Snackbar.make(requireActivity().findViewById(R.id.container), text, Snackbar.LENGTH_SHORT)
+            .setTextColor(resources.getColor(R.color.white, requireContext().theme))
+            .setBackgroundTint(resources.getColor(R.color.red, requireContext().theme))
             .show()
     }
 }

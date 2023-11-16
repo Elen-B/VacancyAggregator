@@ -54,27 +54,27 @@ class VacancySearchViewModel(
     fun searchDebounce(
         changedText: String = "",
         forceButtonClick: Boolean = false,
-        lastItem: Boolean = false
+        update: Boolean = false
     ) {
         var text = changedText
-        if (changedText.isEmpty() && !lastItem) {
+        if (changedText.isEmpty() && !update) {
             searchJob?.cancel()
             return
-        } else if (latestSearchText == changedText && !forceButtonClick && !lastItem) {
-            Log.i("Errror","return")
+        } else if (latestSearchText == changedText && !forceButtonClick && !update) {
+            Log.i("Errror", "return")
             return
-        } else if (changedText.isEmpty() && lastItem) {
-            Log.i("Errror","page+")
+        } else if (changedText.isEmpty() && update && !forceButtonClick) {
+            Log.i("Errror", "page+")
             latestSearchText?.let { text = it }
             page_number++
         } else {
-            Log.i("Errror","page_numberClear")
+            Log.i("Errror", "page_numberClear")
             page_number = 0
         }
-        Log.i("Errror","last_page=false")
         last_page = false
-        val searchOption = hashMapOf<String, String>(TEXT to text, PER_PAGE to TWENTY)
-        if (lastItem) {
+        Log.i("Errror", "last_page=$last_page")
+        val searchOption = hashMapOf<String, String>(TEXT to text, PER_PAGE to TWENTY, PAGE to "0")
+        if (update) {
             searchOption.put(PAGE, page_number.toString())
         }
         searchOption.putAll(filterMap)
@@ -85,7 +85,7 @@ class VacancySearchViewModel(
             if (!forceButtonClick) {
                 delay(SEARCH_DEBOUNCE_DELAY)
             }
-            searchRequest(searchOption, lastItem)
+            searchRequest(searchOption, update)
         }
     }
 
@@ -135,7 +135,6 @@ class VacancySearchViewModel(
     fun getFilter(): FilterParameters? = filterParameters
 
     fun forceSearch(filterParameters: FilterParameters?) {
-        Log.i("Errror","ForceSearch")
         filterParameters?.let {
             filterMap.clear()
             filterMap.putAll(it.toHashMap())
@@ -143,8 +142,8 @@ class VacancySearchViewModel(
         latestSearchText?.let { searchDebounce(it, true) }
     }
 
-    fun lastPage() {
-        last_page = true
+    fun lastPage(isLastPage: Boolean) {
+        last_page = isLastPage
     }
 
     fun isLastPage(): Boolean = last_page

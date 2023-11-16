@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.data.impl
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -35,9 +34,7 @@ class VacancySearchRepositoryImpl(
                                 VacancyState.Empty(VACANCY_ERROR)
                             )
                         )
-                    } else if ((response as VacancySearchResponse).page.toInt() != ZERO
-                        || (response as VacancySearchResponse).pages.toInt() == ONE) {
-                        Log.i("Errror","VacancyUpdate")
+                    } else if ((response as VacancySearchResponse).page.toInt() != ZERO) {
                         emit(
                             Resource.Success<VacancyState>(
                                 VacancyState.Update(
@@ -60,7 +57,8 @@ class VacancySearchRepositoryImpl(
                                             it
                                         )
                                     },
-                                    (response as VacancySearchResponse).found
+                                    (response as VacancySearchResponse).found,
+                                    (response as VacancySearchResponse).pages.toInt() == ONE
                                 )
                             )
                         )
