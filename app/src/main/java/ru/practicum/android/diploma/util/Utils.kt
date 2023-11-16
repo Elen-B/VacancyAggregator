@@ -25,7 +25,9 @@ const val SPACE = " "
 const val COMMA = ","
 const val ZERO = 0
 const val PAGE = "page"
+const val ONE = 1
 const val CHECK_CONNECTION = "Проверьте подключение к интернету"
+const val ERROR_HAS_OCCURRED = "Произошла ошибка"
 
 
 const val BASE_URL = "https://api.hh.ru/"

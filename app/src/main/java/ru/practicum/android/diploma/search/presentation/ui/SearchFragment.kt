@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation.ui
 
+import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.core.domain.models.Vacancy
@@ -29,6 +31,7 @@ import ru.practicum.android.diploma.search.presentation.SearchVacancyAdapter
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.search.presentation.view_model.VacancySearchViewModel
 import ru.practicum.android.diploma.util.CHECK_CONNECTION
+import ru.practicum.android.diploma.util.ERROR_HAS_OCCURRED
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
@@ -47,9 +50,7 @@ class SearchFragment : Fragment() {
         }
     }, object : OnEndOfListListener {
         override fun onEndOfList() {
-            if (viewModel.isLastPage()) {
-                Toast.makeText(requireContext(), CHECK_CONNECTION, Toast.LENGTH_LONG).show()
-            } else {
+            if (!viewModel.isLastPage()) {
                 showLoadingUpdate()
             }
         }
@@ -172,6 +173,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showUpdate(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
+        binding.textVacancyCount.isVisible = true
         binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
         binding.groupProgressBarBottomUpdate.isVisible = false
         if (binding.searchEditText.text.isBlank()) {
@@ -182,43 +184,53 @@ class SearchFragment : Fragment() {
         binding.recyclerViewSearch.visibility = View.VISIBLE
         if (isPageLast) {
             viewModel.lastPage()
+            binding.progressBar.isVisible = false
         }
     }
 
     private fun showError(errorMessage: String) {
-        hideKeyboard()
-        if (errorMessage == SERVER_ERROR) {
-            binding.groupServerError.isVisible = true
-        } else {
-            binding.groupConnectionError.isVisible = true
+        if(viewModel.getPage() != 0 && !viewModel.isLastPage()){
+            showToast(CHECK_CONNECTION)
         }
-        binding.groupProgressBarBottomUpdate.isVisible = false
-        binding.progressBar.visibility = View.GONE
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.textVacancyCount.visibility = View.GONE
+        else {
+            hideKeyboard()
+            if (errorMessage == SERVER_ERROR) {
+                binding.groupServerError.isVisible = true
+            } else {
+                binding.groupConnectionError.isVisible = true
+            }
+            binding.groupProgressBarBottomUpdate.isVisible = false
+            binding.progressBar.visibility = View.GONE
+            binding.recyclerViewSearch.visibility = View.GONE
+            binding.textVacancyCount.visibility = View.GONE
+        }
     }
 
     private fun showEmpty(message: String) {
-        hideKeyboard()
-        binding.progressBar.visibility = View.GONE
-        binding.groupProgressBarBottomUpdate.isVisible = false
-        binding.groupVacancyError.isVisible = true
-        binding.recyclerViewSearch.visibility = View.GONE
-        binding.textVacancyCount.visibility = View.GONE
+            hideKeyboard()
+            binding.progressBar.visibility = View.GONE
+            binding.groupProgressBarBottomUpdate.isVisible = false
+            binding.groupVacancyError.isVisible = true
+            binding.recyclerViewSearch.visibility = View.GONE
+            binding.textVacancyCount.visibility = View.GONE
     }
 
     private fun showContent(contentTracks: List<Vacancy>, count: String) {
-        binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
-        binding.progressBar.visibility = View.GONE
-        if (binding.searchEditText.text.isBlank()) {
-            return
+        if(viewModel.getPage() != 0 && !viewModel.isLastPage()){
+            showToast(ERROR_HAS_OCCURRED)
+        }else {
+            binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
+            binding.progressBar.visibility = View.GONE
+            if (binding.searchEditText.text.isBlank()) {
+                return
+            }
+            binding.imageCover.visibility = View.GONE
+            binding.textVacancyCount.visibility = View.VISIBLE
+            adapter.searchVacancyList.clear()
+            adapter.searchVacancyList.addAll(contentTracks)
+            adapter.notifyDataSetChanged()
+            binding.recyclerViewSearch.visibility = View.VISIBLE
         }
-        binding.imageCover.visibility = View.GONE
-        binding.textVacancyCount.visibility = View.VISIBLE
-        adapter.searchVacancyList.clear()
-        adapter.searchVacancyList.addAll(contentTracks)
-        adapter.notifyDataSetChanged()
-        binding.recyclerViewSearch.visibility = View.VISIBLE
     }
 
     private fun getDefaultView() {
@@ -238,5 +250,12 @@ class SearchFragment : Fragment() {
         val inputMethodManager =
             requireActivity().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
+    }
+
+    fun showToast(text: String){
+        Snackbar.make(requireActivity().findViewById(R.id.container),text, Snackbar.LENGTH_SHORT)
+            .setTextColor( resources.getColor (R.color.white, requireContext().theme))
+            .setBackgroundTint(resources.getColor (R.color.red, requireContext().theme))
+            .show()
     }
 }

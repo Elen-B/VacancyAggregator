@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.search.data.dto.VacancySearchResponse
 import ru.practicum.android.diploma.search.domain.VacancySearchRepository
 import ru.practicum.android.diploma.search.presentation.VacancyState
 import ru.practicum.android.diploma.util.NETWORK_ERROR
+import ru.practicum.android.diploma.util.ONE
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ERROR
@@ -34,7 +35,9 @@ class VacancySearchRepositoryImpl(
                                 VacancyState.Empty(VACANCY_ERROR)
                             )
                         )
-                    } else if ((response as VacancySearchResponse).page.toInt() != ZERO) {
+                    } else if ((response as VacancySearchResponse).page.toInt() != ZERO
+                        || (response as VacancySearchResponse).pages.toInt() == ONE) {
+                        Log.i("Errror","VacancyUpdate")
                         emit(
                             Resource.Success<VacancyState>(
                                 VacancyState.Update(
@@ -44,7 +47,7 @@ class VacancySearchRepositoryImpl(
                                         )
                                     },
                                     (response as VacancySearchResponse).found,
-                                    response.page.toInt() == response.pages.toInt() - 1
+                                    (response.page.toInt() == response.pages.toInt() - 1)
                                 )
                             )
                         )

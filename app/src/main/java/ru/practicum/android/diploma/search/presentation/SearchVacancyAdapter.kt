@@ -17,7 +17,7 @@ class SearchVacancyAdapter(
 
     override fun onBindViewHolder(holder: SearchVacancyViewHolder, position: Int) {
         holder.bind(searchVacancyList.get(position))
-        if (position == getItemCount() - 1) {
+        if (position == getItemCount() - 2) {
             onEndOfListListener.onEndOfList();
         }
     }
