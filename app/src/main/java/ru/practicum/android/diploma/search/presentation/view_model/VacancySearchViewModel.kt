@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -56,29 +55,20 @@ class VacancySearchViewModel(
         forceButtonClick: Boolean = false,
         update: Boolean = false
     ) {
-        var text = changedText
         if (changedText.isEmpty() && !update) {
+            latestSearchText = ""
             searchJob?.cancel()
             return
         } else if (latestSearchText == changedText && !forceButtonClick && !update) {
-            Log.i("Errror", "return")
             return
-        } else if (changedText.isEmpty() && update && !forceButtonClick) {
-            Log.i("Errror", "page+")
-            latestSearchText?.let { text = it }
-            page_number++
-        } else {
-            Log.i("Errror", "page_numberClear")
-            page_number = 0
         }
-        last_page = false
-        Log.i("Errror", "last_page=$last_page")
-        val searchOption = hashMapOf<String, String>(TEXT to text, PER_PAGE to TWENTY, PAGE to "0")
+
+        val searchOption = hashMapOf<String, String>(TEXT to changedText, PER_PAGE to TWENTY, PAGE to "0")
         if (update) {
-            searchOption.put(PAGE, page_number.toString())
+            searchOption.put(PAGE, (page_number + 1).toString())
         }
         searchOption.putAll(filterMap)
-        latestSearchText = text
+        latestSearchText = changedText
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -91,7 +81,7 @@ class VacancySearchViewModel(
 
     private fun searchRequest(searchOptions: HashMap<String, String>, isUpdate: Boolean = false) {
         if (searchOptions.isNotEmpty()) {
-            if (!isUpdate) {
+                if (!isUpdate) {
                 renderState(VacancyState.Loading)
             }
             viewModelScope.launch {
@@ -113,6 +103,25 @@ class VacancySearchViewModel(
 
     private fun renderState(state: VacancyState) {
         stateLiveData.postValue(state)
+        updateLocalData(state)
+    }
+
+    private fun updateLocalData(state: VacancyState) {
+        when (state) {
+            is VacancyState.Content -> {
+                last_page = state.lastPage
+                page_number = 0
+            }
+
+            is VacancyState.Update -> {
+                last_page = state.lastPage
+                page_number++
+            }
+            else -> {
+                last_page = false
+                page_number = 0
+            }
+        }
     }
 
     fun setFocus(textIsEmpty: Boolean) {
@@ -139,11 +148,8 @@ class VacancySearchViewModel(
             filterMap.clear()
             filterMap.putAll(it.toHashMap())
         }
-        latestSearchText?.let { searchDebounce(it, true) }
-    }
-
-    fun lastPage(isLastPage: Boolean) {
-        last_page = isLastPage
+        latestSearchText?.let {
+            searchDebounce(it, true) }
     }
 
     fun isLastPage(): Boolean = last_page

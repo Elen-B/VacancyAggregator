@@ -167,7 +167,7 @@ class SearchFragment : Fragment() {
             return
         }
         binding.groupProgressBarBottomUpdate.isVisible = true
-        viewModel.searchDebounce(update = true)
+        viewModel.searchDebounce(binding.searchEditText.text.toString(), update = true)
     }
 
     private fun showUpdate(contentTracks: List<Vacancy>, count: String, isPageLast: Boolean) {
@@ -180,7 +180,6 @@ class SearchFragment : Fragment() {
         adapter.searchVacancyList.addAll(contentTracks)
         adapter.notifyDataSetChanged()
         binding.recyclerViewSearch.visibility = View.VISIBLE
-        viewModel.lastPage(isPageLast)
         binding.progressBar.isVisible = false
 
     }
@@ -222,11 +221,11 @@ class SearchFragment : Fragment() {
             }
             binding.imageCover.visibility = View.GONE
             binding.textVacancyCount.visibility = View.VISIBLE
+            binding.recyclerViewSearch.scrollToPosition(0)
             adapter.searchVacancyList.clear()
             adapter.searchVacancyList.addAll(contentTracks)
             adapter.notifyDataSetChanged()
             binding.recyclerViewSearch.visibility = View.VISIBLE
-            viewModel.lastPage(isPageLast)
             binding.progressBar.isVisible = false
 
         }
