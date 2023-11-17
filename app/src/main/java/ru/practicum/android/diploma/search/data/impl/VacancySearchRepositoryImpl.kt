@@ -34,20 +34,6 @@ class VacancySearchRepositoryImpl(
                                 VacancyState.Empty(VACANCY_ERROR)
                             )
                         )
-                    } else if ((response as VacancySearchResponse).page.toInt() != ZERO) {
-                        emit(
-                            Resource.Success<VacancyState>(
-                                VacancyState.Update(
-                                    (response as VacancySearchResponse).items.map {
-                                        VacancyMapper.map(
-                                            it
-                                        )
-                                    },
-                                    (response as VacancySearchResponse).found,
-                                    (response.page.toInt() == response.pages.toInt() - 1)
-                                )
-                            )
-                        )
                     } else {
                         emit(
                             Resource.Success<VacancyState>(
@@ -58,7 +44,8 @@ class VacancySearchRepositoryImpl(
                                         )
                                     },
                                     (response as VacancySearchResponse).found,
-                                    (response as VacancySearchResponse).pages.toInt() == ONE
+                                    (response as VacancySearchResponse).page,
+                                    (response as VacancySearchResponse).pages
                                 )
                             )
                         )
