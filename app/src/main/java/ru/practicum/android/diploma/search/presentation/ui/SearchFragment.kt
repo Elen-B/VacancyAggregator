@@ -34,6 +34,7 @@ import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.NOT_EXIST
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
+import ru.practicum.android.diploma.util.getStringCount
 
 
 class SearchFragment : Fragment() {
@@ -175,7 +176,7 @@ class SearchFragment : Fragment() {
 
     private fun showUpdate(contentTracks: List<Vacancy>, count: String) {
         binding.textVacancyCount.isVisible = true
-        binding.textVacancyCount.setText(viewModel.getCountString(count))
+        binding.textVacancyCount.setText(getStringCount(count))
         binding.groupProgressBarBottomUpdate.isVisible = false
         if (binding.searchEditText.text.isBlank()) {
             return
@@ -220,7 +221,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(contentTracks: List<Vacancy>, count: String) {
-        binding.textVacancyCount.setText(viewModel.getCountString(count))
+        binding.textVacancyCount.setText(getStringCount(count))
         binding.progressBar.visibility = View.GONE
         if (binding.searchEditText.text.isBlank()) {
             return

@@ -12,9 +12,6 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="text">Text</string>
-    <string name="found0Vacancies">Найдено %1$s вакансий</string>
-    <string name="found1Vacancies">Найдена %1$s вакансия</string>
-    <string name="found2Vacancies">Найдено %1$s вакансии</string>
 
     <!-- filter section -->
     <string name="filter_topbar_header">Настройки фильтрации</string>

@@ -21,7 +21,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        VacancySearchViewModel(get(), get(),get())
+        VacancySearchViewModel(get(), get())
     }
 
     viewModel { (filterParameters: FilterParameters?) ->

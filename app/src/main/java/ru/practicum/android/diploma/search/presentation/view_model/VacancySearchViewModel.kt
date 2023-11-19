@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation.view_model
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,13 +18,11 @@ import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.TEXT
 import ru.practicum.android.diploma.util.TWENTY
-import ru.practicum.android.diploma.util.VacancyCountFormatter
 import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchViewModel(
     private val searchInteractor: VacancySearchInteractor,
-    private val filterInteractor: FilterLocalInteractor,
-    private val context: Context
+    private val filterInteractor: FilterLocalInteractor
 ) : ViewModel() {
 
     private var filterParameters: FilterParameters? = null
@@ -151,7 +148,5 @@ class VacancySearchViewModel(
 
     fun isLastPage(): Boolean = lastPage
     fun getPage(): Int = pageNumber
-    fun getCountString(count: String): String{
-       return VacancyCountFormatter(context).getStringCount(count)
-    }
+
 }
