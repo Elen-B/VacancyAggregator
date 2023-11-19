@@ -75,7 +75,7 @@ class DetailFragment : Fragment() {
             }
 
             is DetailState.Error -> {
-                showError()
+                showError(state.message, state.errorImagePath)
             }
 
             is DetailState.Loading -> {
@@ -135,7 +135,7 @@ class DetailFragment : Fragment() {
 
         binding.progress.isVisible = false
         binding.scroll.isVisible = true
-        binding.phDetailsError.isVisible = false
+        binding.include.root.isVisible =  false
         binding.btSimilar.isVisible = !fromDB
     }
 
@@ -202,12 +202,19 @@ class DetailFragment : Fragment() {
     private fun showProgress() {
         binding.progress.isVisible = true
         binding.scroll.isVisible = false
-        binding.phDetailsError.isVisible = false
+        binding.include.root.isVisible =  false
     }
 
-    private fun showError() {
+    private fun showError(
+        message: String,
+        imagePath: Int
+    ) {
+        with(binding.include) {
+            imError.setImageResource(imagePath)
+            tvError.text = message
+        }
+        binding.include.root.isVisible = true
         binding.progress.isVisible = false
         binding.scroll.isVisible = false
-        binding.phDetailsError.isVisible = true
     }
 }
