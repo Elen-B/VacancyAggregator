@@ -431,7 +431,7 @@
         android:visibility="gone"/>
 
     <FrameLayout
-        android:id="@+id/phDetailsError"
+        android:id="@+id/phDetailsServerError"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
@@ -442,6 +442,20 @@
             android:layout_width="match_parent"
             android:text="@string/error_details"
             app:drawableTopCompat="@drawable/error_details"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/phDetailsNetworkError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            style="@style/FilterPlaceHolderTextViewStyle"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="@string/network_error"
+            app:drawableTopCompat="@drawable/error_connection_lm"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

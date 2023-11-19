@@ -57,20 +57,26 @@ class DetailViewModel (
                                 _state.value = DetailState.Success(vacancy, true)
                             else
                                 _state.value =
-                                    DetailState.Error(
-                                        message = UNKNOWN_ERROR,
-                                    )
+                                    resultData.message?.let {
+                                        DetailState.Error(
+                                            message = it,
+                                        )
+                                    }
                         } catch (_: Exception) {
                             _state.value =
-                                DetailState.Error(
-                                    message = resultData.message ?: UNKNOWN_ERROR,
-                                )
+                                resultData.message?.let {
+                                    DetailState.Error(
+                                        message = it,
+                                    )
+                                }
                         }
                     } else {
                         _state.value =
-                            DetailState.Error(
-                                message = resultData.message ?: UNKNOWN_ERROR,
-                            )
+                            resultData.message?.let {
+                                DetailState.Error(
+                                    message = it,
+                                )
+                            }
                     }
                 }
 
