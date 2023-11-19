@@ -49,7 +49,7 @@ class SimilarFragment : Fragment() {
 
             is SimilarState.Error -> {
                 setError(
-                    message = state.message.toInt(),
+                    message = state.message,
                     imagePath = state.errorImagePath
                 )
             }
@@ -61,12 +61,12 @@ class SimilarFragment : Fragment() {
     }
 
     private fun setError(
-        message: Int,
+        message: String,
         imagePath: Int
     ) {
         with(binding.include) {
             imError.setImageResource(imagePath)
-            tvError.text = getString(message)
+            tvError.text = message
         }
         binding.include.root.isVisible = true
         binding.rvSimilar.isVisible = false

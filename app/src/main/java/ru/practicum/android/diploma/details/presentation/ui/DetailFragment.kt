@@ -20,8 +20,6 @@ import ru.practicum.android.diploma.databinding.FragmentDetailBinding
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
 import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
-import ru.practicum.android.diploma.util.NETWORK_ERROR
-import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
 class DetailFragment : Fragment() {
@@ -77,7 +75,7 @@ class DetailFragment : Fragment() {
             }
 
             is DetailState.Error -> {
-                showError(state.message)
+                showError(state.message, state.errorImagePath)
             }
 
             is DetailState.Loading -> {
@@ -137,8 +135,7 @@ class DetailFragment : Fragment() {
 
         binding.progress.isVisible = false
         binding.scroll.isVisible = true
-        binding.phDetailsNetworkError.isVisible = false
-        binding.phDetailsServerError.isVisible = false
+        binding.include.root.isVisible =  false
         binding.btSimilar.isVisible = !fromDB
     }
 
@@ -205,22 +202,19 @@ class DetailFragment : Fragment() {
     private fun showProgress() {
         binding.progress.isVisible = true
         binding.scroll.isVisible = false
-        binding.phDetailsServerError.isVisible = false
-        binding.phDetailsNetworkError.isVisible = false
+        binding.include.root.isVisible =  false
     }
 
-    private fun showError(message: String) {
+    private fun showError(
+        message: String,
+        imagePath: Int
+    ) {
+        with(binding.include) {
+            imError.setImageResource(imagePath)
+            tvError.text = message
+        }
+        binding.include.root.isVisible = true
         binding.progress.isVisible = false
         binding.scroll.isVisible = false
-        when (message){
-            NETWORK_ERROR ->{
-                binding.phDetailsNetworkError.isVisible = true
-                binding.phDetailsServerError.isVisible = false
-            }
-            SERVER_ERROR ->{
-                binding.phDetailsServerError.isVisible = true
-                binding.phDetailsNetworkError.isVisible = false
-            }
-        }
     }
 }

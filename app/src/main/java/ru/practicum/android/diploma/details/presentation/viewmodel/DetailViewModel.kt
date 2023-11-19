@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 import ru.practicum.android.diploma.details.presentation.state.DetailState
@@ -13,6 +14,7 @@ import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.SingleEventLiveData
+import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 import ru.practicum.android.diploma.util.debounce
 
@@ -55,18 +57,18 @@ class DetailViewModel(
                             _state.value = DetailState.Success(vacancy, true)
                         else
                             _state.value =
-                                resultData.message?.let {
-                                    DetailState.Error(
-                                        message = it,
-                                    )
-                                }
+                                DetailState.Error(
+                                    message = resultData.message ?: UNKNOWN_ERROR,
+                                    errorImagePath = resultData.errorImagePath
+                                        ?: R.drawable.error_show_cat
+                                )
                     } else {
                         _state.value =
-                            resultData.message?.let {
-                                DetailState.Error(
-                                    message = it,
-                                )
-                            }
+                            DetailState.Error(
+                                message = resultData.message ?: UNKNOWN_ERROR,
+                                errorImagePath = resultData.errorImagePath
+                                    ?: R.drawable.error_show_cat
+                            )
                     }
                 }
 
