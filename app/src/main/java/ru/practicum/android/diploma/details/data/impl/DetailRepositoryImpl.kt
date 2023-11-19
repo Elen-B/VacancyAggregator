@@ -23,7 +23,7 @@ class DetailRepositoryImpl(
             }
             Response.RESULT_NETWORK_ERROR -> Resource.Error(
                 message = NETWORK_ERROR,
-                errorImagePath = R.drawable.error_connection_lm)
+                errorImagePath = R.drawable.error_connection)
             else -> Resource.Error(
                 message = SERVER_ERROR,
                 errorImagePath = R.drawable.error_details)
