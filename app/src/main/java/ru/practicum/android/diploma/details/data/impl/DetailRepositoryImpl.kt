@@ -26,7 +26,7 @@ class DetailRepositoryImpl(
                 errorImagePath = R.drawable.error_connection_lm)
             else -> Resource.Error(
                 message = SERVER_ERROR,
-                errorImagePath = R.drawable.error_show_cat)
+                errorImagePath = R.drawable.error_details)
         }
     }
 }
