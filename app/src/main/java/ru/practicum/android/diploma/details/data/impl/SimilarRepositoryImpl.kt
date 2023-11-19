@@ -26,10 +26,10 @@ class SimilarRepositoryImpl(private val networkClient: NetworkClient): SimilarRe
 
             Response.RESULT_NETWORK_ERROR -> Resource.Error(
                 message = NETWORK_ERROR,
-                errorImagePath = R.drawable.error_connection_lm)
+                errorImagePath = R.drawable.error_connection)
             else -> Resource.Error(
                 message = SERVER_ERROR,
-                errorImagePath = R.drawable.error_show_cat)
+                errorImagePath = R.drawable.server_error)
         }
     }
 }

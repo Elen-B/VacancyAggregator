@@ -8,15 +8,15 @@
     </style>
 
     <style name="SearchCoverImage">
-        <item name="android:src">@drawable/search_cover_lm</item>
+        <item name="android:src">@drawable/search_cover</item>
     </style>
 
     <style name="ErrorNetworkImage">
-        <item name="android:src">@drawable/error_connection_lm</item>
+        <item name="android:src">@drawable/error_connection</item>
     </style>
 
     <style name="ErrorServerImage">
-        <item name="android:src">@drawable/server_error_lm</item>
+        <item name="android:src">@drawable/server_error</item>
     </style>
 
     <style name="ErrorVacancyImage">
