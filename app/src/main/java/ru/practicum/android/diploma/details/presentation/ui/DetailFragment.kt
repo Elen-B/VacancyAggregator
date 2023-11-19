@@ -215,9 +215,11 @@ class DetailFragment : Fragment() {
         when (message){
             NETWORK_ERROR ->{
                 binding.phDetailsNetworkError.isVisible = true
+                binding.phDetailsServerError.isVisible = false
             }
             SERVER_ERROR ->{
                 binding.phDetailsServerError.isVisible = true
+                binding.phDetailsNetworkError.isVisible = false
             }
         }
     }
