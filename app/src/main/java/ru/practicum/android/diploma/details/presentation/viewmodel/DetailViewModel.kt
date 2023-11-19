@@ -13,11 +13,10 @@ import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.SingleEventLiveData
-import ru.practicum.android.diploma.util.UNKNOWN_ERROR
-import ru.practicum.android.diploma.util.debounce
 import ru.practicum.android.diploma.util.VACANCY_ID
+import ru.practicum.android.diploma.util.debounce
 
-class DetailViewModel (
+class DetailViewModel(
     private val detailsInterActor: DetailsInterActor,
     private val savedStateHandle: SavedStateHandle,
     private val favouritesInteractor: FavouritesInteractor
@@ -26,7 +25,7 @@ class DetailViewModel (
     val state = _state
 
     private val inFavouritesLiveDataMutable = MutableLiveData(false)
-    fun observeStateInFavourites(): LiveData<Boolean>  = inFavouritesLiveDataMutable
+    fun observeStateInFavourites(): LiveData<Boolean> = inFavouritesLiveDataMutable
 
     private val shareVacancyTrigger = SingleEventLiveData<String>()
     fun getShareVacancyTrigger(): LiveData<String> = shareVacancyTrigger
@@ -51,25 +50,16 @@ class DetailViewModel (
             when (val resultData = detailsInterActor.getDetails(id = id)) {
                 is Resource.Error -> {
                     if (inFavourites) {
-                        try {
-                            val vacancy = favouritesInteractor.getVacancyById(id)
-                            if (vacancy != null)
-                                _state.value = DetailState.Success(vacancy, true)
-                            else
-                                _state.value =
-                                    resultData.message?.let {
-                                        DetailState.Error(
-                                            message = it,
-                                        )
-                                    }
-                        } catch (_: Exception) {
+                        val vacancy = favouritesInteractor.getVacancyById(id)
+                        if (vacancy != null)
+                            _state.value = DetailState.Success(vacancy, true)
+                        else
                             _state.value =
                                 resultData.message?.let {
                                     DetailState.Error(
                                         message = it,
                                     )
                                 }
-                        }
                     } else {
                         _state.value =
                             resultData.message?.let {
