@@ -28,7 +28,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/nameSimilar"
-        style="@style/SimilarItemHeaderStyle"
+        style="@style/ItemHeaderStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_8"
@@ -42,7 +42,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/nameSimilarEmployer"
-        style="@style/SimilarItemTextStyle"
+        style="@style/ItemTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_12"
@@ -54,7 +54,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/salarySimilar"
-        style="@style/SimilarItemTextStyle"
+        style="@style/ItemTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_12"
