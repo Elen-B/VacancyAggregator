@@ -31,8 +31,10 @@ import ru.practicum.android.diploma.search.presentation.view_model.VacancySearch
 import ru.practicum.android.diploma.util.CHECK_CONNECTION
 import ru.practicum.android.diploma.util.ERROR_HAS_OCCURRED
 import ru.practicum.android.diploma.util.NETWORK_ERROR
+import ru.practicum.android.diploma.util.NOT_EXIST
 import ru.practicum.android.diploma.util.SERVER_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
+import ru.practicum.android.diploma.util.getStringCount
 
 
 class SearchFragment : Fragment() {
@@ -174,7 +176,7 @@ class SearchFragment : Fragment() {
 
     private fun showUpdate(contentTracks: List<Vacancy>, count: String) {
         binding.textVacancyCount.isVisible = true
-        binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
+        binding.textVacancyCount.setText(getStringCount(count))
         binding.groupProgressBarBottomUpdate.isVisible = false
         if (binding.searchEditText.text.isBlank()) {
             return
@@ -188,50 +190,50 @@ class SearchFragment : Fragment() {
 
     private fun showError(errorMessage: String) {
         if (viewModel.getPage() != 0 && !viewModel.isLastPage()) {
-            if(errorMessage == NETWORK_ERROR){
+            if (errorMessage == NETWORK_ERROR) {
                 showToast(CHECK_CONNECTION)
-            }
-            else{
+            } else {
                 showToast(ERROR_HAS_OCCURRED)
             }
             return
         }
-            hideKeyboard()
-            if (errorMessage == SERVER_ERROR) {
-                binding.groupServerError.isVisible = true
-            } else {
-                binding.groupConnectionError.isVisible = true
-            }
-            binding.groupProgressBarBottomUpdate.isVisible = false
-            binding.progressBar.visibility = View.GONE
-            binding.recyclerViewSearch.visibility = View.GONE
-            binding.textVacancyCount.visibility = View.GONE
+        hideKeyboard()
+        if (errorMessage == SERVER_ERROR) {
+            binding.groupServerError.isVisible = true
+        } else {
+            binding.groupConnectionError.isVisible = true
+        }
+        binding.groupProgressBarBottomUpdate.isVisible = false
+        binding.progressBar.visibility = View.GONE
+        binding.recyclerViewSearch.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.GONE
 
     }
 
     private fun showEmpty() {
         hideKeyboard()
+        binding.textVacancyCount.isVisible = true
+        binding.textVacancyCount.setText(NOT_EXIST)
         binding.progressBar.visibility = View.GONE
         binding.groupProgressBarBottomUpdate.isVisible = false
         binding.groupVacancyError.isVisible = true
         binding.recyclerViewSearch.visibility = View.GONE
-        binding.textVacancyCount.visibility = View.GONE
     }
 
     private fun showContent(contentTracks: List<Vacancy>, count: String) {
-            binding.textVacancyCount.setText(getString(R.string.foundVacancies, count))
-            binding.progressBar.visibility = View.GONE
-            if (binding.searchEditText.text.isBlank()) {
-                return
-            }
-            binding.imageCover.visibility = View.GONE
-            binding.textVacancyCount.visibility = View.VISIBLE
-            binding.recyclerViewSearch.scrollToPosition(0)
-            adapter.searchVacancyList.clear()
-            adapter.searchVacancyList.addAll(contentTracks)
-            adapter.notifyDataSetChanged()
-            binding.recyclerViewSearch.visibility = View.VISIBLE
-            binding.progressBar.isVisible = false
+        binding.textVacancyCount.setText(getStringCount(count))
+        binding.progressBar.visibility = View.GONE
+        if (binding.searchEditText.text.isBlank()) {
+            return
+        }
+        binding.imageCover.visibility = View.GONE
+        binding.textVacancyCount.visibility = View.VISIBLE
+        binding.recyclerViewSearch.scrollToPosition(0)
+        adapter.searchVacancyList.clear()
+        adapter.searchVacancyList.addAll(contentTracks)
+        adapter.notifyDataSetChanged()
+        binding.recyclerViewSearch.visibility = View.VISIBLE
+        binding.progressBar.isVisible = false
     }
 
     private fun getDefaultView() {
