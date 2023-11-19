@@ -32,7 +32,7 @@ class SimilarViewModel (
                         SimilarState.Error(
                             message = resultData.message ?: UNKNOWN_ERROR,
                             errorImagePath = resultData.errorImagePath
-                                ?: R.drawable.error_show_cat
+                                ?: R.drawable.server_error
                         )
                 }
                 is Resource.Success -> {
