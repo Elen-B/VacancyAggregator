@@ -57,7 +57,21 @@ class SimilarFragment : Fragment() {
             is SimilarState.Loading -> {
                 setLoad()
             }
+
+            is SimilarState.Empty -> {
+                setEmpty()
+            }
         }
+    }
+
+    private fun setEmpty() {
+        with(binding.include) {
+            imError.setImageResource(R.drawable.error_show_cat)
+            tvError.text = getString(R.string.no_list)
+        }
+        binding.include.root.isVisible = true
+        binding.rvSimilar.isVisible = false
+        binding.progress.isVisible = false
     }
 
     private fun setError(

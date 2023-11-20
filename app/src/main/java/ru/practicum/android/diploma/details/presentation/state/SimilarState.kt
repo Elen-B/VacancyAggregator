@@ -4,6 +4,7 @@ import ru.practicum.android.diploma.core.domain.models.Vacancy
 
 sealed class SimilarState {
     object Loading : SimilarState()
+    object Empty : SimilarState()
     class Error(
         val message: String,
         val errorImagePath: Int) : SimilarState()
