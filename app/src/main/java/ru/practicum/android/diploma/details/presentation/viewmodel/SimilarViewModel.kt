@@ -36,7 +36,7 @@ class SimilarViewModel (
                         )
                 }
                 is Resource.Success -> {
-                    _state.value = if (resultData.data == null) {
+                    _state.value = if (resultData.data.isNullOrEmpty()) {
                         SimilarState.Empty
                     } else {
                         SimilarState.Success(data = resultData.data)
