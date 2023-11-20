@@ -15,6 +15,7 @@ import ru.practicum.android.diploma.core.domain.models.Vacancy
 import ru.practicum.android.diploma.databinding.FragmentSimilarBinding
 import ru.practicum.android.diploma.details.presentation.state.SimilarState
 import ru.practicum.android.diploma.details.presentation.viewmodel.SimilarViewModel
+import ru.practicum.android.diploma.util.VACANCY_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
 class SimilarFragment : Fragment() {
@@ -57,7 +58,21 @@ class SimilarFragment : Fragment() {
             is SimilarState.Loading -> {
                 setLoad()
             }
+
+            is SimilarState.Empty -> {
+                setEmpty()
+            }
         }
+    }
+
+    private fun setEmpty() {
+        with(binding.include) {
+            imError.setImageResource(R.drawable.error_show_cat)
+            tvError.text = VACANCY_ERROR
+        }
+        binding.include.root.isVisible = true
+        binding.rvSimilar.isVisible = false
+        binding.progress.isVisible = false
     }
 
     private fun setError(
