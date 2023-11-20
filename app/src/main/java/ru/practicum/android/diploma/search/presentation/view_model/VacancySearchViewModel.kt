@@ -6,86 +6,92 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.toHashMap
 import ru.practicum.android.diploma.search.domain.VacancySearchInteractor
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
-import ru.practicum.android.diploma.search.presentation.FilterMapper
 import ru.practicum.android.diploma.search.presentation.VacancyState
-import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
-import ru.practicum.android.diploma.util.NETWORK_ERROR
+import ru.practicum.android.diploma.util.PAGE
+import ru.practicum.android.diploma.util.PER_PAGE
 import ru.practicum.android.diploma.util.SEARCH_DEBOUNCE_DELAY
-import ru.practicum.android.diploma.util.VACANCY_ERROR
+import ru.practicum.android.diploma.util.TEXT
+import ru.practicum.android.diploma.util.TWENTY
+import ru.practicum.android.diploma.util.debounce
 
 class VacancySearchViewModel(
     private val searchInteractor: VacancySearchInteractor,
-    private val filterInteractor: FilterLocalInteractor) : ViewModel() {
+    private val filterInteractor: FilterLocalInteractor
+) : ViewModel() {
 
     private var filterParameters: FilterParameters? = null
     private var latestSearchText: String? = null
     private var searchJob: Job? = null
     private var isClickAllowed = true
     private val stateLiveData = MutableLiveData<VacancyState>()
-    private val foundVacanciesCount = MutableLiveData<String?>(null)
-    private val isFiltered = MutableLiveData<Boolean>(false)
+    private val isFiltered = MutableLiveData(false)
+    private val iconVisible = MutableLiveData<Boolean>()
+    private val imageCoverIsVisible = MutableLiveData<Boolean>()
+    private val filterMap = HashMap<String, String>()
+    private var pageNumber: Int = 0
+    private var lastPage: Boolean = true
+    fun observeCoverImageVisible() = imageCoverIsVisible
     fun observeState(): LiveData<VacancyState> = stateLiveData
-    fun observeFoundVacanciesCount(): LiveData<String?> = foundVacanciesCount
     fun observeisFiltered(): LiveData<Boolean> = isFiltered
+    fun observeIconVisible(): LiveData<Boolean> = iconVisible
 
-    fun searchDebounce(changedText: String, forceButtonClick: Boolean = false) {
-        if (latestSearchText == changedText && !forceButtonClick) {
+    init {
+        isFilterButtonEnable()
+    }
+
+    private val onClickDebounce =
+        debounce<Boolean>(SEARCH_DEBOUNCE_DELAY, viewModelScope, false) {
+            isClickAllowed = it
+        }
+
+    fun searchDebounce(
+        changedText: String = "",
+        forceButtonClick: Boolean = false,
+        update: Boolean = false
+    ) {
+        if (changedText.isEmpty() && !update) {
+            latestSearchText = ""
+            searchJob?.cancel()
+            return
+        } else if (latestSearchText == changedText && !forceButtonClick && !update) {
             return
         }
-        val searchOption = hashMapOf<String,String>("text" to changedText)
-        if(filterParameters != null){
-            searchOption.putAll(FilterMapper.getMap(filterParameters!!))
+
+        val searchOption = hashMapOf(TEXT to changedText, PER_PAGE to TWENTY, PAGE to "0")
+        if (update) {
+            pageNumber++
+            searchOption.put(PAGE, pageNumber.toString())
+        } else {
+            pageNumber = 0
         }
+        searchOption.putAll(filterMap)
         latestSearchText = changedText
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            if(!forceButtonClick){
-            delay(SEARCH_DEBOUNCE_DELAY)}
-            searchRequest(searchOption)
+            if (!forceButtonClick) {
+                delay(SEARCH_DEBOUNCE_DELAY)
+            }
+            searchRequest(searchOption, update)
         }
     }
 
-    private fun searchRequest(searchOptions: HashMap<String,String>) {
+    private fun searchRequest(searchOptions: HashMap<String, String>, isUpdate: Boolean = false) {
         if (searchOptions.isNotEmpty()) {
-            renderState(VacancyState.Loading)
+            if (!isUpdate) {
+                lastPage = true
+                renderState(VacancyState.Loading)
+            }
             viewModelScope.launch {
                 searchInteractor
                     .searchVacancy(searchOptions)
-                    .collect { pair ->
-                        processResult(
-                            pair.second.data,
-                            pair.second.message
-                        ).apply { foundVacanciesCount.postValue(pair.first) }
-                    }
-            }
-        }
-    }
-
-    private fun processResult(
-        foundVacancies: List<SearchVacancy>?,
-        message: String?
-    ) {
-        val vacancies = mutableListOf<SearchVacancy>()
-        if (foundVacancies != null) {
-            vacancies.addAll(foundVacancies)
-        }
-        when {
-            message == NETWORK_ERROR -> {
-                renderState(VacancyState.Error(errorMessage = NETWORK_ERROR))
-            }
-
-            message == VACANCY_ERROR || foundVacancies.isNullOrEmpty() -> {
-                renderState(VacancyState.Empty(message = VACANCY_ERROR))
-            }
-
-            else -> {
-                renderState(VacancyState.Content(vacancy = vacancies))
+                    .first().data?.let { renderState(it) }
             }
         }
     }
@@ -94,25 +100,52 @@ class VacancySearchViewModel(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            viewModelScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
+            onClickDebounce(true)
         }
         return current
     }
 
     private fun renderState(state: VacancyState) {
+        updateLocalData(state)
         stateLiveData.postValue(state)
     }
 
-    fun isFilterButtonEnable(){
+    private fun updateLocalData(state: VacancyState) {
+        lastPage = when (state) {
+            is VacancyState.Content -> state.lastPage
+            is VacancyState.Update -> state.lastPage
+            else -> lastPage
+        }
+    }
+
+    fun setFocus(textIsEmpty: Boolean) {
+        iconVisible.postValue(textIsEmpty)
+    }
+
+    fun setVisibleCoverImage(isVisible: Boolean) {
+        imageCoverIsVisible.postValue(isVisible)
+    }
+
+    fun isFilterButtonEnable() {
         viewModelScope.launch {
-            delay(CLICK_DEBOUNCE_DELAY)
             filterParameters = filterInteractor.getFilterParameters()
+            filterMap.clear()
+            filterParameters?.toHashMap()?.let { filterMap.putAll(it) }
             isFiltered.postValue(filterParameters != null)
         }
     }
 
     fun getFilter(): FilterParameters? = filterParameters
+
+    fun forceSearch(filterParameters: FilterParameters?) {
+        filterParameters?.let {
+            filterMap.clear()
+            filterMap.putAll(it.toHashMap())
+        }
+        latestSearchText?.let {
+            searchDebounce(it, true) }
+    }
+
+    fun isLastPage(): Boolean = lastPage
+    fun getPage(): Int = pageNumber
 }

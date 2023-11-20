@@ -18,7 +18,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentLocationRegionBinding
-import ru.practicum.android.diploma.filter.presentation.models.LocationRegionScreenState
+import ru.practicum.android.diploma.filter.presentation.state.LocationRegionScreenState
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationRegionViewModel
 
 class LocationRegionFragment: Fragment() {

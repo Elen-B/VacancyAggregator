@@ -6,11 +6,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
-import ru.practicum.android.diploma.filter.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.models.FilterIndustryScreenState
+import ru.practicum.android.diploma.core.domain.models.Industry
+import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
+import ru.practicum.android.diploma.filter.domain.models.FilterParameters
+import ru.practicum.android.diploma.filter.domain.models.FilterSaveMode
+import ru.practicum.android.diploma.filter.presentation.state.FilterIndustryScreenState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
-class FilterIndustryViewModel(industry: Industry?, private val filterInteractor: FilterInteractor): ViewModel() {
+class FilterIndustryViewModel(
+    industry: Industry?,
+    private val filterInteractor: FilterInteractor,
+    private val filterLocalInteractor: FilterLocalInteractor
+) : ViewModel() {
 
     private val originalList: MutableList<Industry> = ArrayList()
     private val filteredList: MutableList<Industry> = ArrayList()
@@ -30,11 +37,11 @@ class FilterIndustryViewModel(industry: Industry?, private val filterInteractor:
     private fun loadData() {
         viewModelScope.launch {
             val result = filterInteractor.getIndustries()
-            if (result.second != null) {
+            if (result.isError) {
                 setState(FilterIndustryScreenState.Error)
             } else {
-                if (result.first != null) {
-                    originalList.addAll(result.first!!)
+                if (result.data != null) {
+                    originalList.addAll(result.data)
                     setState(FilterIndustryScreenState.Content(originalList, checkedIndustry))
                 } else {
                     setState(FilterIndustryScreenState.Empty)
@@ -81,9 +88,14 @@ class FilterIndustryViewModel(industry: Industry?, private val filterInteractor:
     }
 
     fun applyFilter() {
-        if (/*clickDebounce() &&*/ stateLiveData.value is FilterIndustryScreenState.Content) {
-            applyFilterTrigger.value =
+        if (stateLiveData.value is FilterIndustryScreenState.Content) {
+            val checkedIndustry =
                 (stateLiveData.value as FilterIndustryScreenState.Content).checkedIndustry
+            filterLocalInteractor.saveFilterParameters(
+                FilterParameters(industry = checkedIndustry),
+                FilterSaveMode.INDUSTRY
+            )
+            applyFilterTrigger.value = checkedIndustry
         }
     }
 }

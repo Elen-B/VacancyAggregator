@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,10 +21,10 @@ import ru.practicum.android.diploma.databinding.FragmentFilterBinding
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.core.domain.models.Industry
+import ru.practicum.android.diploma.filter.presentation.state.FilterScreenState
 
 class FilterFragment : Fragment() {
     private lateinit var binding: FragmentFilterBinding
@@ -82,8 +84,8 @@ class FilterFragment : Fragment() {
             showIndustry(industry)
         }
 
-        viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
+        viewModel.getSaveFilterTrigger().observe(viewLifecycleOwner) { filterParameters ->
+            applyFilter(filterParameters)
         }
 
         binding.miFilterLocation.editText?.setOnClickListener {
@@ -119,7 +121,7 @@ class FilterFragment : Fragment() {
             viewModel.onSalaryChanged(text.toString())
         }
 
-        binding.miFilterSalary.editText?.setOnEditorActionListener { _, actionId, keyEvent ->
+        binding.miFilterSalary.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.miFilterSalary.editText?.clearFocus()
                 binding.miFilterSalary.isEndIconVisible = false
@@ -137,12 +139,17 @@ class FilterFragment : Fragment() {
         }
 
         binding.btTopBarBack.setOnClickListener {
+            setFragmentResult(
+                FILTER_RESULT_KEY,
+                bundleOf(
+                    FILTER_RESULT_VAL to null
+                )
+            )
             findNavController().navigateUp()
         }
 
         binding.btFilterApply.setOnClickListener {
-            viewModel.saveFilterParameters()
-            findNavController().navigateUp()
+            viewModel.applyFilter()
         }
 
         binding.btFilterClear.setOnClickListener {
@@ -191,8 +198,7 @@ class FilterFragment : Fragment() {
                 filterParameters.salary != null
             )
             binding.btFilterClear.isVisible = !filterParameters.isEmpty()
-
-            binding.btFilterApply.isVisible = state is FilterScreenState.Modified
+            binding.btFilterApply.isVisible = !filterParameters.isEmpty()
         }
     }
 
@@ -257,5 +263,20 @@ class FilterFragment : Fragment() {
             industry
         )
         findNavController().navigate(action)
+    }
+
+    private fun applyFilter(filterParameters: FilterParameters) {
+        setFragmentResult(
+            FILTER_RESULT_KEY,
+            bundleOf(
+                FILTER_RESULT_VAL to filterParameters
+            )
+        )
+        findNavController().navigateUp()
+    }
+
+    companion object {
+        const val FILTER_RESULT_KEY = "filter_key"
+        const val FILTER_RESULT_VAL = "filter_val"
     }
 }

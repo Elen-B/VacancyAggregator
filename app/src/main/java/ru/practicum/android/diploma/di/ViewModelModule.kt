@@ -3,13 +3,13 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterLocationViewModel
-import ru.practicum.android.diploma.details.presentation.DetailViewModel
-import ru.practicum.android.diploma.details.presentation.SimilarViewModel
+import ru.practicum.android.diploma.details.presentation.viewmodel.DetailViewModel
+import ru.practicum.android.diploma.details.presentation.viewmodel.SimilarViewModel
 import ru.practicum.android.diploma.favourites.presentation.viewModel.FavouritesViewModel
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterIndustryViewModel
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 import ru.practicum.android.diploma.filter.presentation.viewmodel.FilterViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationCountryViewModel
 import ru.practicum.android.diploma.filter.presentation.viewmodel.LocationRegionViewModel
@@ -29,7 +29,7 @@ val viewModelModule = module {
     }
 
     viewModel {(country: Area?, region: Area?) ->
-        FilterLocationViewModel(country, region, get())
+        FilterLocationViewModel(country, region, get(), get())
     }
 
     viewModel {
@@ -41,7 +41,7 @@ val viewModelModule = module {
     }
 
     viewModel {(industry: Industry?) ->
-        FilterIndustryViewModel(industry, get())
+        FilterIndustryViewModel(industry, get(), get())
     }
 
     viewModel {

@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.filter.presentation.ui
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.filter.domain.models.Industry
+import ru.practicum.android.diploma.core.domain.models.Industry
 
 class IndustryAdapter(private var items: List<Industry>) : RecyclerView.Adapter<IndustryViewHolder>() {
     var clickListener: IndustryClickListener? = null

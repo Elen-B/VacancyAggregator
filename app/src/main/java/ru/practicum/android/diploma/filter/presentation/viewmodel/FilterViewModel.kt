@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ru.practicum.android.diploma.filter.domain.api.FilterLocalInteractor
-import ru.practicum.android.diploma.filter.domain.models.Area
+import ru.practicum.android.diploma.core.domain.models.Area
 import ru.practicum.android.diploma.filter.domain.models.FilterParameters
-import ru.practicum.android.diploma.filter.domain.models.Industry
-import ru.practicum.android.diploma.filter.presentation.models.FilterScreenState
+import ru.practicum.android.diploma.core.domain.models.Industry
+import ru.practicum.android.diploma.filter.presentation.state.FilterScreenState
 import ru.practicum.android.diploma.util.CLICK_DEBOUNCE_DELAY
 import ru.practicum.android.diploma.util.SingleEventLiveData
 import ru.practicum.android.diploma.util.debounce
@@ -29,8 +29,8 @@ class FilterViewModel(
     private val showIndustryTrigger = SingleEventLiveData<Industry?>()
     fun getShowIndustryTrigger(): LiveData<Industry?> = showIndustryTrigger
 
-    private val saveFilterTrigger = SingleEventLiveData<Unit>()
-    fun getSaveFilterTrigger(): LiveData<Unit> = saveFilterTrigger
+    private val saveFilterTrigger = SingleEventLiveData<FilterParameters>()
+    fun getSaveFilterTrigger(): LiveData<FilterParameters> = saveFilterTrigger
 
     private var isClickAllowed = true
     private val onTrackClickDebounce =
@@ -84,26 +84,31 @@ class FilterViewModel(
         val salary = if (value.isNotEmpty()) value.toInt() else null
         val newFilterParameters = filterParameters.copy(salary = salary)
         setStateEx(newFilterParameters, false)
+        saveFilterParameters()
     }
 
     fun onLocationChanged(country: Area?, region: Area?) {
         val newFilterParameters = filterParameters.copy(country = country, region = region)
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun onIndustryChanged(industry: Industry?) {
         val newFilterParameters = filterParameters.copy(industry = industry)
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun onFSalaryRequiredChanged(checked: Boolean) {
         val newFilterParameters = filterParameters.copy(fSalaryRequired = checked)
         setStateEx(newFilterParameters, false)
+        saveFilterParameters()
     }
 
     fun onClearFilterClick() {
         val newFilterParameters = FilterParameters()
         setStateEx(newFilterParameters, true)
+        saveFilterParameters()
     }
 
     fun showLocation() {
@@ -118,9 +123,11 @@ class FilterViewModel(
         }
     }
 
-    fun saveFilterParameters() {
-        if (clickDebounce()) {
-            filterLocalInteractor.saveFilterParameters(filterParameters)
-        }
+    fun applyFilter() {
+        saveFilterTrigger.value = filterParameters
+    }
+
+    private fun saveFilterParameters() {
+        filterLocalInteractor.saveFilterParameters(filterParameters)
     }
 }

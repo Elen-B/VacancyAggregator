@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
-import ru.practicum.android.diploma.filter.presentation.models.LocationCountryScreenState
+import ru.practicum.android.diploma.filter.presentation.state.LocationCountryScreenState
 
 class LocationCountryViewModel(private val filterInteractor: FilterInteractor): ViewModel()  {
 
@@ -20,11 +20,11 @@ class LocationCountryViewModel(private val filterInteractor: FilterInteractor): 
     private fun loadData() {
         viewModelScope.launch {
             val result = filterInteractor.getCountries()
-            if (!result.second.isNullOrEmpty()) {
+            if (result.isError) {
                 setState(LocationCountryScreenState.Error)
             } else {
-                if (result.first != null) {
-                    setState(LocationCountryScreenState.Content(result.first!!))
+                if (result.data != null) {
+                    setState(LocationCountryScreenState.Content(result.data))
                 } else {
                     setState(LocationCountryScreenState.Error)
                 }

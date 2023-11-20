@@ -5,7 +5,7 @@
     android:theme="@style/Theme.PracticumAndroidDiploma"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".details.presentation.DetailFragment">
+    tools:context=".details.presentation.ui.DetailFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/back"
@@ -44,12 +44,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_12"
-        android:layout_marginTop="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_20"
         android:layout_marginEnd="@dimen/margin_16"
-        android:paddingBottom="@dimen/margin_8"
+        android:layout_marginBottom="@dimen/margin_8"
         android:text="@string/vacancy"
-        android:textColor="@color/base_text"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="@dimen/header_text_size"
+        android:fontFamily="@font/ys_display_medium"
         app:layout_constraintStart_toEndOf="@id/back"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,10 +59,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/tool_bar_height"
-        app:layout_constraintTop_toBottomOf="@id/vacancy" >
+        app:layout_constraintTop_toBottomOf="@id/vacancy">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/vacancyName"
                 android:layout_width="match_parent"
@@ -69,9 +72,9 @@
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_32"
                 android:layout_marginEnd="@dimen/margin_16"
+                android:fontFamily="@font/ys_display_bold"
                 android:text="@string/vacancy_name"
                 android:textColor="@color/base_text"
-                android:fontFamily="@font/ys_display_bold"
                 android:textSize="@dimen/title_text_size"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -91,8 +94,8 @@
                 android:id="@+id/cardEmployer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_16"
                 android:layout_marginStart="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
                 app:cardCornerRadius="@dimen/margin_12"
                 app:layout_constraintTop_toBottomOf="@id/salary">
@@ -102,17 +105,27 @@
                     android:layout_height="wrap_content"
                     android:background="@color/light_grey">
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/employerLogo"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_16"
-                        android:src="@drawable/vacancy_item_search_placeholder"
-                        android:layout_marginBottom="@dimen/margin_16"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardLogo"
+                        android:layout_width="@dimen/edit_text_height"
+                        android:layout_height="@dimen/edit_text_height"
                         android:layout_marginStart="@dimen/margin_16"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="@dimen/margin_16"
+                        android:layout_marginBottom="@dimen/margin_16"
+                        app:cardCornerRadius="@dimen/margin_12"
+                        app:cardElevation="0dp"
+
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/employerLogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/colorPrimary"
+                            android:src="@drawable/ic_logo" />
+                    </androidx.cardview.widget.CardView>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/employerName"
@@ -123,10 +136,11 @@
                         android:textColor="@color/card_text"
                         android:layout_marginEnd="@dimen/margin_16"
                         android:textSize="@dimen/header_text_size"
+                        android:fontFamily="@font/ys_display_medium"
                         android:layout_marginTop="@dimen/margin_16"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/employerLogo"/>
+                        app:layout_constraintStart_toEndOf="@id/cardLogo"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/employerCity"
@@ -136,153 +150,172 @@
                         android:text="@string/from"
                         android:textColor="@color/card_text"
                         android:textSize="@dimen/regular_text_size"
+                        android:fontFamily="@font/ys_display_regular"
                         android:paddingBottom="@dimen/margin_16"
                         app:layout_constraintTop_toBottomOf="@id/employerName"
-                        app:layout_constraintStart_toEndOf="@id/employerLogo"/>
+                        app:layout_constraintStart_toEndOf="@id/cardLogo"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/requiredExperience"
+                style="@style/DetailsSubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/required_experience"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/cardEmployer"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/experience"
+                style="@style/DetailsTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
                 android:text="@string/from"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
+
                 app:layout_constraintTop_toBottomOf="@id/requiredExperience"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grExperience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="requiredExperience, experience" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/employment"
+                style="@style/DetailsTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_8"
-                android:text="@string/from"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
+                tools:text="@string/from"
+
                 app:layout_constraintTop_toBottomOf="@id/experience"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/vacancyDescription"
+                style="@style/DetailsHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginTop="@dimen/margin_32"
+                android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/vacancy_description"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/header_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/employment"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/description"
+                style="@style/DetailsTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
-                android:text="@string/from"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_regular"
+                tools:text="@string/vacancy_description"
+
                 app:layout_constraintTop_toBottomOf="@id/vacancyDescription"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="vacancyDescription, description" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/keySkills"
+                style="@style/DetailsHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/key_skills"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/header_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/description"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/keySkillsContent"
+                style="@style/DetailsTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
-                android:text="@string/key_skills"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_regular"
+                tools:text="@string/key_skills"
+
                 app:layout_constraintTop_toBottomOf="@id/keySkills"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grSkills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="keySkills, keySkillsContent" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contacts"
+                style="@style/DetailsHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_24"
                 android:text="@string/contacts"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/header_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/keySkillsContent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contactFace"
+                style="@style/DetailsSubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
                 android:text="@string/contact_name"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/contacts"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contactName"
+                style="@style/DetailsTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
-                android:text="@string/contact_name"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_regular"
+                tools:text="@string/contact_name"
+
                 app:layout_constraintTop_toBottomOf="@id/contactFace"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="contactName, contactFace" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/emailName"
+                style="@style/DetailsSubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
                 android:text="@string/e_mail"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/contactName"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -292,23 +325,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
-                android:text="@string/e_mail"
+                tools:text="@string/e_mail"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/regular_text_size"
                 android:fontFamily="@font/ys_display_regular"
                 app:layout_constraintTop_toBottomOf="@id/emailName"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="emailName, email" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/phoneName"
+                style="@style/DetailsSubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
                 android:text="@string/phone"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/email"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -318,55 +357,91 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
-                android:text="@string/phone"
+                tools:text="@string/phone"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/regular_text_size"
                 android:fontFamily="@font/ys_display_regular"
                 app:layout_constraintTop_toBottomOf="@id/phoneName"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="phoneName, phone" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/commentName"
+                style="@style/DetailsSubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_16"
                 android:text="@string/comment"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
+
                 app:layout_constraintTop_toBottomOf="@id/phone"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/comment"
-                android:layout_width="wrap_content"
+                style="@style/DetailsTextStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginTop="@dimen/margin_4"
                 android:text="@string/comment"
-                android:textColor="@color/base_text"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_regular"
+
                 app:layout_constraintTop_toBottomOf="@id/commentName"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btSimilar"
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/grComment"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_16"
+                android:visibility="visible"
+                app:constraint_referenced_ids="commentName, comment" />
+
+            <Button
+                android:id="@+id/btSimilar"
+                style="@style/FilterBlueButtonStyle"
                 android:layout_marginTop="@dimen/margin_24"
+                android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
-                android:background="@drawable/corner_button"
-                android:textAllCaps="false"
+                android:layout_marginBottom="@dimen/margin_24"
                 android:text="@string/similar_vacancies"
-                android:textSize="@dimen/regular_text_size"
-                android:fontFamily="@font/ys_display_medium"
-                android:textColor="@color/blue_button_text"
-                app:layout_constraintTop_toBottomOf="@id/comment" />
+                app:layout_constraintTop_toBottomOf="@id/comment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/phDetailsError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            style="@style/FilterPlaceHolderTextViewStyle"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="@string/error_details"
+            app:drawableTopCompat="@drawable/error_details"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

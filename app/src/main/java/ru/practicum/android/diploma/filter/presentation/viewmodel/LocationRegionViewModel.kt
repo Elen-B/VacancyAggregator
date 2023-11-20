@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
-import ru.practicum.android.diploma.filter.domain.models.Area
-import ru.practicum.android.diploma.filter.presentation.models.LocationRegionScreenState
+import ru.practicum.android.diploma.core.domain.models.Area
+import ru.practicum.android.diploma.filter.presentation.state.LocationRegionScreenState
 
 class LocationRegionViewModel(country: Area?, private val filterInteractor: FilterInteractor) :
     ViewModel() {
@@ -26,11 +26,11 @@ class LocationRegionViewModel(country: Area?, private val filterInteractor: Filt
         viewModelScope.launch {
             val id = country?.id.orEmpty()
             val result = filterInteractor.getAreas(id)
-            if (!result.second.isNullOrEmpty()) {
+            if (result.isError) {
                 setState(LocationRegionScreenState.Error)
             } else {
-                if (result.first != null) {
-                    originalList.addAll(result.first!!)
+                if (result.data != null) {
+                    originalList.addAll(result.data)
                     setState(LocationRegionScreenState.Content(originalList))
                 } else {
                     setState(LocationRegionScreenState.Error)

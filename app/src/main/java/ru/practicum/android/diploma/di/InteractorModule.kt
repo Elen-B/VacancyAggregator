@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActor
-import ru.practicum.android.diploma.details.domain.usecase.DetailsInterActorImpl
-import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActor
-import ru.practicum.android.diploma.details.domain.usecase.SimilarInterActorImpl
+import ru.practicum.android.diploma.details.domain.api.DetailsInterActor
+import ru.practicum.android.diploma.details.domain.impl.GetVacancyDetailsUseCase
+import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
+import ru.practicum.android.diploma.details.domain.impl.GetSimilarVacanciesUseCase
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesInteractor
 import ru.practicum.android.diploma.favourites.domain.impl.FavouritesInteractorImpl
 import ru.practicum.android.diploma.filter.domain.api.FilterInteractor
@@ -16,29 +16,28 @@ import ru.practicum.android.diploma.search.domain.impl.VacancySearchInteractorIm
 
 import ru.practicum.android.diploma.filter.domain.impl.FilterLocalInteractorImpl
 
-
 val interactorModule = module {
-    single <DetailsInterActor> {
-        DetailsInterActorImpl(get())
+    factory<DetailsInterActor> {
+        GetVacancyDetailsUseCase(get())
     }
 
-    single <FilterInteractor> {
+    factory<FilterInteractor> {
         FilterInteractorImpl(get())
     }
 
-    single <VacancySearchInteractor> {
+    factory<VacancySearchInteractor> {
         VacancySearchInteractorImpl(get())
     }
 
-    single<FavouritesInteractor>{
+    factory<FavouritesInteractor> {
         FavouritesInteractorImpl(get())
     }
 
-    single<FilterLocalInteractor> {
+    factory<FilterLocalInteractor> {
         FilterLocalInteractorImpl(get())
     }
 
-    single <SimilarInterActor> {
-        SimilarInterActorImpl(get())
+    factory<SimilarInterActor> {
+        GetSimilarVacanciesUseCase(get())
     }
 }

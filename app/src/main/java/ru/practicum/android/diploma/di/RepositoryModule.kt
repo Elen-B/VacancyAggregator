@@ -1,10 +1,11 @@
 package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
-import ru.practicum.android.diploma.details.data.DetailRepositoryImpl
-import ru.practicum.android.diploma.details.domain.impl.DetailRepository
-import ru.practicum.android.diploma.favourites.data.FavouritesRepositoryImpl
-import ru.practicum.android.diploma.favourites.data.VacancyConvertor
+import ru.practicum.android.diploma.details.data.impl.DetailRepositoryImpl
+import ru.practicum.android.diploma.details.data.impl.SimilarRepositoryImpl
+import ru.practicum.android.diploma.details.domain.api.DetailRepository
+import ru.practicum.android.diploma.details.domain.api.SimilarRepository
+import ru.practicum.android.diploma.favourites.data.impl.FavouritesRepositoryImpl
 import ru.practicum.android.diploma.favourites.domain.api.FavouritesRepository
 import ru.practicum.android.diploma.filter.data.impl.FilterLocalRepositoryImpl
 import ru.practicum.android.diploma.filter.data.impl.FilterRepositoryImpl
@@ -22,19 +23,19 @@ val repositoryModule = module {
         FilterRepositoryImpl(get())
     }
 
-
     single<VacancySearchRepository> {
         VacancySearchRepositoryImpl(get())
     }
+
     single<FavouritesRepository> {
-        FavouritesRepositoryImpl(get(), get())
+        FavouritesRepositoryImpl(get())
     }
 
-    single<FilterLocalRepository> {
+    factory <FilterLocalRepository> {
         FilterLocalRepositoryImpl(get(), get())
     }
 
-    factory {
-        VacancyConvertor(get())
+    single<SimilarRepository> {
+        SimilarRepositoryImpl(get())
     }
 }

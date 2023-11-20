@@ -3,11 +3,11 @@ package ru.practicum.android.diploma.favourites.presentation.adapter
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.search.domain.models.SearchVacancy
+import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
 
-class FavouritesVacancyAdapter(private val onClickItem: (SearchVacancy) -> Unit) :
+class FavouritesVacancyAdapter(private val onClickItem: (ProfessionDetail) -> Unit) :
     RecyclerView.Adapter<FavouritesVacancyHolder>() {
-    private val vacancyItems = mutableListOf<SearchVacancy>()
+    private val vacancyItems = mutableListOf<ProfessionDetail>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesVacancyHolder =
         FavouritesVacancyHolder(parent)
 
@@ -23,7 +23,7 @@ class FavouritesVacancyAdapter(private val onClickItem: (SearchVacancy) -> Unit)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setVacancyList(newVacancyList: List<SearchVacancy>?) {
+    fun setVacancyList(newVacancyList: List<ProfessionDetail>?) {
         vacancyItems.clear()
         if (!newVacancyList.isNullOrEmpty()) {
             vacancyItems.addAll(newVacancyList)
