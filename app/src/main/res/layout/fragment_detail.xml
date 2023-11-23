@@ -431,7 +431,7 @@
         android:visibility="gone"/>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/errorPlaceholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

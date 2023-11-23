@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/errorPlaceholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"

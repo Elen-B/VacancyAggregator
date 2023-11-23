@@ -65,11 +65,11 @@ class SimilarFragment : Fragment() {
     }
 
     private fun setEmpty() {
-        with(binding.include) {
+        with(binding.errorPlaceholder) {
             imError.setImageResource(R.drawable.error_show_cat)
             tvError.text = getString(R.string.no_list)
         }
-        binding.include.root.isVisible = true
+        binding.errorPlaceholder.root.isVisible = true
         binding.rvSimilar.isVisible = false
         binding.progress.isVisible = false
     }
@@ -78,11 +78,11 @@ class SimilarFragment : Fragment() {
         message: String,
         imagePath: Int
     ) {
-        with(binding.include) {
+        with(binding.errorPlaceholder) {
             imError.setImageResource(imagePath)
             tvError.text = message
         }
-        binding.include.root.isVisible = true
+        binding.errorPlaceholder.root.isVisible = true
         binding.rvSimilar.isVisible = false
         binding.progress.isVisible = false
     }
@@ -103,12 +103,12 @@ class SimilarFragment : Fragment() {
         val adapter = SimilarAdapter(data, stateClickListener)
         binding.rvSimilar.adapter = adapter
         binding.progress.isVisible = false
-        binding.include.root.isVisible =  false
+        binding.errorPlaceholder.root.isVisible =  false
     }
 
     private fun setLoad() {
         binding.rvSimilar.isVisible = false
         binding.progress.isVisible = true
-        binding.include.root.isVisible =  false
+        binding.errorPlaceholder.root.isVisible =  false
     }
 }
