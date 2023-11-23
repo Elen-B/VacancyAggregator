@@ -135,7 +135,7 @@ class DetailFragment : Fragment() {
 
         binding.progress.isVisible = false
         binding.scroll.isVisible = true
-        binding.include.root.isVisible =  false
+        binding.errorPlaceholder.root.isVisible =  false
         binding.btSimilar.isVisible = !fromDB
     }
 
@@ -202,18 +202,18 @@ class DetailFragment : Fragment() {
     private fun showProgress() {
         binding.progress.isVisible = true
         binding.scroll.isVisible = false
-        binding.include.root.isVisible =  false
+        binding.errorPlaceholder.root.isVisible =  false
     }
 
     private fun showError(
         message: String,
         imagePath: Int
     ) {
-        with(binding.include) {
+        with(binding.errorPlaceholder) {
             imError.setImageResource(imagePath)
             tvError.text = message
         }
-        binding.include.root.isVisible = true
+        binding.errorPlaceholder.root.isVisible = true
         binding.progress.isVisible = false
         binding.scroll.isVisible = false
     }
