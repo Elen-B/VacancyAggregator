@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.details.domain.api.SimilarInterActor
 import ru.practicum.android.diploma.details.presentation.state.SimilarState
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.UNKNOWN_ERROR
 import ru.practicum.android.diploma.util.VACANCY_ID
 
 class SimilarViewModel (
@@ -29,16 +30,17 @@ class SimilarViewModel (
                 is Resource.Error -> {
                     _state.value =
                         SimilarState.Error(
-                            message = resultData.message ?: "An unknown error",
+                            message = resultData.message ?: UNKNOWN_ERROR,
                             errorImagePath = resultData.errorImagePath
-                                ?: R.drawable.error_show_cat
+                                ?: R.drawable.server_error
                         )
                 }
                 is Resource.Success -> {
-                    _state.value =
-                        resultData.data?.let {
-                            SimilarState.Success(data = it)
-                        }
+                    _state.value = if (resultData.data.isNullOrEmpty()) {
+                        SimilarState.Empty
+                    } else {
+                        SimilarState.Success(data = resultData.data)
+                    }
                 }
             }
         }

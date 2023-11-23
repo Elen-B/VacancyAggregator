@@ -8,7 +8,7 @@
         android:id="@+id/imError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/error_connection_dm"
+        android:src="@drawable/error_connection"
         android:layout_marginStart="@dimen/margin_16"
         android:layout_marginEnd="@dimen/margin_16"
         app:layout_constraintTop_toTopOf="parent"/>

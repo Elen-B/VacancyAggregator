@@ -148,4 +148,5 @@ class VacancySearchViewModel(
 
     fun isLastPage(): Boolean = lastPage
     fun getPage(): Int = pageNumber
+
 }

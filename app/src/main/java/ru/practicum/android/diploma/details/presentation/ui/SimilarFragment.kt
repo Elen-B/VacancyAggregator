@@ -49,7 +49,7 @@ class SimilarFragment : Fragment() {
 
             is SimilarState.Error -> {
                 setError(
-                    message = state.message.toInt(),
+                    message = state.message,
                     imagePath = state.errorImagePath
                 )
             }
@@ -57,16 +57,30 @@ class SimilarFragment : Fragment() {
             is SimilarState.Loading -> {
                 setLoad()
             }
+
+            is SimilarState.Empty -> {
+                setEmpty()
+            }
         }
     }
 
+    private fun setEmpty() {
+        with(binding.include) {
+            imError.setImageResource(R.drawable.error_show_cat)
+            tvError.text = getString(R.string.no_list)
+        }
+        binding.include.root.isVisible = true
+        binding.rvSimilar.isVisible = false
+        binding.progress.isVisible = false
+    }
+
     private fun setError(
-        message: Int,
+        message: String,
         imagePath: Int
     ) {
         with(binding.include) {
             imError.setImageResource(imagePath)
-            tvError.text = getString(message)
+            tvError.text = message
         }
         binding.include.root.isVisible = true
         binding.rvSimilar.isVisible = false

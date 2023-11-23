@@ -28,17 +28,6 @@
         style="@style/TeamDeveloperStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/team_developer_2"/>
-
-    <TextView
-        style="@style/TeamDeveloperStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="@string/team_developer_3"/>
 
-    <TextView
-        style="@style/TeamDeveloperStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/team_developer_4"/>
 </LinearLayout>

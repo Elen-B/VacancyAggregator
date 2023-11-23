@@ -8,7 +8,9 @@ import ru.practicum.android.diploma.details.data.dto.DetailVacancyResponse
 import ru.practicum.android.diploma.details.data.mapper.mapToProfessionDetail
 import ru.practicum.android.diploma.details.domain.api.DetailRepository
 import ru.practicum.android.diploma.details.domain.models.ProfessionDetail
+import ru.practicum.android.diploma.util.NETWORK_ERROR
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.SERVER_ERROR
 
 class DetailRepositoryImpl(
     private val networkClient: NetworkClient
@@ -20,14 +22,11 @@ class DetailRepositoryImpl(
                 Resource.Success((response as DetailVacancyResponse).item.mapToProfessionDetail())
             }
             Response.RESULT_NETWORK_ERROR -> Resource.Error(
-                message = R.string.network_error.toString(),
-                errorImagePath = R.drawable.error_connection_lm)
-            Response.RESULT_BAD_REQUEST -> Resource.Error(
-                message = R.string.vacancy_error.toString(),
-                errorImagePath = R.drawable.error_show_cat)
+                message = NETWORK_ERROR,
+                errorImagePath = R.drawable.error_connection)
             else -> Resource.Error(
-                message = R.string.unknown_error.toString(),
-                errorImagePath = R.drawable.error_show_cat)
+                message = SERVER_ERROR,
+                errorImagePath = R.drawable.error_details)
         }
     }
 }

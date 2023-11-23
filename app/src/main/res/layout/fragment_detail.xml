@@ -159,7 +159,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/requiredExperience"
-                style="@style/DetailsSubHeaderStyle"
+                style="@style/SubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -171,7 +171,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/experience"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -190,7 +190,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/employment"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -202,7 +202,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/vacancyDescription"
-                style="@style/DetailsHeaderStyle"
+                style="@style/ItemHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -214,7 +214,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/description"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -234,7 +234,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/keySkills"
-                style="@style/DetailsHeaderStyle"
+                style="@style/ItemHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -246,7 +246,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/keySkillsContent"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -266,7 +266,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contacts"
-                style="@style/DetailsHeaderStyle"
+                style="@style/ItemHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -278,7 +278,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contactFace"
-                style="@style/DetailsSubHeaderStyle"
+                style="@style/SubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -290,7 +290,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/contactName"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -309,7 +309,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/emailName"
-                style="@style/DetailsSubHeaderStyle"
+                style="@style/SubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -341,7 +341,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/phoneName"
-                style="@style/DetailsSubHeaderStyle"
+                style="@style/SubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -373,7 +373,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/commentName"
-                style="@style/DetailsSubHeaderStyle"
+                style="@style/SubHeaderStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -385,7 +385,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/comment"
-                style="@style/DetailsTextStyle"
+                style="@style/ItemTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_16"
@@ -430,18 +430,14 @@
 
         android:visibility="gone"/>
 
-    <FrameLayout
-        android:id="@+id/phDetailsError"
+    <include
+        android:id="@+id/include"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-        <TextView
-            style="@style/FilterPlaceHolderTextViewStyle"
-            android:layout_gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:text="@string/error_details"
-            app:drawableTopCompat="@drawable/error_details"/>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        layout="@layout/error_place_holder"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
