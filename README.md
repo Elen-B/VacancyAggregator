@@ -48,13 +48,14 @@
 Добавление/удаление вакансии осуществляется с экрана деталей вакансии.
 
 ### Скриншоты приложения
-<img height="40%" src="D:\Ya\res\VA\search.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\filter.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\filter2.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\filter3.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\details.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\similars.jpg" width="40%"/>
-<img height="40%" src="D:\Ya\res\VA\favourites.jpg" width="40%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/a6451ca0-90d7-46cc-ad05-f922943f394a" width="30%"/>
+</br>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/b19e74ee-e73f-4e17-a775-5c14c760f7eb" width="30%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/1eb1a87a-5dcb-4f4c-914f-926f922189ca" width="30%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/b449cfa7-a839-4a61-9242-eab929a90f1b" width="30%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/e9b55dd6-2a5b-462e-89c3-9ef8c08c617c" width="30%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/f8a7cb82-c325-4fc2-8c04-d564af6ef1cb" width="30%"/>
+<img height="30%" src="https://github.com/Elen-B/VacancyAggregator/assets/118533717/bbf84eb2-13aa-4820-b620-949a47f758c0" width="30%"/>
 
 ## Общие требования
 
